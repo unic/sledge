@@ -31,25 +31,21 @@ Quality Goals
 Stakeholders
 ------------
 
-  - Developer
-  - Management
-  - User
-  
+| Role               | Description/Goal/Intention                                              |
+|--------------------|-------------------------------------------------------------------------|
+| Management         | Investment for innovation                                               |
+| Technology Manager | Improvement of the software development process                         |
+| Developer          | Fast and automated deployment of applications                           |
+| Operator/Admin     | Stable rollouts of applications                                         |
+
 
 Architecture Constraints
 ========================
 
 Technical Constraints
 ---------------------
-
-+----------------+-----------------------------------------------------------+
-| Technical      |
-| Constraints    |
-+================+===========================================================+
-| C1             | The software shall be based on the Apache Sling framework |
-+----------------+-----------------------------------------------------------+
-
-: List of Technical Constraints
+- Use Apache Sling as base framework
+- Use OSGi-based approach, no system-approach (Docker, etc.)
 
 
 System Scope and Context
