@@ -73,7 +73,7 @@ Level 1
 The following diagram shows the main building blocks of the system and
 their interdependencies:
 
-![Sledge system scope][building-block-level1-diagram]
+![Building block level1][building-block-level1-diagram]
 
 [building-block-level1-diagram]: ../plantuml-generated/building-block-level1-diagram.png "Sledge System - Building block Level 1"
 
@@ -95,64 +95,30 @@ The core package handles all relevant tasks for Application package installation
 The Apache Sling web framework.
 
 
-Level 2
+sledge-core package
 -------
 
-### Building Block Name 1 (White Box Description)
+![Building blocks sledge-core][building-block-core-diagram]
 
-\<insert diagram of building block 1 here\>
+[building-block-core-diagram]: ../plantuml-generated/building-block-core-diagram.png "Sledge Core - Building blocks"
 
-#### Building Block Name 1.1 (Black Box Description)
+### ApplicationPackage
 
-#### Building Block Name 1.2 (Black Box Description)
+The ApplicationPackage provides methods for getting data out of a Application package provided by a Package source connector:
 
-Structure according to black box template
+- General information: version, group, name, description, etc.
+- List of bundles
 
-#### …
+### PackageSource
 
-#### Building Block Name 1.n (Black Box Description)
+The PackageSource defines methods for loading Application packages from a specific source (local repository, Adobe Package Manager, Nexus repository, etc.). It returns a list of ApplicationPackage objects.
 
-#### Description of Relationships
+### DeploymentConfiguration
 
-#### Open Issues
+The DeploymentConfiguration is the central configuration for the installation of an Application package. It defines all needed information for deploying properly an application:
 
-### Building Block Name 2 (White Box Description)
-
-…
-
-\<insert diagram of building block 2 here\>
-
-#### Building Block Name 2.1 (Black Box Description)
-
-Structure according to black box template
-
-#### Building Block Name 2.2 (Black Box Description)
-
-#### …
-
-#### Building Block Name 2.n (Black Box Description)
-
-#### Description of Relationships
-
-#### Open Issues
-
-### Building Block Name 3 (White Box Description)
-
-…
-
-\<insert diagram of building block 3 here\>
-
-#### Building Block Name 3.1 (Black Box Description)
-
-#### Building Block Name 3.2 (Black Box Description)
-
-#### …
-
-#### Building Block Name 3.n (Black Box Description)
-
-#### Description of Relationships
-
-#### Open Issues
+- Deployment locations for bundles
+- Configurations for bundles
 
 
 Concepts
@@ -185,17 +151,8 @@ System Management and Administration
 Logging, Tracing
 ----------------
 
-Business Rules
---------------
-
 Configurability
 ---------------
-
-Parallelization and Threading
------------------------------
-
-Internationalization
---------------------
 
 Testability
 -----------
@@ -205,17 +162,6 @@ Code Generation
 
 Build-Management
 ----------------
-
-Design Decisions
-================
-
-Decision Topic Template
------------------------
-
-Decision Topic 1
-----------------
-
-**Decision.**
 
 
 Technical Risks
@@ -229,6 +175,7 @@ Glossary
 |---------------------|-------------------------------------------------------------------------|
 | Apache Sling        | An Open Source web framework managed by the Apache community          |
 | Application Package | An Application Package consists of a set of bundles and a Sledge Deployment Configuration file. |
+| Bundle              | Defines an OSGi bundle, which is simply a jar with special Manifest directives. |
 
 
 
