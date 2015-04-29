@@ -25,7 +25,6 @@ Quality Goals
 | 3    | Portability         | The software can be used on Unix, Linux and Windows machines. |
 | 4    | Performance         | An Application package installation shall not take longer than 2 minutes. |
 | 5    | Flexibility         | The software shall offer a GUI and an API for remote command line usages. |
-| 6    | Usability           | An administrator shall need less than 30 minutes to understand and use the software over GUI. |
 
 
 Stakeholders
@@ -51,13 +50,19 @@ Technical Constraints
 System Scope and Context
 ========================
 
+![Sledge system scope][context-diagram]
 
+[context-diagram]: ../plantuml-generated/context-diagram.png "Sledge System scope"
 
-External Interfaces
--------------------
+- Admin: The Admin user installs and uninstalls Application Packages via the WebappUI or the remote API.
+- Package source: A Package source provides Application packages for the installation. That may be a local path in the current repository or in some other external systems like FTP, Adobe Package Manager, Nexus repository, etc.
+
 
 Solution Strategy
 =================
+
+We have chosen the Apache Sling web framework as our base framework because the solution shall be mainly available for the AEM platform which is also based on the Apache Sling web framework. The implementation focus on an OSGi-based deployment model instead of using a system approach model like doing such automation via Docker, etc. The reason why we decided to do so is because there are situations where the IT departement has not the possibility to change easily to such deployment technologies.
+
 
 Building Block View
 ===================
@@ -68,27 +73,27 @@ Level 1
 The following diagram shows the main building blocks of the system and
 their interdependencies:
 
-\<insert overview diagram here\>
+![Sledge system scope][building-block-level1-diagram]
 
-Comments regarding structure and interdependencies at Level 1:
+[building-block-level1-diagram]: ../plantuml-generated/building-block-level1-diagram.png "Sledge System - Building block Level 1"
 
-### Building Block Name 1 (Black Box Description)
 
-\<insert the building block’s black box template here\>
+### sledge-webapp
 
-### Building Block Name 2 (Black Box Description)
+The webapp is responsible for rendering and handling the user interface.
 
-\<insert the building block’s black box template here\>
+### sledge-connectors
 
-### …
+The Package sources are provided by Connectors. For each type of Package source there is a Connector package.
 
-\<insert the building block’s black box template here\>
+### sledge-core
 
-### Building Block Name n (Black Box Description)
+The core package handles all relevant tasks for Application package installation and uninstallation. The installation and configuration can be defined by a Sledge deployment file.
 
-\<insert the building block’s black box template here\>
+### Apache Sling
 
-### Open Issues
+The Apache Sling web framework.
+
 
 Level 2
 -------
@@ -149,58 +154,6 @@ Structure according to black box template
 
 #### Open Issues
 
-Level 3
--------
-
-Runtime View
-============
-
-Runtime Scenario 1
-------------------
-
-Runtime Scenario 2
-------------------
-
-…
--
-
-some more
-
-Runtime Scenario n
-------------------
-
-Deployment View
-===============
-
-Infrastructure Level 1
-----------------------
-
-### Deployment Diagram Level 1
-
-### Processor 1
-
-\<insert node template here\>
-
-### Processor 2
-
-\<insert node template here\>
-
-### …
-
-### Processor n
-
-\<insert node template here\>
-
-### Channel 1
-
-### Channel 2
-
-### …
-
-### Channel m
-
-Infrastructure Level 2
-----------------------
 
 Concepts
 ========
@@ -208,46 +161,17 @@ Concepts
 Domain Models
 -------------
 
-Recurring or Generic Structures and Patterns
---------------------------------------------
-
-### ecurring or Generic Structure 1
-
-\<insert diagram and descriptions here\>
-
-### Recurring or Generic Structure 2
-
-\<insert diagram and descriptions here\>
-
 Persistency
 -----------
 
 User Interface
 --------------
 
-Ergonomics
-----------
-
-Flow of Control
----------------
-
-Transaction Procession
-----------------------
-
 Session Handling
 ----------------
 
 Security
 --------
-
-Safety
-------
-
-Communications and Integration
-------------------------------
-
-Distribution
-------------
 
 Plausibility and Validity Checks
 --------------------------------
@@ -273,17 +197,8 @@ Parallelization and Threading
 Internationalization
 --------------------
 
-Migration
----------
-
 Testability
 -----------
-
-Scaling, Clustering
--------------------
-
-High Availability
------------------
 
 Code Generation
 ---------------
@@ -309,13 +224,12 @@ Technical Risks
 Glossary
 ========
 
-+--------------------+--------------------+-------------------------------------------------------------------+
-| Glossary           |                    |                                                                   |
-+====================+====================+===================================================================+
-| Sling              | Apache Sling       | An Open Source web framework managed by the Apache community  |
-+--------------------+--------------------+--------------------+
-| Application Package | --            | An Application Package consists of a set of bundles and a Sledge Deployment Configuration file. |
-+--------------------+--------------------+--------------------+
+
+| Keyword               | Description                                                          |
+|---------------------|-------------------------------------------------------------------------|
+| Apache Sling        | An Open Source web framework managed by the Apache community          |
+| Application Package | An Application Package consists of a set of bundles and a Sledge Deployment Configuration file. |
+
 
 
 About arc42

@@ -1,54 +1,80 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.unic.sledge</groupId>
-    <artifactId>com.unic.sledge.parent</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    
-    <name>sledge-parent</name>
-    <description>
+	<groupId>com.unic.sledge</groupId>
+	<artifactId>com.unic.sledge.parent</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>sledge-parent</name>
+	<description>
         This is the parent module for the Sledge project.
     </description>
-    <inceptionYear>2015</inceptionYear>
+	<inceptionYear>2015</inceptionYear>
 
-    <scm>
-        <connection>scm:git:https://git.unic.com/scm/sledge/sledge.git</connection>
-        <developerConnection>scm:git:https://git.unic.com/scm/sledge/sledge.git</developerConnection>
-        <url>https://git.unic.com/scm/sledge/sledge.git</url>
-    </scm>
+	<scm>
+		<connection>scm:git:https://git.unic.com/scm/sledge/sledge.git</connection>
+		<developerConnection>scm:git:https://git.unic.com/scm/sledge/sledge.git</developerConnection>
+		<url>https://git.unic.com/scm/sledge/sledge.git</url>
+	</scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- Plugin versions -->
+		<plugin.assembly.version>2.5.4</plugin.assembly.version>
+		
+	</properties>
 
-    <developers>
-        <developer>
-            <id>oliver.burkhalter</id>
-            <name>Oliver Burkhalter</name>
-            <email>oliver.burkhalter@unic.com</email>
-            <organization>Unic AG</organization>
-            <organizationUrl>http://www.unic.com</organizationUrl>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<id>oliver.burkhalter</id>
+			<name>Oliver Burkhalter</name>
+			<email>oliver.burkhalter@unic.com</email>
+			<organization>Unic AG</organization>
+			<organizationUrl>http://www.unic.com</organizationUrl>
+		</developer>
+	</developers>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.github.jeluard</groupId>
-                    <artifactId>plantuml-maven-plugin</artifactId>
-                    <version>1.1</version>
-                    <dependencies>
-                        <dependency>
-                          <groupId>net.sourceforge.plantuml</groupId>
-                          <artifactId>plantuml</artifactId>
-                          <version>8022</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${plugin.assembly.version}</version>
+					<executions>
+						<execution>
+							<id>make-assembly</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>com.github.jeluard</groupId>
+					<artifactId>plantuml-maven-plugin</artifactId>
+					<version>1.1</version>
+					<executions>
+						<execution>
+							<id>generate-diagrams</id>
+							<phase>package</phase>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>net.sourceforge.plantuml</groupId>
+							<artifactId>plantuml</artifactId>
+							<version>8022</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

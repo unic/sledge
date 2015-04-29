@@ -1,0 +1,24 @@
+@startuml
+
+rectangle "Sledge system" {
+
+	package "sledge-webapp" as webapp {
+	}
+	
+	package "sledge-connectors" as connectors {
+	}
+	
+	package "sledge-core" as core {
+	}
+	
+	package "Apache Sling" as sling <<Frame>> {
+	}
+	
+	core --> sling : uses
+	webapp --> sling : uses
+	connectors --> sling : uses
+}
+
+hide members
+
+@enduml
