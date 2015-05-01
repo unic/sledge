@@ -15,6 +15,26 @@ Requirements Overview
 The requirements are documented directly in the Story tasks.
 
 
+Business Goals
+--------------
+
+### Decreased Time-to-Market of applications
+
+Sledge simplifies the deployment of your AEM application such it enables you to do "One-click Rollouts". This enables you to push new features of your application to market within a snap.
+
+### Standardized application deployments
+
+Sledge defines a standardized application package format which increases the maintainability of your applications and helps operation teams to execute Application deployments in a standardized way.
+
+### Centralized configuration
+
+Sledge handles all application configurations in one place which decreases the time of configuration management of the operation teams.
+
+### Customizable and Integration-friendly
+
+Sledge provides connectors which enables you to attach Application package sources of your choice. This means you can install directly your Application packages from your FTP server or your Nexus repository. Additionally Sledge offers a remote service API which helps you to easily integrate with your existing Continuous Integration systems.
+
+
 Quality Goals
 -------------
 
