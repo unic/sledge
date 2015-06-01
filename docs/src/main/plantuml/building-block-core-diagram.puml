@@ -1,0 +1,11 @@
+@startuml
+
+package "sledge-core" as core {
+	interface ApplicationPackage
+	interface DeploymentConfiguration
+	interface PackageSource
+}
+
+hide members
+
+@enduml
