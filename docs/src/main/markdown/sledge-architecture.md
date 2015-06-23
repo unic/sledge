@@ -4,8 +4,8 @@ Sledge - Software Architecture Specification (SAS)
 Introduction and Goals
 ======================
 
-Sledge is a Sling Application Manager which provides a simple user interface to easily deploy, uninstall, monitor and configure your applications in one step. 
-Furthermore it provides a command line interface, best suited for remote management of your application in large enterprises. This allows for a nice integration into existing Continuous Delivery environments.
+Sledge is a _Sling Application Manager_ which provides a simple user interface to easily deploy, uninstall, monitor and configure your applications in one step. 
+Furthermore it provides a command line interface, best suited for remote management of your application in large enterprises. This allows for a nice integration into existing _Continuous Delivery_ environments.
 
 This document describes the architecture of the Sledge software based on the Apache Sling framework.
 
@@ -20,19 +20,19 @@ Business Goals
 
 ### Decreased Time-to-Market of applications
 
-Sledge simplifies the deployment of your AEM application such it enables you to do "One-click Rollouts". This enables you to push new features of your application to market within a snap.
+Sledge simplifies the deployment of your AEM application such it enables you to do "One-click Rollouts". This enables you to push new features of your application to testing or production environments at the click of a button. This eliminates manual installation procedures as well as human error and allows to speed up the process manifold. Needless to say, money saved on not manually executing installation procedures can be spent on business functionality, which is far more important.
 
 ### Standardized application deployments
 
-Sledge defines a standardized application package format which increases the maintainability of your applications and helps operation teams to execute Application deployments in a standardized way.
+Sledge defines a standardized application package format which increases the maintainability of your applications and helps operation teams to execute Application deployments in a standardized way. This allows for a clean documentation and easy transferral of work items throughout the team.
 
 ### Centralized configuration
 
-Sledge handles all application configurations in one place which decreases the time of configuration management of the operation teams.
+Sledge handles all application configurations in one place which decreases the time of configuration management of the operation teams. It also ensures quality, as configuration can be easily audited and reviewed.
 
 ### Customizable and Integration-friendly
 
-Sledge provides connectors which enables you to attach Application package sources of your choice. This means you can install directly your Application packages from your FTP server or your Nexus repository. Additionally Sledge offers a remote service API which helps you to easily integrate with your existing Continuous Integration systems.
+Sledge provides connectors which enables you to attach Application package sources of your choice. This means you can install directly your Application packages from your FTP server or your Nexus repository. Additionally Sledge offers a remote service API which helps you to easily integrate with your Continuous Integration systems.
 
 
 Quality Goals
