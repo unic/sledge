@@ -1,0 +1,19 @@
+package com.unic.sledge.core.api.connectors;
+
+import java.util.List;
+
+import com.unic.sledge.core.api.ApplicationPackage;
+
+/**
+ * @author oliver.burkhalter
+ */
+public interface PackageSourceConnector {
+
+    /**
+     * Loads and converts Application package artifacts from the remote source.
+     * 
+     * @return Returns a list of loaded Application packages from the remote source.
+     */
+    List<ApplicationPackage> loadApplicationPackages();
+
+}

@@ -64,7 +64,7 @@ Architecture Constraints
 Technical Constraints
 ---------------------
 - Use Apache Sling as base framework
-- Use OSGi-based approach, no system-approach (Docker, etc.)
+- Use OSGi-based approach, no system-approach (Docker, etc.). This gives us a more flexibility regarding to the implementation with the customer.
 
 
 System Scope and Context
@@ -131,7 +131,7 @@ The ApplicationPackage provides methods for getting data out of a Application pa
 
 ### PackageSourceConnector
 
-The PackageSourceConnector defines methods for loading Application packages from a specific source (local repository, Adobe Package Manager, Nexus repository, etc.). It returns a list of ApplicationPackage objects.
+The PackageSourceConnector defines methods for loading Application packages from a specific source location (local repository, Adobe Package Manager, Nexus repository, etc.). It returns a list of ApplicationPackage objects.
 
 ### DeploymentConfiguration
 

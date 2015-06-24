@@ -1,0 +1,5 @@
+{
+    "jcr:primaryType" : "nt:unstructured",
+    "jcr:title" : "Sledge Packages",
+    "sling:resourceType" : "sledge/packages"
+}

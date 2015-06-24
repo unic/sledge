@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head data-sly-unwrap data-sly-include="head.html"></head>
+    <body>
+        <div class="container-fluid">
+            <div class="page-header">
+            	<h1>Sledge - A Sling Application Manager</h1>
+            </div>
+            <h2>Application Packages</h2>
+            <a href="app.upload.html"><button class="btn btn-default" type="submit">Add new application package</button></a>
+            <br/><br/>
+            <div class="application-packages-list" data-sly-use.mainModel="com.unic.sledge.webapp.models.MainViewModel" data-sly-list="${mainModel.applicationPackages}">
+            	<div>${item.packageFilename} (${item.groupId} : ${item.artifactId})</div>
+            	<form action="/etc/sledge/packages/${item.packageFilename}" method="POST">
+				    <input type="hidden" name=":operation" value="copy">
+				    <input type="hidden" name=":dest" value="/apps/sledge_packages/install/">
+				    <input type="hidden" name=":replace" value="true">
+            		<input type="hidden" name=":redirect" value="${resource.path}.html" />
+            		<button class="btn btn-primary btn-sm" type="submit">Install</button>
+            	</form>
+            	<form action="/apps/sledge_packages/install/${item.packageFilename}" method="POST">
+            		<input type="hidden" name=":operation" value="delete">
+            		<input type="hidden" name=":redirect" value="${resource.path}.html" />
+            		<button class="btn btn-warning btn-sm" type="submit">Uninstall</button>
+            	</form>
+            	<form action="/etc/sledge/packages/${item.packageFilename}" method="POST">
+            		<input type="hidden" name=":operation" value="delete">
+            		<input type="hidden" name=":redirect" value="${resource.path}.html" />
+            		<button class="btn btn-danger btn-sm" type="submit">Remove</button>
+            	</form>
+            </div>
+        </div>
+        <div data-sly-unwrap data-sly-include="bodyEnd.html"></div>
+    </body>
+</html>
