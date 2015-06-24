@@ -1,0 +1,11 @@
+@startuml
+
+package "sledge-webapp" as webapp {
+	class PackageSourceController
+	class ConfigurationController
+	class InstallationController
+}
+
+hide members
+
+@enduml

@@ -116,7 +116,7 @@ The Apache Sling web framework.
 
 
 sledge-core package
--------
+-------------------
 
 ![Building blocks sledge-core][building-block-core-diagram]
 
@@ -126,12 +126,12 @@ sledge-core package
 
 The ApplicationPackage provides methods for getting data out of a Application package provided by a Package source connector:
 
-- General information: version, group, name, description, etc.
-- List of bundles
+- General information: version, groupId, artifactId, description, etc.
+- List of contents
 
-### PackageSource
+### PackageSourceConnector
 
-The PackageSource defines methods for loading Application packages from a specific source (local repository, Adobe Package Manager, Nexus repository, etc.). It returns a list of ApplicationPackage objects.
+The PackageSourceConnector defines methods for loading Application packages from a specific source (local repository, Adobe Package Manager, Nexus repository, etc.). It returns a list of ApplicationPackage objects.
 
 ### DeploymentConfiguration
 
@@ -139,6 +139,25 @@ The DeploymentConfiguration is the central configuration for the installation of
 
 - Deployment locations for bundles
 - Configurations for bundles
+
+
+sledge-connectors package
+-------------------------
+
+TODO
+![Building blocks sledge-connectors][building-block-connectors-diagram]
+
+[building-block-connectors-diagram]: ../plantuml-generated/building-block-connectors-diagram.png "Sledge Connectors - Building blocks"
+
+
+sledge-webapp package
+---------------------
+
+TODO
+![Building blocks sledge-webapp][building-block-webapp-diagram]
+
+[building-block-webapp-diagram]: ../plantuml-generated/building-block-webapp-diagram.png "Sledge Webapp - Building blocks"
+
 
 
 Concepts

@@ -5,7 +5,7 @@
 	<artifactId>com.unic.sledge.docs</artifactId>
 	<packaging>pom</packaging>
 
-	<name>sledge-docs</name>
+	<name>Sledge Docs</name>
 	<description>
 		This is the parent module for the Richemont Intranet project.
 	</description>

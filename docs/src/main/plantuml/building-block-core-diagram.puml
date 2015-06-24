@@ -3,7 +3,7 @@
 package "sledge-core" as core {
 	interface ApplicationPackage
 	interface DeploymentConfiguration
-	interface PackageSource
+	interface PackageSourceConnector
 }
 
 hide members

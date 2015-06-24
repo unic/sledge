@@ -1,0 +1,10 @@
+@startuml
+
+package "sledge-connectors" as connectors {
+	class LocalJcrConnector <<PackageSourceConnector>>
+	class NexusConnector  <<PackageSourceConnector>>
+}
+
+hide members
+
+@enduml
