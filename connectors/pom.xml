@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>com.unic.sledge.connectors</artifactId>
+	<name>Sledge Connectors</name>
+	<description>The Sledge Connectors</description>
+	<packaging>bundle</packaging>
+
+	<parent>
+		<groupId>com.unic.sledge</groupId>
+		<artifactId>com.unic.sledge.parent</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../parent/pom.xml</relativePath>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Sling-Initial-Content>
+							SLING-INF/apps/sledge-connectors;overwrite:=true;path:=/apps/sledge-connectors,
+							SLING-INF/etc/sledge/connectors/fileupload.json;overwrite:=true;path:=/etc/sledge/connectors
+						</Sling-Initial-Content>
+						<Private-Package>
+							com.unic.sledge.connectors.impl.*
+						</Private-Package>
+						<Export-Package>
+							com.unic.sledge.connectors.api.*;version=${project.version}
+						</Export-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<!-- Sledge -->
+		<dependency>
+			<groupId>com.unic.sledge</groupId>
+			<artifactId>com.unic.sledge.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Misc -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+
+		<!-- JCR -->
+		<dependency>
+			<groupId>javax.jcr</groupId>
+			<artifactId>jcr</artifactId>
+		</dependency>
+
+		<!-- OSGi -->
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+
+		<!-- Felix -->
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.annotations</artifactId>
+		</dependency>
+
+		<!-- Sling -->
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.jcr.api</artifactId>
+
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-reflect</artifactId>
+		</dependency>
+	</dependencies>
+</project>

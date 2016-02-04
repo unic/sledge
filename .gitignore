@@ -1,3 +1,5 @@
+.directory
+
 # Generated maven artifacts
 target/
 pom.xml.tag

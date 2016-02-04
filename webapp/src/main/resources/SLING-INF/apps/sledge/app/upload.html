@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sledge - A Sling Application Manager - Upload new application package</title>
+        <link rel="stylesheet" href="${request.contextPath}/etc/sledge/app/static-content/css/bootstrap.min.css">
+        <link href='${request.contextPath}/etc/sledge/app/static-content/css/main.css' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="page-header">
+            	<h1>Sledge - A Sling Application Manager</h1>
+            </div>
+            
+            <a href="app.html"><button class="btn btn-default" type="submit">Back to overview</button></a>
+            <div class="connector-list" data-sly-use.mainModel="com.unic.sledge.webapp.models.MainViewModel" data-sly-list="${mainModel.connectorResources}">
+            	<div data-sly-resource="${item.path}"></div>
+            </div>
+        </div>
+        
+        <!-- Javascript -->
+        <script src="${request.contextPath}/etc/sledge/app/static-content/js/vendor/jquery-2.1.4.min.js"></script>
+        <script src="${request.contextPath}/etc/sledge/app/static-content/js/vendor/bootstrap-3.3.4.min.js"></script>
+        <script type="text/javascript" src="${request.contextPath}/etc/sledge/app/static-content/js/main.js"></script>
+    </body>
+</html>

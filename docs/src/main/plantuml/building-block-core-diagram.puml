@@ -1,6 +1,7 @@
 @startuml
 
 package "sledge-core" as core {
+	interface PackageRepository
 	interface ApplicationPackage
 	interface DeploymentConfiguration
 	interface PackageSourceConnector

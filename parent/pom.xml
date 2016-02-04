@@ -7,24 +7,22 @@
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>sledge-parent</name>
+	<name>Sledge Parent POM</name>
 	<description>
-        This is the parent module for the Sledge project.
-    </description>
+		This is the parent module for the Sledge project.
+	</description>
 	<inceptionYear>2015</inceptionYear>
 
 	<scm>
-		<connection>scm:git:https://git.unic.com/scm/sledge/sledge.git</connection>
-		<developerConnection>scm:git:https://git.unic.com/scm/sledge/sledge.git</developerConnection>
+		<connection>scm:git:https://git.unic.com/scm/sledge/sledge.git
+		</connection>
+		<developerConnection>scm:git:https://git.unic.com/scm/sledge/sledge.git
+		</developerConnection>
 		<url>https://git.unic.com/scm/sledge/sledge.git</url>
 	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
-		<!-- Plugin versions -->
-		<plugin.assembly.version>2.5.4</plugin.assembly.version>
-		
 	</properties>
 
 	<developers>
@@ -41,8 +39,70 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-scr-plugin</artifactId>
+					<version>1.21.0</version>
+					<executions>
+						<execution>
+							<id>generate-scr-scrdescriptor</id>
+							<goals>
+								<goal>scr</goal>
+							</goals>
+							<configuration>
+								<strictMode>true</strictMode>
+								<properties>
+									<service.vendor>Unic AG</service.vendor>
+								</properties>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>3.0.0</version>
+					<inherited>true</inherited>
+					<configuration>
+						<outputDirectory>${basedir}/target/classes</outputDirectory>
+						<obrRepository>NONE</obrRepository>
+						<instructions>
+							<Bundle-Category>sledge</Bundle-Category>
+							<Bundle-DocURL>
+								http://www.unic.com
+							</Bundle-DocURL>
+							<Bundle-Vendor>Unic AG Switzerland</Bundle-Vendor>
+							<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+						</instructions>
+					</configuration>
+					<executions>
+						<execution>
+							<id>baseline</id>
+							<goals>
+								<goal>baseline</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.sling</groupId>
+					<artifactId>maven-sling-plugin</artifactId>
+					<version>2.1.0</version>
+				</plugin>
+
+				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>${plugin.assembly.version}</version>
+					<version>2.5.4</version>
 					<executions>
 						<execution>
 							<id>make-assembly</id>
@@ -77,4 +137,164 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Misc -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>2.4</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.5.10</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>1</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- JCR -->
+			<dependency>
+				<groupId>javax.jcr</groupId>
+				<artifactId>jcr</artifactId>
+				<version>2.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.jackrabbit</groupId>
+				<artifactId>jackrabbit-api</artifactId>
+				<version>2.10.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.jackrabbit</groupId>
+				<artifactId>jackrabbit-jcr-commons</artifactId>
+				<version>2.11.0</version>
+				<scope>provided</scope>
+			</dependency>
+
+
+			<!-- OSGi -->
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.compendium</artifactId>
+				<version>4.2.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>4.2.0</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Felix -->
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.scr.annotations</artifactId>
+				<version>1.9.12</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Sling -->
+			<dependency>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>org.apache.sling.api</artifactId>
+				<version>2.9.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>org.apache.sling.jcr.api</artifactId>
+				<version>2.3.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>org.apache.sling.models.api</artifactId>
+				<version>1.2.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>org.apache.sling.models.impl</artifactId>
+				<version>1.2.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>org.apache.sling.commons.osgi</artifactId>
+				<version>2.3.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>org.apache.sling.servlets.post</artifactId>
+				<version>2.3.8</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.12</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>2.2.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>1.10.19</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easytesting</groupId>
+				<artifactId>fest-reflect</artifactId>
+				<version>1.4.1</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<!-- Use this profile to install the OSGi bundle automatically, during 
+				development -->
+			<id>autoInstallBundle</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.sling</groupId>
+						<artifactId>maven-sling-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>install-bundle</id>
+								<goals>
+									<goal>install</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>

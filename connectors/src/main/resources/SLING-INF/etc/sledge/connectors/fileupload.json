@@ -1,0 +1,5 @@
+{
+    "jcr:primaryType" : "nt:unstructured",
+    "jcr:title" : "Sledge Connectors - File package upload",
+    "sling:resourceType" : "sledge-connectors/fileupload"
+}

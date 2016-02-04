@@ -4,8 +4,7 @@
     <artifactId>com.unic.sledge.sledge-modules</artifactId>
     <packaging>pom</packaging>
 
-    <name>sledge-modules</name>
-
+    <name>Sledge Modules</name>
     <description>
         This is the modules POM of the project.
     </description>
@@ -18,6 +17,11 @@
     </parent>
 
     <modules>
+        <module>parent</module>
+		<module>core</module>
+		<module>connectors</module>
+        <module>webapp</module>
+        
         <module>docs</module>
     </modules>
 
