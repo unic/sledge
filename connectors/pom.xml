@@ -23,8 +23,8 @@
 				<configuration>
 					<instructions>
 						<Sling-Initial-Content>
-							SLING-INF/apps/sledge-connectors;overwrite:=true;path:=/apps/sledge-connectors,
-							SLING-INF/etc/sledge/connectors/fileupload.json;overwrite:=true;path:=/etc/sledge/connectors
+							SLING-INF/apps/sledge-connectors;path:=/apps/sledge-connectors;overwrite:=true,
+							SLING-INF/etc/sledge/connectors/fileupload.json;path:=/etc/sledge/connectors;overwrite:=true
 						</Sling-Initial-Content>
 						<Private-Package>
 							com.unic.sledge.connectors.impl.*

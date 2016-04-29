@@ -28,10 +28,10 @@
 				<configuration>
 					<instructions>
 						<Sling-Initial-Content>
-							SLING-INF/apps/sledge;overwrite:=true;path:=/apps/sledge,
+							SLING-INF/apps/sledge;path:=/apps/sledge;overwrite:=true,
 							SLING-INF/apps/sledge_packages/install.json;path:=/apps/sledge_packages,
-							SLING-INF/etc/sledge/app.json;overwrite:=true;path:=/etc/sledge,
-							SLING-INF/etc/sledge/app;overwrite:=true;path:=/etc/sledge/app,
+							SLING-INF/etc/sledge/app.json;path:=/etc/sledge;overwrite:=true,
+							SLING-INF/etc/sledge/app;path:=/etc/sledge/app;overwrite:=true,
 							SLING-INF/etc/sledge/packages.json;path:=/etc/sledge
 						</Sling-Initial-Content>
 						<Import-Package>

@@ -5,15 +5,16 @@ Sledge is a Sling Application Manager which provides a simple user interface to 
 Furthermore it provides a command line interface, best suited for remote management of your application in large enterprises. This allows for a nice integration into existing Continuous Delivery environments.
 
 
-Installation
-------------
+# Requirements
 
-Install and run Sling 8
+* Java 8
+* Sling 8
 
-Configure the _sledgeUser_ in the Service User Mapper Service: com.unic.sledge.core=sledgeUser
 
-Install core, connectors and webapp packages
+# Installation
 
-Configure the read/write permissions for the _sledgeUser_ for /etc/sledge
+* Install and run Sling 8
 
-    curl -u admin:admin -FprincipalId=sledgeUser -Fprivilege@jcr:all=granted http://localhost:8080/etc/sledge.modifyAce.html
+* Install core, connectors and webapp packages
+
+The logged in user needs write permission to: /apps/sledge_packages and /etc/sledge/packages to make the application work properly.
