@@ -2,7 +2,7 @@ package com.unic.sledge.core.api.connectors;
 
 import java.util.List;
 
-import com.unic.sledge.core.api.ApplicationPackage;
+import com.unic.sledge.core.api.models.ApplicationPackage;
 
 /**
  * @author oliver.burkhalter

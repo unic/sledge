@@ -1,0 +1,32 @@
+<sledgefile artifactId="com.unic.test.theproject" groupdId="com.unic.test">
+	<deployment-def environments="test-author,test-publish">
+		<installer>
+			<!-- If empty or null then by default it installs all packages below packages 
+				folder -->
+		</installer>
+		<configurer>
+			<!-- If empty or null then no configuration replacement is executed -->
+		</configurer>
+	</deployment-def>
+	<deployment-def environments="prod-author">
+		<installer>
+			<package>com.my.package.common-1.0.0-crx.zip</package>
+			<package>com.my.package.templating-1.0.0-crx.zip</package>
+			<package>com.my.package.ws-1.0.0-crx.zip</package>
+			<package>com.my.package.migration-1.0.0-crx.zip</package>
+		</installer>
+		<configurer>
+			<package>com.my.package.configuration-1.0.0-crx.zip</package>
+		</configurer>
+	</deployment-def>
+	<deployment-def environments="prod-publish">
+		<installer>
+			<package>com.my.package.common-1.0.0-crx.zip</package>
+			<package>com.my.package.templating-1.0.0-crx.zip</package>
+			<package>com.my.package.ws-1.0.0-crx.zip</package>
+		</installer>
+		<configurer>
+			<package>com.my.package.configuration-1.0.0-crx.zip</package>
+		</configurer>
+	</deployment-def>
+</sledgefile>

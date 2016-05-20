@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.unic.sledge.core.api.ApplicationPackage;
+import com.unic.sledge.core.api.models.ApplicationPackage;
 
 /**
  * @author oliver.burkhalter

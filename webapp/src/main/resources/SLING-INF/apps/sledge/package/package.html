@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head data-sly-unwrap data-sly-include="../app/head.html"></head>
+<body>
+    <div class="container-fluid" data-sly-use.model="com.unic.sledge.core.api.models.ApplicationPackage">
+        <div class="page-header">
+            <h1>Sledge - A Sling Application Manager</h1>
+        </div>
+        <a href="${resource.parent.path}.html">
+            <button class="btn btn-default" type="submit">Back to overview</button>
+        </a>
+        <h2>Install package: ${resource.name}</h2>
+        <div class="package-metadata">
+            <p><strong>State:</strong> ${model.state}</p>
+            <p><strong>ArtifactId:</strong> ${model.artifactId} / <strong>GroupId:</strong> ${model.groupId} / <strong>Package type:</strong> ${model.packageType}</p>
+        </div>
+        <select id="environment-file-list" data-sly-list="${model.environmentFilenames}">
+            <option>${item}</option>
+        </select>
+        <a><button class="btn btn-primary btn-sm js-load-config-button" data-load-url="${resource.path}" type="submit">Load config</button></a>
+        <div class="environment-file-area">
+            <label for="environment-file-content">Environment config file:</label><br/>
+            <textarea id="environment-file-content" name="environment-file-content" rows="12" cols="80"></textarea>
+        </div>
+        <form action="${resource.path}.install.html" method="post">
+            <input type="hidden" name=":redirect" value="/etc/sledge/packages.html" />
+            <button class="btn btn-primary btn-sm js-package-install" type="submit">Start installation</button>
+        </form>
+    </div>
+    <div data-sly-unwrap data-sly-include="../app/bodyEnd.html"></div>
+</body>
+</html>

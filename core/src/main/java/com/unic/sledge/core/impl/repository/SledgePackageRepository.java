@@ -6,16 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.Service;
+import com.unic.sledge.core.api.models.ApplicationPackageState;
 import org.apache.jackrabbit.JcrConstants;
+import org.apache.sling.api.SlingConstants;
+import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-import com.unic.sledge.core.api.ApplicationPackage;
-import com.unic.sledge.core.api.ServiceUserResourceResolver;
+import com.unic.sledge.core.api.SledgeConstants;
+import com.unic.sledge.core.api.models.ApplicationPackage;
 import com.unic.sledge.core.api.repository.PackageRepository;
 
 /**
@@ -25,23 +25,23 @@ import com.unic.sledge.core.api.repository.PackageRepository;
  * 
  * @author oliver.burkhalter
  */
-@Component(immediate = true)
-@Service(value = PackageRepository.class)
 public class SledgePackageRepository implements PackageRepository {
 
     public static final String APP_PACKAGES_ROOT_PATH = "/etc/sledge/packages";
 
-    @Reference
-    private ServiceUserResourceResolver serviceUserResourceResolver;
+    ResourceResolver resourceResolver;
+
+    public SledgePackageRepository(ResourceResolver resourceResolver) {
+        if (resourceResolver == null) {
+            throw new IllegalArgumentException("Cannot initialize PackageRepository because no valid resource resolver is available.");
+        }
+
+        this.resourceResolver = resourceResolver;
+    }
 
     @Override
     public List<ApplicationPackage> getApplicationPackages() {
         List<ApplicationPackage> appPackages = new ArrayList<>();
-
-        ResourceResolver resourceResolver = serviceUserResourceResolver.getServiceResourceResolver();
-        if (resourceResolver == null) {
-            throw new IllegalArgumentException("Cannot get application packages because no valid resource resolver is available.");
-        }
 
         resourceResolver.refresh();
 
@@ -59,40 +59,71 @@ public class SledgePackageRepository implements PackageRepository {
     }
 
     @Override
-    public void addApplicationPackage(ApplicationPackage appPackage) throws PersistenceException {
-        Map<String, Object> props = new HashMap<>();
+    public void addApplicationPackage(ApplicationPackage appPackage) {
+        Map<String, Object> props = getPropsFromApplicationPackage(appPackage);
         props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
-        props.put("packageType", "application");
-        props.put("artifactId", appPackage.getArtifactId());
-        props.put("groupId", appPackage.getGroupId());
-
-        ResourceResolver resolver = serviceUserResourceResolver.getServiceResourceResolver();
+        props.put(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_TYPE, SledgeConstants.RT_PACKAGE);
 
         // TODO: Handle duplicate file names
 
-        Resource packageResource = resolver.create(getRepositoryRootResource(), appPackage.getPackageFilename(), props);
+		Resource packageResource = null;
+		try {
+			packageResource = resourceResolver.create(getRepositoryRootResource(), appPackage.getPackageFilename(), props);
 
-        resolver.commit();
+			resourceResolver.commit();
 
-        props = new HashMap<>();
-        props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_FILE);
+			props = new HashMap<>();
+			props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_FILE);
 
-        Resource fileResource = resolver.create(packageResource, "packageFile", props);
+			Resource fileResource = resourceResolver.create(packageResource, "packageFile", props);
 
-        props = new HashMap<>();
-        props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_RESOURCE);
-        props.put(JcrConstants.JCR_DATA, appPackage.getPackageFile());
+			props = new HashMap<>();
+			props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_RESOURCE);
+			props.put(JcrConstants.JCR_DATA, appPackage.getPackageFile());
 
-        resolver.create(fileResource, JcrConstants.JCR_CONTENT, props);
+			resourceResolver.create(fileResource, JcrConstants.JCR_CONTENT, props);
 
-        resolver.commit();
+			resourceResolver.commit();
+
+		} catch (PersistenceException e) {
+			throw new RuntimeException("Could not add the Application Package to the repository.", e);
+		}
+
     }
 
-    @Override
+	@Override
+	public void updateApplicationPackage(ApplicationPackage appPackage) {
+		Resource packageResource = null;
+
+		try {
+			packageResource = getRepositoryRootResource().getChild(appPackage.getPackageFilename());
+
+			if(packageResource != null) {
+				ModifiableValueMap props = packageResource.adaptTo(ModifiableValueMap.class);
+				props.putAll(getPropsFromApplicationPackage(appPackage));
+				resourceResolver.commit();
+			}
+
+		} catch (PersistenceException e) {
+			throw new RuntimeException("Could not update the Application Package in the repository.", e);
+		}
+	}
+
+	@Override
     public Resource getRepositoryRootResource() {
-        ResourceResolver resourceResolver = serviceUserResourceResolver.getServiceResourceResolver();
         return resourceResolver.getResource(APP_PACKAGES_ROOT_PATH);
     }
+
+	private Map<String, Object> getPropsFromApplicationPackage(ApplicationPackage appPackage) {
+		Map<String, Object> props = new HashMap<>();
+		props.put("packageFilename", appPackage.getPackageFilename());
+		props.put("packageType", appPackage.getPackageType());
+		props.put("artifactId", appPackage.getArtifactId());
+		props.put("groupId", appPackage.getGroupId());
+		props.put("state", appPackage.getState().toString());
+
+		return props;
+	}
 
     private boolean isAclPrimaryType(Resource appPackageResource) {
         return appPackageResource.getValueMap().get("jcr:primaryType", "").equals("rep:ACL");
@@ -102,6 +133,7 @@ public class SledgePackageRepository implements PackageRepository {
         ApplicationPackage appPackage = new ApplicationPackage(appPackageResource.getName());
         appPackage.setArtifactId(appPackageResource.getValueMap().get("artifactId", "NO_ARTIFACT_ID"));
         appPackage.setGroupId(appPackageResource.getValueMap().get("groupId", "nogroup"));
+        appPackage.setPath(appPackageResource.getPath());
 
         return appPackage;
     }

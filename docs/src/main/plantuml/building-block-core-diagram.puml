@@ -2,9 +2,15 @@
 
 package "sledge-core" as core {
 	interface PackageRepository
-	interface ApplicationPackage
 	interface DeploymentConfiguration
 	interface PackageSourceConnector
+	interface Installer
+	interface ApplicationPackageExtractor
+	class ApplicationPackage
+	class SledgeInstallServlet
+	class SledgeUninstallServlet
+	class SledgeUploadServlet
+	class SledgeConfigServlet
 }
 
 hide members

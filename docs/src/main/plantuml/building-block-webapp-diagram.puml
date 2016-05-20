@@ -1,9 +1,7 @@
 @startuml
 
 package "sledge-webapp" as webapp {
-	class PackageSourceController
-	class ConfigurationController
-	class InstallationController
+	class MainViewModel
 }
 
 hide members

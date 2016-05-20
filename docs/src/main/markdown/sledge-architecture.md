@@ -129,6 +129,8 @@ The ApplicationPackage provides methods for getting data out of a Application pa
 - General information: version, groupId, artifactId, description, etc.
 - List of contents
 
+The internal structure of an Application Package is defined by the _ApplicationPackageExtractor_.
+
 ### PackageSourceConnector
 
 The PackageSourceConnector defines methods for loading Application packages from a specific source location (local repository, Adobe Package Manager, Nexus repository, etc.). It returns a list of ApplicationPackage objects.
