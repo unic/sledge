@@ -117,9 +117,6 @@ public class SledgePackageRepository implements PackageRepository {
 	private Map<String, Object> getPropsFromApplicationPackage(ApplicationPackage appPackage) {
 		Map<String, Object> props = new HashMap<>();
 		props.put("packageFilename", appPackage.getPackageFilename());
-		props.put("packageType", appPackage.getPackageType());
-		props.put("artifactId", appPackage.getArtifactId());
-		props.put("groupId", appPackage.getGroupId());
 		props.put("state", appPackage.getState().toString());
 
 		return props;
@@ -131,8 +128,6 @@ public class SledgePackageRepository implements PackageRepository {
 
     private ApplicationPackage createApplicationPackage(Resource appPackageResource) {
         ApplicationPackage appPackage = new ApplicationPackage(appPackageResource.getName());
-        appPackage.setArtifactId(appPackageResource.getValueMap().get("artifactId", "NO_ARTIFACT_ID"));
-        appPackage.setGroupId(appPackageResource.getValueMap().get("groupId", "nogroup"));
         appPackage.setPath(appPackageResource.getPath());
 
         return appPackage;

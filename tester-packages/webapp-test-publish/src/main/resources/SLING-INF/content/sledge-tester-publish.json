@@ -1,0 +1,5 @@
+{
+    "jcr:primaryType" : "nt:unstructured",
+    "jcr:title" : "Sledge Tester webapp Publish",
+    "sling:resourceType" : "sledge-tester-publish/tester"
+}

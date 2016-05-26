@@ -18,4 +18,5 @@ public class SledgeConstants {
 	 * The path where application packages gets extracted and installed.
      */
     public static final String SLEDGE_INSTALL_LOCATION = "/apps/sledge_packages/install";
+	public static final String SLEDGEFILE_XML = "sledgefile.xml";
 }

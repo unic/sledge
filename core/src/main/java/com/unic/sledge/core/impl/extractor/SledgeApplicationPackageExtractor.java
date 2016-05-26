@@ -1,7 +1,10 @@
 package com.unic.sledge.core.impl.extractor;
 
+import com.unic.sledge.core.api.configuration.DeploymentConfiguration;
+import com.unic.sledge.core.api.configuration.DeploymentConfigurationReader;
 import com.unic.sledge.core.api.extractor.ApplicationPackageExtractor;
 import com.unic.sledge.core.api.models.ApplicationPackage;
+import com.unic.sledge.core.impl.configuration.DeploymentConfigurationReaderXml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import static com.unic.sledge.core.api.SledgeConstants.*;
 
 /**
  * The {@link SledgeApplicationPackageExtractor} extracts data from a given {@link ApplicationPackage}.
@@ -52,8 +57,6 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 
 			while ((zipEntry = zipStream.getNextEntry()) != null) {
 
-				log.info("Reading zip entry: " + zipEntry.getName());
-
 				if (zipEntry.isDirectory()) {
 					zipStream.closeEntry();
 					continue;
@@ -66,13 +69,13 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 				}
 			}
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		} finally {
 			try {
 				zipStream.close();
 				appPackage.getPackageFile().reset();
 			} catch (IOException e) {
-				log.error(e.getMessage());
+				log.error(e.getMessage(), e);
 			}
 		}
 
@@ -98,7 +101,7 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 				if (zipEntry.getName().endsWith(environmentFileName)) {
 
 					int length;
-					while ((length = zipStream.read(buffer, 0,buffer.length)) >= 0) {
+					while ((length = zipStream.read(buffer, 0, buffer.length)) >= 0) {
 						output.write(buffer, 0, length);
 					}
 
@@ -109,13 +112,13 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 				}
 			}
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		} finally {
 			try {
 				zipStream.close();
 				appPackage.getPackageFile().reset();
 			} catch (IOException e) {
-				log.error(e.getMessage());
+				log.error(e.getMessage(), e);
 			}
 		}
 
@@ -142,7 +145,7 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 					ByteArrayOutputStream output = new ByteArrayOutputStream();
 
 					int length;
-					while ((length = zipStream.read(buffer, 0,buffer.length)) >= 0) {
+					while ((length = zipStream.read(buffer, 0, buffer.length)) >= 0) {
 						output.write(buffer, 0, length);
 					}
 
@@ -153,17 +156,64 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 				}
 			}
 		} catch (IOException e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(), e);
 		} finally {
 			try {
 				zipStream.close();
 				appPackage.getPackageFile().reset();
 			} catch (IOException e) {
-				log.error(e.getMessage());
+				log.error(e.getMessage(), e);
 			}
 		}
 
 		return packages;
+	}
+
+	@Override
+	public DeploymentConfiguration getDeploymentConfiguration(InputStream appPackageInputStream) {
+		DeploymentConfiguration deploymentConfig = null;
+		ZipInputStream zipStream = new ZipInputStream(new BufferedInputStream(appPackageInputStream), Charset.forName("UTF-8"));
+
+		try {
+			byte[] buffer = new byte[2048];
+			ZipEntry zipEntry = null;
+
+			while ((zipEntry = zipStream.getNextEntry()) != null) {
+
+				if (zipEntry.isDirectory()) {
+					zipStream.closeEntry();
+					continue;
+				}
+
+				if (zipEntry.getName().startsWith(SLEDGEFILE_XML)) {
+					ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+					int length;
+					while ((length = zipStream.read(buffer, 0, buffer.length)) >= 0) {
+						output.write(buffer, 0, length);
+					}
+
+					DeploymentConfigurationReader deploymentConfigReader = new DeploymentConfigurationReaderXml();
+					deploymentConfig = deploymentConfigReader.parseDeploymentConfiguration(new ByteArrayInputStream(output.toByteArray()));
+
+					zipStream.closeEntry();
+
+					// Stop here, the file is read
+					break;
+				}
+			}
+		} catch (IOException e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			try {
+				zipStream.close();
+				appPackageInputStream.reset();
+			} catch (IOException e) {
+				log.error(e.getMessage(), e);
+			}
+		}
+
+		return deploymentConfig;
 	}
 
 	private ZipInputStream getNewUtf8ZipInputStream(ApplicationPackage appPackage) {

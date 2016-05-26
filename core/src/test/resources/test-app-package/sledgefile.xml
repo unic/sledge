@@ -1,9 +1,0 @@
-<sledgefile artifactId="com.unic.test.theproject" groupdId="com.unic.test">
-	<deployment-def environments="test-author,test-publish">
-		<installer>
-			<package>com.unic.sledge.webapp-tester-0.1.0-SNAPSHOT.jar</package>
-		</installer>
-		<configurer>
-		</configurer>
-	</deployment-def>
-</sledgefile>

@@ -1,5 +1,6 @@
 package com.unic.sledge.core.api.extractor;
 
+import com.unic.sledge.core.api.configuration.DeploymentConfiguration;
 import com.unic.sledge.core.api.models.ApplicationPackage;
 
 import java.io.InputStream;
@@ -34,4 +35,9 @@ public interface ApplicationPackageExtractor {
 	 * @return A map of package input streams mapped to their file name
 	 */
 	Map<String, InputStream> getPackages(ApplicationPackage appPackage);
+
+	/**
+	 * @return Returns the deployment configuration object parsed from the sledgefile.xml contained at the root level in the application package.
+	 */
+	DeploymentConfiguration getDeploymentConfiguration(InputStream appPackageInputStream);
 }

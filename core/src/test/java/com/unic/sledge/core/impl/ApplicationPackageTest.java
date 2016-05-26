@@ -17,18 +17,18 @@ import com.unic.sledge.core.api.models.ApplicationPackage;
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationPackageTest {
 
-    private String artifactId = "com.test.webapp";
+    private String packageFilename = "com.test.webapp.zip";
 
     @InjectMocks
     private ApplicationPackage testee;
 
     @Before
     public void setup() {
-        field("artifactId").ofType(String.class).in(testee).set(artifactId);
+        field("packageFilename").ofType(String.class).in(testee).set(packageFilename);
     }
 
     @Test
-    public void getArtifactId() {
-        assertThat(testee.getArtifactId()).isEqualTo(artifactId);
+    public void testGetPackageFilename() {
+        assertThat(testee.getPackageFilename()).isEqualTo(packageFilename);
     }
 }

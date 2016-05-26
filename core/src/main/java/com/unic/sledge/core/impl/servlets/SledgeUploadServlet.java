@@ -1,13 +1,14 @@
 package com.unic.sledge.core.impl.servlets;
 
+import com.unic.sledge.core.api.configuration.DeploymentConfiguration;
+import com.unic.sledge.core.api.extractor.ApplicationPackageExtractor;
 import com.unic.sledge.core.api.models.ApplicationPackage;
 import com.unic.sledge.core.api.models.ApplicationPackageState;
-import com.unic.sledge.core.api.models.PackageType;
 import com.unic.sledge.core.api.repository.PackageRepository;
+import com.unic.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
 import com.unic.sledge.core.impl.repository.SledgePackageRepository;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
-import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
@@ -46,12 +47,7 @@ public class SledgeUploadServlet extends SlingAllMethodsServlet {
 
 			ApplicationPackage appPackage = new ApplicationPackage(fileName);
 
-			// TODO: Extract artifactId and groupId from package sledgefile.xml
-			appPackage.setArtifactId("com.sledge.unknown");
-			appPackage.setGroupId("sledge.group");
-			appPackage.setPackageType(PackageType.application.toString());
 			appPackage.setState(ApplicationPackageState.UPLOADED.toString());
-
 			appPackage.setPackageFile(packageRequestParam.getInputStream());
 
 			PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
