@@ -10,7 +10,7 @@
             <a href="${resource.path}.upload.html" class="add-package-button"><button class="btn btn-default" type="submit">Add new application package</button></a>
             <div class="application-packages-list" data-sly-list="${resource.listChildren}">
 				<div class="row app-package-item">
-					<div class="col-md-3 app-package-item-description"><strong>${item.name}</strong><br/>(${item.valueMap.groupId} : ${item.valueMap.artifactId})</div>
+					<div class="col-md-3 app-package-item-description"><strong>${item.name}</strong></div>
                     <div class="col-md-1">
                         <span class="label label-primary" data-sly-test="${item.valueMap.state == 'UPLOADED'}">${item.valueMap.state}</span>
                         <span class="label label-success" data-sly-test="${item.valueMap.state == 'INSTALLED'}">${item.valueMap.state}</span>

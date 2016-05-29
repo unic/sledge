@@ -25,15 +25,6 @@ public class ApplicationPackage {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@ValueMapValue
-	private String artifactId;
-
-	@ValueMapValue
-	private String groupId;
-
-	@ValueMapValue
-	private String packageType;
-
-	@ValueMapValue
 	private String packageFilename;
 
 	private String path;
@@ -49,30 +40,6 @@ public class ApplicationPackage {
 
 	public ApplicationPackage(String packageFileName) {
 		this.packageFilename = packageFileName;
-	}
-
-	public String getPackageType() {
-		return packageType;
-	}
-
-	public void setPackageType(String packageType) {
-		this.packageType = packageType;
-	}
-
-	public String getArtifactId() {
-		return artifactId;
-	}
-
-	public String getGroupId() {
-		return groupId;
-	}
-
-	public void setArtifactId(String artifactId) {
-		this.artifactId = artifactId;
-	}
-
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
 	}
 
 	public String getPackageFilename() {
