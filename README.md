@@ -14,7 +14,6 @@ Furthermore it provides a command line interface, best suited for remote managem
 # Installation
 
 * Install and run Sling 8
+* Install core, connectors and webapp packages, check the `deploy.sh` script for the Maven commands
 
-* Install core, connectors and webapp packages
-
-The logged in user needs write permission to: /apps/sledge_packages and /etc/sledge/packages to make the application work properly.
+The logged in user needs write permission to: `/apps/sledge_packages` and `/etc/sledge/packages` to make the application work properly.

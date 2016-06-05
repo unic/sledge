@@ -14,8 +14,10 @@ import java.util.List;
 
 /**
  * An <i>ApplicationPackage</i> provides all needed information for the whole
- * application. Its defined by a file name, an artifactId and a groupId.
- * It contains the bundles or packages (e.g. CRX packages), configurations and the deployment descriptor file.
+ * application. It contains the bundles or packages (e.g. CRX packages), configurations and the deployment descriptor file <i>sledgefile.xml</i>.
+ * <p>
+ * The deployment descriptor file sledgefile.xml declares the <strong>deployment-def</strong> elements which defines a deployment for a specific environment.
+ * </p>
  *
  * @author oliver.burkhalter
  */
@@ -77,8 +79,8 @@ public class ApplicationPackage {
 		this.state = state;
 	}
 
-	public List<String> getEnvironmentFilenames() {
+	public List<String> getEnvironmentNames() {
 		ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
-		return appPackageExtractor.getEnvironmentFilenames(this);
+		return appPackageExtractor.getEnvironmentNames(this);
 	}
 }

@@ -35,7 +35,7 @@ public class ConfigFileServlet extends SlingAllMethodsServlet {
 
 	@Override
 	protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-		RequestParameter configFileParam = request.getRequestParameter(SledgeConstants.ENVIRONMENT_FILE_PARAM);
+		RequestParameter configFileParam = request.getRequestParameter(SledgeConstants.ENVIRONMENT_NAME_PARAM);
 		Resource packageResource = request.getResource();
 
 		if(configFileParam != null) {

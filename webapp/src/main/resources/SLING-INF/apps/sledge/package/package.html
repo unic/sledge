@@ -13,15 +13,15 @@
         <div class="package-metadata">
             <p><strong>State:</strong> ${model.state}</p>
         </div>
-        <select id="environment-file-list" data-sly-list="${model.environmentFilenames}">
-            <option>${item}</option>
-        </select>
-        <a><button class="btn btn-primary btn-sm js-load-config-button" data-load-url="${resource.path}" type="submit">Load config</button></a>
-        <div class="environment-file-area">
-            <label for="environment-file-content">Environment config file:</label><br/>
-            <textarea id="environment-file-content" name="environment-file-content" rows="12" cols="80"></textarea>
-        </div>
         <form action="${resource.path}.install.html" method="post">
+            <select id="environment-file-list" name="environmentName" data-sly-list="${model.environmentNames}">
+                <option>${item}</option>
+            </select>
+            <a><button class="btn btn-primary btn-sm js-load-config-button" data-package-resource-path="${resource.path}" type="button">Load config</button></a>
+            <div class="environment-file-area">
+                <label for="environment-file-content">Environment config file:</label><br/>
+                <textarea id="environment-file-content" name="environmentFileContent" rows="12" cols="80"></textarea>
+            </div>
             <input type="hidden" name=":redirect" value="/etc/sledge/packages.html" />
             <button class="btn btn-primary btn-sm js-package-install" type="submit">Start installation</button>
         </form>

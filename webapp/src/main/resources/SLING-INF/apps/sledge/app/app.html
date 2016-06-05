@@ -20,12 +20,11 @@
 						<a href="/etc/sledge/packages/${item.name}.html" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
 							<button class="btn btn-primary btn-sm" type="submit">Install</button>
 						</a>
-						<form action="${resource.path}.uninstall.html?packagePath=${item.path}" method="POST" data-sly-test="${item.valueMap.state == 'INSTALLED'}">
-							<input type="hidden" name=":operation" value="delete">
-							<input type="hidden" name=":redirect" value="${resource.path}.html" />
+						<form action="${item.path}.uninstall.html" method="POST" data-sly-test="${item.valueMap.state == 'INSTALLED'}">
+							<input type="hidden" name=":redirect" value="/etc/sledge/packages.html" />
 							<button class="btn btn-warning btn-sm" type="submit">Uninstall</button>
 						</form>
-						<form action="/etc/sledge/packages/${item.name}" method="POST">
+						<form action="/etc/sledge/packages/${item.name}" method="POST" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
 							<input type="hidden" name=":operation" value="delete">
 							<input type="hidden" name=":redirect" value="${resource.path}.html" />
 							<button class="btn btn-danger btn-sm" type="submit">Remove</button>

@@ -2,6 +2,7 @@ package com.unic.sledge.core.impl.extractor;
 
 import com.unic.sledge.core.api.configuration.DeploymentConfiguration;
 import com.unic.sledge.core.api.configuration.DeploymentConfigurationReader;
+import com.unic.sledge.core.api.configuration.DeploymentDef;
 import com.unic.sledge.core.api.extractor.ApplicationPackageExtractor;
 import com.unic.sledge.core.api.models.ApplicationPackage;
 import com.unic.sledge.core.impl.configuration.DeploymentConfigurationReaderXml;
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static com.unic.sledge.core.api.SledgeConstants.*;
+import static com.unic.sledge.core.api.SledgeConstants.SLEDGEFILE_XML;
+import static org.apache.commons.io.FilenameUtils.getBaseName;
 
 /**
  * The {@link SledgeApplicationPackageExtractor} extracts data from a given {@link ApplicationPackage}.
@@ -48,7 +51,7 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 	}
 
 	@Override
-	public List<String> getEnvironmentFilenames(ApplicationPackage appPackage) {
+	public List<String> getEnvironmentNames(ApplicationPackage appPackage) {
 		List<String> envFiles = new ArrayList<>();
 		ZipInputStream zipStream = getNewUtf8ZipInputStream(appPackage);
 
@@ -63,8 +66,8 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 				}
 
 				if (zipEntry.getName().startsWith("environments/")) {
-					String configFileName = zipEntry.getName().substring(13);
-					envFiles.add(configFileName);
+					// test-publish.properties -> test-publish
+					envFiles.add(getBaseName(zipEntry.getName()));
 					zipStream.closeEntry();
 				}
 			}
@@ -83,7 +86,7 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 	}
 
 	@Override
-	public String getEnvironmentFile(String environmentFileName, ApplicationPackage appPackage) {
+	public String getEnvironmentFile(String environmentName, ApplicationPackage appPackage) {
 		ZipInputStream zipStream = getNewUtf8ZipInputStream(appPackage);
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -98,7 +101,7 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 					continue;
 				}
 
-				if (zipEntry.getName().endsWith(environmentFileName)) {
+				if (getBaseName(zipEntry.getName()).equals(environmentName)) {
 
 					int length;
 					while ((length = zipStream.read(buffer, 0, buffer.length)) >= 0) {
@@ -165,6 +168,21 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 				log.error(e.getMessage(), e);
 			}
 		}
+
+		return packages;
+	}
+
+	@Override
+	public List<Map.Entry<String, InputStream>> getPackagesByEnvironment(ApplicationPackage appPackage, String envName) {
+		List<Map.Entry<String, InputStream>> packages;
+		Map<String, InputStream> allPackages = getPackages(appPackage);
+
+		DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration(appPackage.getPackageFile());
+		final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(envName);
+		final List<String> installerPackageNamesForEnv = deploymentDef.getInstallerPackageNames();
+
+		packages = allPackages.entrySet().stream().filter(packageEntry -> installerPackageNamesForEnv.contains(packageEntry.getKey()))
+				.collect(Collectors.toList());
 
 		return packages;
 	}

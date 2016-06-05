@@ -1,8 +1,8 @@
 <sledgefile>
 	<deployment-def environments="test-author,test-publish">
 		<installer>
-			<package>com.unic.sledge.common-tester-0.1.0-SNAPSHOT.jar</package>
-            <package>com.unic.sledge.webapp-tester-0.1.0-SNAPSHOT.jar</package>
+			<package>com.unic.sledge.webapp-tester-0.1.0-SNAPSHOT.jar</package>
+            <package>com.unic.sledge.webapp-tester-publish-0.1.0-SNAPSHOT.jar</package>
 		</installer>
 		<configurer>
 		</configurer>

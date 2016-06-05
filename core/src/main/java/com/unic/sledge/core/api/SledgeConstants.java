@@ -12,7 +12,7 @@ public class SledgeConstants {
      */
     public static final String RT_PACKAGE = "sledge/package";
 
-    public static final String ENVIRONMENT_FILE_PARAM = "environmentFilename";
+    public static final String ENVIRONMENT_NAME_PARAM = "environmentName";
 
 	/**
 	 * The path where application packages gets extracted and installed.

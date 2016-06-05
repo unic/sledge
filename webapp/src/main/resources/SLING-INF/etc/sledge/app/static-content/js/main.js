@@ -12,7 +12,7 @@
 
 		// Private variables and functions
 		var $element = $(selector);
-		var resourcePath = $element.attr("data-load-url");
+		var resourcePath = $element.attr("data-package-resource-path");
 
 		var bindClick = function () {
 			$element.click(function () {
@@ -21,8 +21,8 @@
 		};
 
 		var getConfigFileLoadUrl = function () {
-			var envFilename = $environmentFileList.find(":selected").val();
-			return resourcePath + ".config.html?environmentFilename=" + envFilename;
+			var envName= $environmentFileList.find(":selected").val();
+			return resourcePath + ".config.html?environmentName=" + envName;
 		};
 
 		var loadConfigFileContent = function () {
