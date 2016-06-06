@@ -1,6 +1,8 @@
 package com.unic.sledge.core.impl.installer;
 
 import com.unic.sledge.core.api.SledgeConstants;
+import com.unic.sledge.core.api.configuration.DeploymentConfiguration;
+import com.unic.sledge.core.api.configuration.DeploymentDef;
 import com.unic.sledge.core.api.extractor.ApplicationPackageExtractor;
 import com.unic.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
 import com.unic.sledge.core.api.installer.InstallationException;
@@ -13,6 +15,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,15 +34,12 @@ public class SledgeInstallerImpl implements Installer {
 	}
 
 	@Override
-	public void install(ApplicationPackage appPackage) throws InstallationException {
-
+	public void install(ApplicationPackage appPackage, String envName) throws InstallationException {
 		Resource installLocationResource = resourceResolver.getResource(SledgeConstants.SLEDGE_INSTALL_LOCATION);
-
 		ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
 
-		Map<String, InputStream> packages = appPackageExtractor.getPackages(appPackage);
-
-		for (Map.Entry<String, InputStream> packageEntry : packages.entrySet()) {
+		List<Map.Entry<String, InputStream>> packages = appPackageExtractor.getPackagesByEnvironment(appPackage, envName);
+		for (Map.Entry<String, InputStream> packageEntry : packages) {
 			try {
 
 				Map<String, Object> props = new HashMap<>();

@@ -12,7 +12,6 @@ import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.servlets.post.SlingPostConstants;
@@ -41,24 +40,20 @@ public class SledgeInstallServlet extends SlingAllMethodsServlet {
 
 	@Override
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-		String packagePath = request.getResource().getPath();
+		String envName = request.getParameter(SledgeConstants.ENVIRONMENT_NAME_PARAM);
+		// String envFileContent = request.getParameter("environmentFileContent");
 
-		if (packagePath != null) {
-			Resource packageResource = request.getResourceResolver().getResource(packagePath);
-			ApplicationPackage appPackage = packageResource.adaptTo(ApplicationPackage.class);
+		Resource packageResource = request.getResource();
+		ApplicationPackage appPackage = packageResource.adaptTo(ApplicationPackage.class);
 
-			Installer installer = new SledgeInstallerImpl(request.getResourceResolver());
-			installer.install(appPackage);
+		Installer installer = new SledgeInstallerImpl(request.getResourceResolver());
+		installer.install(appPackage, envName);
 
-			PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
-			appPackage.setState(ApplicationPackageState.INSTALLED.toString());
-			packageRepository.updateApplicationPackage(appPackage);
+		PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
+		appPackage.setState(ApplicationPackageState.INSTALLED.toString());
+		packageRepository.updateApplicationPackage(appPackage);
 
-			String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);
-			response.sendRedirect(redirectUrl);
-
-		} else {
-			response.sendRedirect(request.getRequestURI() + ".html");
-		}
+		String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);
+		response.sendRedirect(redirectUrl);
 	}
 }
