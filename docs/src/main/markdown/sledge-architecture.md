@@ -81,7 +81,15 @@ System Scope and Context
 Solution Strategy
 =================
 
-We have chosen the Apache Sling web framework as our base framework because the solution shall be mainly available for the AEM platform which is also based on the Apache Sling web framework. The implementation focus on an OSGi-based deployment model instead of using a system approach model like doing such automation via Docker, etc. The reason why we decided to do so is because there are situations where the IT departement has not the possibility to change easily to such deployment technologies.
+We have chosen the Apache Sling web framework as our base framework because the solution shall be mainly available for the AEM platform which is also based on the Apache Sling web framework.
+The implementation focus on an OSGi-based deployment model instead of using a system approach model like doing such automation via Docker, etc. The reason why we decided to do so is because there are situations where the IT departement has not the possibility to change easily to such deployment technologies.
+
+Advantages of this solution:
+
+- No console access needed, simple web UI integrated in AEM stack
+- Possibility to access all the OSGi related data for monitoring properly the installation process (bundles state, configuration state, etc.)
+- Can be easily integrated with other CI/CD systems because it is using simple HTTP calls
+- Apache Sling standard based solution (using the OsgiInstaller) offers a community to get support
 
 
 Building Block View
