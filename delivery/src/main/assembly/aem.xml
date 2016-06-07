@@ -1,0 +1,41 @@
+ <assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>aem</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	
+	<includeBaseDirectory>false</includeBaseDirectory>
+	
+    <fileSets>
+        <fileSet>
+            <outputDirectory>META-INF</outputDirectory>
+            <includes>
+                <include>**/*.xml</include>
+            </includes>
+            <filtered>true</filtered>
+            <directory>src/main/vault-resources/META-INF</directory>
+        </fileSet>
+		<fileSet>
+			<outputDirectory />
+			<excludes>
+				<exclude>META-INF/**/*.xml</exclude>
+			</excludes>
+			<directory>src/main/vault-resources</directory>
+		</fileSet>
+    </fileSets>
+	
+	<dependencySets>
+        <dependencySet>
+            <outputDirectory>jcr_root/apps/${project.artifactId}/install</outputDirectory>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <includes>
+                <include>${project.groupId}:com.unic.sledge.core</include>
+                <include>${project.groupId}:com.unic.sledge.connectors</include>
+				<include>${project.groupId}:com.unic.sledge.webapp</include>
+            </includes>
+        </dependencySet>
+	</dependencySets>
+</assembly>
