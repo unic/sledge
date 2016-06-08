@@ -4,6 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * The DeploymentConfiguration contains all the deployment definition elements.
+ *
+ * You can load a deployment definition for a specific environment which provides you with the needed packages for installation for
+ * this environment.
+
  * @author oliver.burkhalter
  */
 public class DeploymentConfiguration {

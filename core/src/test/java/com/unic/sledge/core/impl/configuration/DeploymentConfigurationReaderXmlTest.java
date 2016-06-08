@@ -33,26 +33,27 @@ public class DeploymentConfigurationReaderXmlTest {
 		DeploymentDef deploymentDefTest = deploymentConfiguration.getDeploymentDefinitions().get(0);
 
 		assertThat(deploymentDefTest.getEnvironments()).containsOnly("test-author", "test-publish");
-		assertThat(deploymentDefTest.getInstallerPackageNames())
+		assertThat(deploymentDefTest.getPackages()).extracting("packageName")
 				.contains("com.my.package.common-1.0.0-crx.zip", "com.my.package.templating-1.0.0-crx.zip",
-						"com.my.package.ws-1.0.0-crx.zip");
-		assertThat(deploymentDefTest.getConfigurerPackageNames()).contains("com.my.package.configuration-1.0.0-crx.zip");
+						"com.my.package.ws-1.0.0-crx.zip", "com.my.package.configuration-1.0.0-crx.zip");
+		assertThat(deploymentDefTest.getPackages()).filteredOn("configure", true).hasSize(1);
 
 		// prod-author environment configuration
 		DeploymentDef deploymentDefProdAuthor = deploymentConfiguration.getDeploymentDefinitions().get(1);
 		assertThat(deploymentDefProdAuthor.getEnvironments()).containsOnly("prod-author");
-		assertThat(deploymentDefProdAuthor.getInstallerPackageNames())
+		assertThat(deploymentDefProdAuthor.getPackages()).extracting("packageName")
 				.contains("com.my.package.common-1.0.0-crx.zip", "com.my.package.templating-1.0.0-crx.zip",
-						"com.my.package.ws-1.0.0-crx.zip", "com.my.package.migration-1.0.0-crx.zip");
-		assertThat(deploymentDefProdAuthor.getConfigurerPackageNames()).contains("com.my.package.configuration-1.0.0-crx.zip");
+						"com.my.package.ws-1.0.0-crx.zip", "com.my.package.migration-1.0.0-crx.zip",
+						"com.my.package.configuration-1.0.0-crx.zip");
+		assertThat(deploymentDefProdAuthor.getPackages()).filteredOn("configure", true).hasSize(1);
 
 		// prod-publish environment configuration
 		DeploymentDef deploymentDefProdPublish = deploymentConfiguration.getDeploymentDefinitions().get(2);
 		assertThat(deploymentDefProdPublish.getEnvironments()).containsOnly("prod-publish");
-		assertThat(deploymentDefProdPublish.getInstallerPackageNames())
+		assertThat(deploymentDefProdPublish.getPackages()).extracting("packageName")
 				.contains("com.my.package.common-1.0.0-crx.zip", "com.my.package.templating-1.0.0-crx.zip",
-						"com.my.package.ws-1.0.0-crx.zip");
-		assertThat(deploymentDefProdPublish.getConfigurerPackageNames()).contains("com.my.package.configuration-1.0.0-crx.zip");
+						"com.my.package.ws-1.0.0-crx.zip", "com.my.package.configuration-1.0.0-crx.zip");
+		assertThat(deploymentDefProdPublish.getPackages()).filteredOn("configure", true).hasSize(1);
 	}
 
 	@Test(expected = DuplicateEnvironmentException.class)

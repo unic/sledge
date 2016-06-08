@@ -3,6 +3,7 @@ package com.unic.sledge.core.impl.extractor;
 import com.unic.sledge.core.api.configuration.DeploymentConfiguration;
 import com.unic.sledge.core.api.configuration.DeploymentConfigurationReader;
 import com.unic.sledge.core.api.configuration.DeploymentDef;
+import com.unic.sledge.core.api.configuration.PackageElement;
 import com.unic.sledge.core.api.extractor.ApplicationPackageExtractor;
 import com.unic.sledge.core.api.models.ApplicationPackage;
 import com.unic.sledge.core.impl.configuration.DeploymentConfigurationReaderXml;
@@ -179,9 +180,9 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
 
 		DeploymentConfiguration deploymentConfiguration = getDeploymentConfiguration(appPackage.getPackageFile());
 		final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(envName);
-		final List<String> installerPackageNamesForEnv = deploymentDef.getInstallerPackageNames();
+		final List<String> packageNamesForEnv = deploymentDef.getPackageNames();
 
-		packages = allPackages.entrySet().stream().filter(packageEntry -> installerPackageNamesForEnv.contains(packageEntry.getKey()))
+		packages = allPackages.entrySet().stream().filter(packageEntry -> packageNamesForEnv.contains(packageEntry.getKey()))
 				.collect(Collectors.toList());
 
 		return packages;

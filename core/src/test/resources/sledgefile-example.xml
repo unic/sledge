@@ -1,33 +1,27 @@
 <sledgefile>
 	<deployment-def environments="test-author,test-publish">
-		<installer>
+		<packages>
 			<package>com.my.package.common-1.0.0-crx.zip</package>
 			<package>com.my.package.templating-1.0.0-crx.zip</package>
 			<package>com.my.package.ws-1.0.0-crx.zip</package>
-		</installer>
-		<configurer>
-			<package>com.my.package.configuration-1.0.0-crx.zip</package>
-		</configurer>
+			<package configure="true">com.my.package.configuration-1.0.0-crx.zip</package>
+		</packages>
 	</deployment-def>
 	<deployment-def environments="prod-author">
-		<installer>
+		<packages>
 			<package>com.my.package.common-1.0.0-crx.zip</package>
 			<package>com.my.package.templating-1.0.0-crx.zip</package>
 			<package>com.my.package.ws-1.0.0-crx.zip</package>
 			<package>com.my.package.migration-1.0.0-crx.zip</package>
-		</installer>
-		<configurer>
-			<package>com.my.package.configuration-1.0.0-crx.zip</package>
-		</configurer>
+			<package configure="true">com.my.package.configuration-1.0.0-crx.zip</package>
+		</packages>
 	</deployment-def>
 	<deployment-def environments="prod-publish">
-		<installer>
+		<packages>
 			<package>com.my.package.common-1.0.0-crx.zip</package>
 			<package>com.my.package.templating-1.0.0-crx.zip</package>
 			<package>com.my.package.ws-1.0.0-crx.zip</package>
-		</installer>
-		<configurer>
-			<package>com.my.package.configuration-1.0.0-crx.zip</package>
-		</configurer>
+			<package configure="true">com.my.package.configuration-1.0.0-crx.zip</package>
+		</packages>
 	</deployment-def>
 </sledgefile>

@@ -2,17 +2,18 @@ package com.unic.sledge.core.api.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
+ * Represents a &lt;deployment-def> element in the sledgefile.xml config file.
+ *
  * @author oliver.burkhalter
  */
 public class DeploymentDef {
 
-	private List<String> environments;
+	private List<String> environments = new ArrayList<>();;
 
-	private List<String> installerPackageNames = new ArrayList<>();
-
-	private List<String> configurerPackageNames = new ArrayList<>();
+	private List<PackageElement> packages = new ArrayList<>();
 
 	public List<String> getEnvironments() {
 		return environments;
@@ -22,19 +23,19 @@ public class DeploymentDef {
 		this.environments = environments;
 	}
 
-	public List<String> getInstallerPackageNames() {
-		return installerPackageNames;
+	public List<PackageElement> getPackages() {
+		return packages;
 	}
 
-	public void addInstallerPackageName(String packageName) {
-		installerPackageNames.add(packageName);
+	public List<String> getPackageNames() {
+		return packages.stream().map(p -> p.getPackageName()).collect(Collectors.toList());
 	}
 
-	public List<String> getConfigurerPackageNames() {
-		return configurerPackageNames;
+	public List<PackageElement> getPackagesForConfiguration() {
+		return packages.stream().filter(p -> p.isConfigure()).collect(Collectors.toList());
 	}
 
-	public void addConfigurerPackageName(String packageName) {
-		configurerPackageNames.add(packageName);
+	public void addPackage(PackageElement packageElement) {
+		packages.add(packageElement);
 	}
 }

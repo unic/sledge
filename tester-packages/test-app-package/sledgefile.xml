@@ -1,24 +1,18 @@
 <sledgefile>
 	<deployment-def environments="test-author,test-publish">
-		<installer>
+		<packages>
 			<package>com.unic.sledge.webapp-tester-0.1.0-SNAPSHOT.jar</package>
             <package>com.unic.sledge.webapp-tester-publish-0.1.0-SNAPSHOT.jar</package>
-		</installer>
-		<configurer>
-		</configurer>
+		</packages>
 	</deployment-def>
 	<deployment-def environments="prod-author">
-		<installer>
+		<packages>
 			<package>com.unic.sledge.webapp-tester-0.1.0-SNAPSHOT.jar</package>
-		</installer>
-		<configurer>
-		</configurer>
+		</packages>
 	</deployment-def>
 	<deployment-def environments="prod-publish">
-		<installer>
+		<packages>
 			<package>com.unic.sledge.webapp-tester-publish-0.1.0-SNAPSHOT.jar</package>
-		</installer>
-		<configurer>
-		</configurer>
+		</packages>
 	</deployment-def>
 </sledgefile>
