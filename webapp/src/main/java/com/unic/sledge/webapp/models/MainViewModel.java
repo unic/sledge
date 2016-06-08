@@ -1,27 +1,29 @@
 package com.unic.sledge.webapp.models;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 
-import com.unic.sledge.core.api.models.ApplicationPackage;
-import com.unic.sledge.core.api.repository.PackageRepository;
+import java.util.Iterator;
 
 /**
+ * Model for the /etc/sledge/packages.html resource.
+ *
  * @author oliver.burkhalter
  */
 @Model(adaptables = Resource.class)
 public class MainViewModel {
 
-    @Self
-    private Resource resource;
+	@Self
+	private Resource resource;
 
-    public Iterator<Resource> getConnectorResources() {
-        return resource.getParent().getChild("connectors").listChildren();
-    }
+	public Iterator<Resource> getConnectorResources() {
+		return resource.getParent().getChild("connectors").listChildren();
+	}
+
+	public boolean isSightlyGraniteClientlibTemplateAvailable() {
+		Resource sightlyGraniteClientlibTemplateResource = resource.getResourceResolver()
+				.getResource("/libs/granite/sightly/templates/clientlib.html");
+		return sightlyGraniteClientlibTemplateResource != null;
+	}
 }
