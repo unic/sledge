@@ -31,8 +31,8 @@ public class DeploymentDef {
 		return packages.stream().map(p -> p.getPackageName()).collect(Collectors.toList());
 	}
 
-	public List<PackageElement> getPackagesForConfiguration() {
-		return packages.stream().filter(p -> p.isConfigure()).collect(Collectors.toList());
+	public List<String> getPackageNamesForConfiguration() {
+		return packages.stream().filter(p -> p.isConfigure()).map(p -> p.getPackageName()).collect(Collectors.toList());
 	}
 
 	public void addPackage(PackageElement packageElement) {

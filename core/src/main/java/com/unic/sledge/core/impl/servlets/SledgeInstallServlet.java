@@ -18,6 +18,7 @@ import org.apache.sling.servlets.post.SlingPostConstants;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.io.StringReader;
 
 /**
  * @author oliver.burkhalter
@@ -41,13 +42,18 @@ public class SledgeInstallServlet extends SlingAllMethodsServlet {
 	@Override
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
 		String envName = request.getParameter(SledgeConstants.ENVIRONMENT_NAME_PARAM);
-		// String envFileContent = request.getParameter("environmentFileContent");
+		String overwriteEnvFileContent = request.getParameter(SledgeConstants.ENVIRONMENT_FILE_CONTENT_PARAM);
+
+		java.util.Properties overwriteEnvProps = new java.util.Properties();
+		if(overwriteEnvFileContent != null) {
+			overwriteEnvProps.load(new StringReader(overwriteEnvFileContent));
+		}
 
 		Resource packageResource = request.getResource();
 		ApplicationPackage appPackage = packageResource.adaptTo(ApplicationPackage.class);
 
-		Installer installer = new SledgeInstallerImpl(request.getResourceResolver());
-		installer.install(appPackage, envName);
+		Installer installer = new SledgeInstallerImpl(request);
+		installer.install(appPackage, envName, overwriteEnvProps);
 
 		PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
 		appPackage.setState(ApplicationPackageState.INSTALLED.toString());

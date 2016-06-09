@@ -38,11 +38,10 @@ public class DeploymentDefTest {
 		testee.addPackage(new PackageElement(true, "package4"));
 
 		// When:
-		List<PackageElement> packagesForConfiguration = testee.getPackagesForConfiguration();
+		List<String> packagesForConfiguration = testee.getPackageNamesForConfiguration();
 
 		// Then:
 		assertThat(packagesForConfiguration).hasSize(2);
-		assertThat(packagesForConfiguration).extracting("configure", "packageName")
-				.contains(tuple(true, "package3"), tuple(true,  "package4"));
+		assertThat(packagesForConfiguration).contains("package3", "package4");
 	}
 }

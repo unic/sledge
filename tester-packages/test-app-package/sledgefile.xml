@@ -3,16 +3,19 @@
 		<packages>
 			<package>com.unic.sledge.webapp-tester-0.1.0-SNAPSHOT.jar</package>
             <package>com.unic.sledge.webapp-tester-publish-0.1.0-SNAPSHOT.jar</package>
+			<package configure="true">com.unic.sledge.configuration-tester-0.1.0-SNAPSHOT-crx.zip</package>
 		</packages>
 	</deployment-def>
 	<deployment-def environments="prod-author">
 		<packages>
 			<package>com.unic.sledge.webapp-tester-0.1.0-SNAPSHOT.jar</package>
+			<package configure="true">com.unic.sledge.configuration-tester-0.1.0-SNAPSHOT-crx.zip</package>
 		</packages>
 	</deployment-def>
 	<deployment-def environments="prod-publish">
 		<packages>
 			<package>com.unic.sledge.webapp-tester-publish-0.1.0-SNAPSHOT.jar</package>
+			<package configure="true">com.unic.sledge.configuration-tester-0.1.0-SNAPSHOT-crx.zip</package>
 		</packages>
 	</deployment-def>
 </sledgefile>

@@ -14,6 +14,7 @@
             <p><strong>State:</strong> ${model.state}</p>
         </div>
         <form action="${resource.path}.install.html" method="post">
+            <input type="hidden" name="_charset_" value="UTF-8"/>
             <select id="environment-file-list" name="environmentName" data-sly-list="${model.environmentNames}">
                 <option>${item}</option>
             </select>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+	jcr:primaryType="sling:OsgiConfig"
+	resource.resolver.allowDirect="{Boolean}true"
+	resource.resolver.default.vanity.redirect.status="302"
+	resource.resolver.manglenamespaces="{Boolean}true"
+	resource.resolver.map.location="/etc/map"
+	resource.resolver.searchpath="[/apps,/libs,/apps/foundation/components/primary,/libs/foundation/components/primary]"
+	resource.resolver.virtual="[/:/]"
+/>
