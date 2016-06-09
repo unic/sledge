@@ -139,6 +139,24 @@ The ApplicationPackage provides methods for getting data out of a Application pa
 
 The internal structure of an Application Package is defined by the _ApplicationPackageExtractor_.
 
+### ApplicationPackageExtractor
+
+The `ApplicationPackageExtractor` defines an interface to get the needed data from an `ApplicationPackage`.
+
+The `SledgeApplicationPackageExtractor` has the following defined format:
+
+```
+- environments/
+  - test-author.properties
+  - test-publish.properties
+  - my-environment.properties
+  - etc.
+- packages/
+  - com.my.project.app-x.y.z.zip
+  - com.my.project.lib-x.y.z.jar
+- sledgefile.xml
+```
+
 ### PackageSourceConnector
 
 The PackageSourceConnector defines methods for loading Application packages from a specific source location (local repository, Adobe Package Manager, Nexus repository, etc.). It returns a list of ApplicationPackage objects.
