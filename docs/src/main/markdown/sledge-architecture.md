@@ -134,8 +134,9 @@ sledge-core package
 
 The ApplicationPackage provides methods for getting data out of a Application package provided by a Package source connector:
 
-- General information: version, groupId, artifactId, description, etc.
-- List of contents
+- General information: filename, state, etc
+- The packages for installation (bundles, CRX packages)
+- The deployment descriptor file _sledgefile.xml_
 
 The internal structure of an Application Package is defined by the _ApplicationPackageExtractor_.
 
