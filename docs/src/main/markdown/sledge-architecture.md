@@ -138,6 +138,11 @@ The ApplicationPackage provides methods for getting data out of a Application pa
 - The packages for installation (bundles, CRX packages)
 - The deployment descriptor file _sledgefile.xml_
 
+The _sledgefile.xml_ defines:
+
+- Which environment configurations are available
+- Which packages are available
+
 The internal structure of an Application Package is defined by the _ApplicationPackageExtractor_.
 
 ### ApplicationPackageExtractor
