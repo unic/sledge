@@ -89,7 +89,12 @@ Advantages of this solution:
 - No console access needed, simple web UI integrated in AEM stack
 - Possibility to access all the OSGi related data for monitoring properly the installation process (bundles state, configuration state, etc.)
 - Can be easily integrated with other CI/CD systems because it is using simple HTTP calls
-- Apache Sling standard based solution (using the OsgiInstaller) offers a community to get support
+- Apache Sling standard based solution (using the OsgiInstaller) offers a good community to get support
+
+Therefore we target the following two solution paths:
+
+- Sledge WebUI: Simple webapp for doing deployments via an user interface
+- Sledge API: HTTP API for an easy integration into existing CI/CD environments
 
 
 Building Block View
