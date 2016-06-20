@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>com.unic.sledge.docs</artifactId>
+	<artifactId>io.sledge.docs</artifactId>
 	<packaging>pom</packaging>
 
 	<name>Sledge Docs</name>
@@ -11,8 +11,8 @@
 	</description>
 
 	<parent>
-		<groupId>com.unic.sledge</groupId>
-		<artifactId>com.unic.sledge.parent</artifactId>
+		<groupId>io.sledge</groupId>
+		<artifactId>io.sledge.parent</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../parent/pom.xml</relativePath>
 	</parent>

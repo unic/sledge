@@ -24,7 +24,7 @@ The logged in user needs write permission to: `/apps/sledge_packages` and `/etc/
 
 # AEM installation
 
-* Install the `com.unic.sledge.delivery-VERSION-aem.zip` package
+* Install the `io.sledge.delivery-VERSION-aem.zip` package
 * Open url: http://localhost:4502/etc/sledge/packages.html
 
 

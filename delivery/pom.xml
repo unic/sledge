@@ -2,14 +2,14 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>com.unic.sledge.delivery</artifactId>
+	<artifactId>io.sledge.delivery</artifactId>
 	<name>Sledge Delivery Package</name>
 	<description>The Sledge Delivery package</description>
 	<packaging>pom</packaging>
 
 	<parent>
-		<groupId>com.unic.sledge</groupId>
-		<artifactId>com.unic.sledge.parent</artifactId>
+		<groupId>io.sledge</groupId>
+		<artifactId>io.sledge.parent</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
@@ -30,18 +30,18 @@
 	<dependencies>
 		<!-- Sledge -->
 		<dependency>
-			<groupId>com.unic.sledge</groupId>
-			<artifactId>com.unic.sledge.core</artifactId>
+			<groupId>io.sledge</groupId>
+			<artifactId>io.sledge.core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.unic.sledge</groupId>
-			<artifactId>com.unic.sledge.connectors</artifactId>
+			<groupId>io.sledge</groupId>
+			<artifactId>io.sledge.connectors</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.unic.sledge</groupId>
-			<artifactId>com.unic.sledge.webapp</artifactId>
+			<groupId>io.sledge</groupId>
+			<artifactId>io.sledge.webapp</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
