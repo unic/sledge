@@ -4,7 +4,7 @@
 
 	<artifactId>io.sledge.delivery</artifactId>
 	<name>Sledge Delivery Package</name>
-	<description>The Sledge Delivery package</description>
+	<description>The Sledge Delivery package for deployment into AEM</description>
 	<packaging>pom</packaging>
 
 	<parent>

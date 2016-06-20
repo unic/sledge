@@ -60,9 +60,6 @@
 							</goals>
 							<configuration>
 								<strictMode>true</strictMode>
-								<properties>
-									<service.vendor>Unic AG</service.vendor>
-								</properties>
 							</configuration>
 						</execution>
 					</executions>
@@ -77,10 +74,6 @@
 						<obrRepository>NONE</obrRepository>
 						<instructions>
 							<Bundle-Category>sledge</Bundle-Category>
-							<Bundle-DocURL>
-								http://www.unic.com
-							</Bundle-DocURL>
-							<Bundle-Vendor>Unic AG Switzerland</Bundle-Vendor>
 							<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						</instructions>
 					</configuration>
