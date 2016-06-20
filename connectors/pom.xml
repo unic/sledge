@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>com.unic.sledge.connectors</artifactId>
+	<artifactId>io.sledge.connectors</artifactId>
 	<name>Sledge Connectors</name>
 	<description>The Sledge Connectors</description>
 	<packaging>bundle</packaging>
 
 	<parent>
-		<groupId>com.unic.sledge</groupId>
-		<artifactId>com.unic.sledge.parent</artifactId>
+		<groupId>io.sledge</groupId>
+		<artifactId>io.sledge.parent</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
@@ -27,10 +27,10 @@
 							SLING-INF/etc/sledge/connectors/fileupload.json;path:=/etc/sledge/connectors;overwrite:=true
 						</Sling-Initial-Content>
 						<Private-Package>
-							com.unic.sledge.connectors.impl.*
+							io.sledge.connectors.impl.*
 						</Private-Package>
 						<Export-Package>
-							com.unic.sledge.connectors.api.*;version=${project.version}
+							io.sledge.connectors.api.*;version=${project.version}
 						</Export-Package>
 					</instructions>
 				</configuration>
@@ -46,8 +46,8 @@
 
 		<!-- Sledge -->
 		<dependency>
-			<groupId>com.unic.sledge</groupId>
-			<artifactId>com.unic.sledge.core</artifactId>
+			<groupId>io.sledge</groupId>
+			<artifactId>io.sledge.core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

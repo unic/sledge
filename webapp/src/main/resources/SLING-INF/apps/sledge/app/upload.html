@@ -8,7 +8,7 @@
             </div>
             
             <a href="${resource.path}.html"><button class="btn btn-default" type="submit">Back to overview</button></a>
-            <div class="connector-list" data-sly-use.mainModel="com.unic.sledge.webapp.models.MainViewModel" data-sly-list="${mainModel.connectorResources}">
+            <div class="connector-list" data-sly-use.mainModel="io.sledge.webapp.models.MainViewModel" data-sly-list="${mainModel.connectorResources}">
             	<div data-sly-resource="${item.path}"></div>
             </div>
         </div>

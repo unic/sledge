@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>com.unic.sledge.sledge-modules</artifactId>
+    <artifactId>io.sledge.sledge-modules</artifactId>
     <packaging>pom</packaging>
 
     <name>Sledge Modules</name>
@@ -10,8 +10,8 @@
     </description>
 
     <parent>
-        <groupId>com.unic.sledge</groupId>
-        <artifactId>com.unic.sledge.parent</artifactId>
+        <groupId>io.sledge</groupId>
+        <artifactId>io.sledge.parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
         <relativePath>parent/pom.xml</relativePath>
     </parent>

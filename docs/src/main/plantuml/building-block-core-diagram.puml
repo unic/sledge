@@ -15,7 +15,7 @@ package "sledge-core" as core {
 		class SledgeConfigServlet
 	}
 
-	package com.unic.sledge.core.api {
+	package io.sledge.core.api {
 		hide members
 
 		package installer {

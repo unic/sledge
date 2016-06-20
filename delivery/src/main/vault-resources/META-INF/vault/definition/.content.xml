@@ -22,6 +22,14 @@
 			mode="replace"
 			root="/apps/${project.artifactId}"
 			rules="[]"/>
+		<f1 jcr:primaryType="nt:unstructured"
+			mode="replace"
+			root="/apps/sledge"
+			rules="[]"/>
+		<f2 jcr:primaryType="nt:unstructured"
+			mode="replace"
+			root="/apps/sledge-connectors"
+			rules="[]"/>
 	</filter>
 	<thumbnail jcr:primaryType="nt:unstructured">
 		<file/>

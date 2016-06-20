@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>com.unic.sledge.core</artifactId>
+	<artifactId>io.sledge.core</artifactId>
 	<name>Sledge Core</name>
 	<description>The Sledge Core components</description>
 	<packaging>bundle</packaging>
 
 	<parent>
-		<groupId>com.unic.sledge</groupId>
-		<artifactId>com.unic.sledge.parent</artifactId>
+		<groupId>io.sledge</groupId>
+		<artifactId>io.sledge.parent</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
@@ -23,14 +23,14 @@
 				<configuration>
 					<instructions>
 						<Private-Package>
-							com.unic.sledge.core.impl.*
+							io.sledge.core.impl.*
 						</Private-Package>
 						<Export-Package>
-							com.unic.sledge.core.api.*;version=${project.version}
+							io.sledge.core.api.*;version=${project.version}
 						</Export-Package>
 						<Sling-Model-Packages>
-							com.unic.sledge.core.api.models,
-							com.unic.sledge.core.impl.installer
+							io.sledge.core.api.models,
+							io.sledge.core.impl.installer
 						</Sling-Model-Packages>
 					</instructions>
 				</configuration>

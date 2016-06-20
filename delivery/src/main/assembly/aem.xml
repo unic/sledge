@@ -32,9 +32,9 @@
             <outputDirectory>jcr_root/apps/${project.artifactId}/install</outputDirectory>
             <useTransitiveDependencies>false</useTransitiveDependencies>
             <includes>
-                <include>${project.groupId}:com.unic.sledge.core</include>
-                <include>${project.groupId}:com.unic.sledge.connectors</include>
-				<include>${project.groupId}:com.unic.sledge.webapp</include>
+                <include>${project.groupId}:io.sledge.core</include>
+                <include>${project.groupId}:io.sledge.connectors</include>
+				<include>${project.groupId}:io.sledge.webapp</include>
             </includes>
         </dependencySet>
 	</dependencySets>
