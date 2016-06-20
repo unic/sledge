@@ -29,7 +29,8 @@
 							com.unic.sledge.core.api.*;version=${project.version}
 						</Export-Package>
 						<Sling-Model-Packages>
-							com.unic.sledge.core.api.models
+							com.unic.sledge.core.api.models,
+							com.unic.sledge.core.impl.installer
 						</Sling-Model-Packages>
 					</instructions>
 				</configuration>
@@ -60,9 +61,21 @@
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 		</dependency>
+        <dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+        </dependency>        
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
 		</dependency>
 		
 		<!-- JCR -->

@@ -64,8 +64,6 @@ public class SledgePackageRepository implements PackageRepository {
         props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
         props.put(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_TYPE, SledgeConstants.RT_PACKAGE);
 
-        // TODO: Handle duplicate file names
-
 		Resource packageResource = null;
 		try {
 			packageResource = resourceResolver.create(getRepositoryRootResource(), appPackage.getPackageFilename(), props);

@@ -135,6 +135,13 @@ sledge-core package
 
 [building-block-core-diagram]: ../plantuml-generated/building-block-core-diagram.png "Sledge Core - Building blocks"
 
+### PackageRepository
+
+The `PackageRepository` handles all the Application packages in a central location in the repository:
+
+- Add new Application package
+- Update state of Application packages
+
 ### ApplicationPackage
 
 The ApplicationPackage provides methods for getting data out of a Application package provided by a Package source connector:
@@ -147,6 +154,8 @@ The _sledgefile.xml_ defines:
 
 - Which environment configurations are available
 - Which packages are available
+
+See an example of this _sledgefile.xml_ in the _tester-packages_ module.
 
 The internal structure of an Application Package is defined by the _ApplicationPackageExtractor_.
 
@@ -179,71 +188,44 @@ The DeploymentConfiguration is the central configuration for the installation of
 - Deployment locations for bundles
 - Configurations for bundles
 
+### PackageConfigurer
+
+The `PackageConfigurer` takes a package and replaces the placeholders in the text files with the given properties for a specific environment.
+
+A concrete implemenation is the `SledgePackageConfigurer`:
+
+- It extracts zip packages and creates a new configured zip package in the _sledge-tmp_ directory
+- Uses the provided Sling Tika Detector for evaluating text file types
+- Replaces placeholders with the given properties using the Commons Lang `StrSubstitutor` class
+
 
 sledge-connectors package
 -------------------------
 
-TODO
 ![Building blocks sledge-connectors][building-block-connectors-diagram]
 
 [building-block-connectors-diagram]: ../plantuml-generated/building-block-connectors-diagram.png "Sledge Connectors - Building blocks"
+
+### Simple file upload
+
+New Application packages can easily be added via the _Simple file upload_ connector.
 
 
 sledge-webapp package
 ---------------------
 
-TODO
 ![Building blocks sledge-webapp][building-block-webapp-diagram]
 
 [building-block-webapp-diagram]: ../plantuml-generated/building-block-webapp-diagram.png "Sledge Webapp - Building blocks"
 
+### Templates
+
+The templates are implemented using _Sigthly_.
+
+- Main app view
+- Package view
 
 
-Concepts
-========
-
-Domain Models
--------------
-
-Persistency
------------
-
-User Interface
---------------
-
-Session Handling
-----------------
-
-Security
---------
-
-Plausibility and Validity Checks
---------------------------------
-
-Exception/Error Handling
-------------------------
-
-System Management and Administration
-------------------------------------
-
-Logging, Tracing
-----------------
-
-Configurability
----------------
-
-Testability
------------
-
-Code Generation
----------------
-
-Build-Management
-----------------
-
-
-Technical Risks
-===============
 
 Glossary
 ========

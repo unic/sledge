@@ -9,11 +9,13 @@ Furthermore it provides a command line interface, best suited for remote managem
 
 * Java 8
 * Sling 8 or AEM 6.2
+* Commons Lang 3.4 Osgi bundle
 
 
-# Installation
+# Sling Installation
 
 * Install and run Sling 8
+* Install manually the Commons Lang 3.4 bundle: https://commons.apache.org/proper/commons-lang/download_lang.cgi
 * Install core, connectors and webapp packages, check the `deploy.sh` script for the Maven commands
 * Open browser and enter this url: http://localhost:8080/etc/sledge/packages.html
 
