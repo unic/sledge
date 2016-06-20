@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:vlt="http://www.day.com/jcr/vault/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
-    jcr:created="{Date}2013-06-04T19:47:47.953+01:00"
-    jcr:createdBy="Unic AG"
     jcr:description="${project.description}"
-    jcr:lastModified="{Date}2013-06-04T19:47:47.953+01:00"
-    jcr:lastModifiedBy="Unic AG"
     jcr:primaryType="vlt:PackageDefinition"
     sling:resourceType="cq/packaging/components/pack/definition"
     acHandling="Ignore"
@@ -12,31 +8,18 @@
     cqVersion="5.5"
     fixedBugs=""
     group="${project.groupId}"
-    lastUnwrapped="{Date}2013-06-04T19:47:47.953+01:00"
-    lastUnwrappedBy="Unic AG"
-    lastWrapped="{Date}2013-06-04T19:47:47.953+01:00"
-    lastWrappedBy="${project.groupId}"
     name="${project.name}"
     path="/etc/packages/${project.groupId}/${project.artifactId}-${project.version}"
     providerLink=""
-    providerName="Unic AG"
-    providerUrl="http://www.unic.com"
+    providerName=""
+    providerUrl=""
     testedWith=""
     version="${project.version}">
-    <thumbnail.png/>
     <filter jcr:primaryType="nt:unstructured">
         <f0
             jcr:primaryType="nt:unstructured"
             mode="replace"
             root="/apps/${project.name}"
             rules="[]"/>
-        <f1
-            jcr:primaryType="nt:unstructured"
-            mode="replace"
-            root="/etc/map"
-            rules="[]"/>
     </filter>
-    <thumbnail jcr:primaryType="nt:unstructured">
-        <file/>
-    </thumbnail>
 </jcr:root>

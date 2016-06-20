@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>FileVault Package Properties</comment>
-<entry key="createdBy">Unic AG</entry>
+<entry key="createdBy">Sledge</entry>
 <entry key="name">${project.artifactId}</entry>
 <entry key="acHandling">Ignore</entry>
 <entry key="version">${project.version}</entry>

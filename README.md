@@ -12,11 +12,22 @@ Furthermore it provides a command line interface, best suited for remote managem
 * Commons Lang 3.4 Osgi bundle
 
 
+# Building from source
+
+Sledge is built by Maven 3.3.x.
+
+Execute the following command from the root directory:
+
+```
+mvn clean install
+```
+
+
 # Sling Installation
 
 * Install and run Sling 8
-* Install manually the Commons Lang 3.4 bundle: https://commons.apache.org/proper/commons-lang/download_lang.cgi
-* Install core, connectors and webapp packages, check the `deploy.sh` script for the Maven commands
+* Install manually the [Commons Lang 3.4 bundle](https://commons.apache.org/proper/commons-lang/download_lang.cgi)
+* Install `core`, `connectors` and `webapp` packages, check the `deploy.sh` script for the Maven commands
 * Open browser and enter this url: http://localhost:8080/etc/sledge/packages.html
 
 The logged in user needs write permission to: `/apps/sledge_packages` and `/etc/sledge/packages` to make the application work properly.
@@ -30,6 +41,13 @@ The logged in user needs write permission to: `/apps/sledge_packages` and `/etc/
 
 # Documentation
 
-## SAS
+## Architecture specification
 
-See here: https://git.unic.com/projects/SLEDGE/repos/sledge/browse/docs/src/main/markdown/sledge-architecture.md
+See here: [Sledge Architecture](docs/src/main/markdown/sledge-architecture.md)
+
+
+# License
+
+Sledge is licensed under the terms of the Apache License, version 2.0.
+
+For the licenses of included products, see [NOTICE](NOTICE.txt)
