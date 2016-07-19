@@ -324,6 +324,33 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<!-- Use this profile to install the OSGi bundle automatically, during
+				development -->
+			<id>autoInstallBundleToAEM</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.sling</groupId>
+						<artifactId>maven-sling-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>install-bundle</id>
+								<configuration>
+									<slingUrl>http://localhost:4502/system/console</slingUrl>
+								</configuration>
+								<goals>
+									<goal>install</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 </project>
