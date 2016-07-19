@@ -15,10 +15,10 @@
         </div>
         <form action="${resource.path}.install.html" method="post">
             <input type="hidden" name="_charset_" value="UTF-8"/>
-            <select id="environment-file-list" name="environmentName" data-sly-list="${model.environmentNames}">
+            <select id="environment-file-list" name="environmentName" data-sly-list="${model.environmentNames}" data-package-resource-path="${resource.path}">
                 <option>${item}</option>
             </select>
-            <a><button class="btn btn-primary btn-sm js-load-config-button" data-package-resource-path="${resource.path}" type="button">Load config</button></a>
+            <a><button class="btn btn-primary btn-sm js-load-config-button" type="button">Load config</button></a>
             <div class="environment-file-area">
                 <label for="environment-file-content">Environment config file:</label><br/>
                 <textarea id="environment-file-content" name="environmentFileContent" rows="12" cols="80"></textarea>

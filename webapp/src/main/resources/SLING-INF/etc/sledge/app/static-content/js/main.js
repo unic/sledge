@@ -11,14 +11,20 @@
 	app.LoadConfigButton = function (selector, $environmentFileList, $envFileContent) {
 
 		// Private variables and functions
-		var $element = $(selector);
-		var resourcePath = $element.attr("data-package-resource-path");
+		var $button = $(selector);
+		var resourcePath = $environmentFileList.attr("data-package-resource-path");
 
 		var bindClick = function () {
-			$element.click(function () {
+			$button.click(function () {
 				loadConfigFileContent();
 			});
 		};
+
+		var bindChange = function () {
+			$environmentFileList.change(function () {
+				loadConfigFileContent();
+			});
+		}
 
 		var getConfigFileLoadUrl = function () {
 			var envName= $environmentFileList.find(":selected").val();
@@ -37,6 +43,7 @@
 
 		var init = function () {
 			bindClick();
+			bindChange();
 		};
 
 		// Public API
@@ -47,7 +54,7 @@
 	};
 
 
-})(window, jQuery, window.MyApp || (window.MyApp = {}));
+})(window, jQuery, window.Sledge || (window.Sledge = {}));
 
 // Application startup
 $(document).ready(function () {
@@ -55,7 +62,8 @@ $(document).ready(function () {
 	// Package view
 	var $environmentFileList = $("select#environment-file-list");
 	var $envFileContent = $("textarea#environment-file-content");
-	var loadConfigButton = new MyApp.LoadConfigButton("button.js-load-config-button", $environmentFileList, $envFileContent);
+	var loadConfigButton = new Sledge.LoadConfigButton("button.js-load-config-button", $environmentFileList, $envFileContent);
+
 
 	loadConfigButton.init();
 });
