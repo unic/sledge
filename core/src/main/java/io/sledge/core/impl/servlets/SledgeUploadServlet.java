@@ -31,6 +31,7 @@ import org.apache.sling.servlets.post.SlingPostConstants;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author oliver.burkhalter
@@ -65,7 +66,21 @@ public class SledgeUploadServlet extends SlingAllMethodsServlet {
 			appPackage.setPackageFile(packageRequestParam.getInputStream());
 
 			PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
-			packageRepository.addApplicationPackage(appPackage);
+			List<ApplicationPackage> installedPackages = packageRepository.getApplicationPackages();
+
+			boolean update = false;
+			for (ApplicationPackage installedPackage : installedPackages) {
+				if (installedPackage.getPackageFilename().equals(appPackage.getPackageFilename())) {
+					update = true;
+					break;
+				}
+			}
+			if (!update) {
+				packageRepository.addApplicationPackage(appPackage);
+			} else {
+				packageRepository.updateApplicationPackage(appPackage);
+			}
+
 
 			String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);
 			response.sendRedirect(redirectUrl);
