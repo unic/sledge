@@ -19,6 +19,7 @@ import io.sledge.core.api.models.ApplicationPackage;
 import io.sledge.core.api.models.ApplicationPackageState;
 import io.sledge.core.api.repository.PackageRepository;
 import io.sledge.core.impl.repository.SledgePackageRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
@@ -54,7 +55,8 @@ public class SledgeUploadServlet extends SlingAllMethodsServlet {
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
 		RequestParameter packageRequestParam = request.getRequestParameter("package");
 
-		if (packageRequestParam != null && !packageRequestParam.isFormField() && packageRequestParam.getInputStream() != null) {
+		if (packageRequestParam != null && !packageRequestParam.isFormField() && packageRequestParam.getInputStream() != null
+				&& StringUtils.isNoneBlank(packageRequestParam.getFileName())) {
 			String fileName = packageRequestParam.getFileName();
 
 			ApplicationPackage appPackage = new ApplicationPackage(fileName);
