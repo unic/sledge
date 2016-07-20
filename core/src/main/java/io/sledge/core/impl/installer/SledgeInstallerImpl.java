@@ -63,13 +63,14 @@ public class SledgeInstallerImpl implements Installer {
 
 	@Override
 	public void install(ApplicationPackage appPackage, String envName, Properties propsForMerge) throws InstallationException {
-		Resource installLocationResource = resourceResolver.getResource(SledgeConstants.SLEDGE_INSTALL_LOCATION);
+		Resource defaultInstallLocationResource = resourceResolver.getResource(SledgeConstants.SLEDGE_INSTALL_LOCATION);
 		ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
 
 		PackageConfigurer packageConfigurer = request.adaptTo(SledgePackageConfigurer.class);
 		DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(appPackage.getPackageFile());
 		final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(envName);
 		final List<String> packageNamesForConfiguration = deploymentDef.getPackageNamesForConfiguration();
+		final Map<String, Integer> startLevelsByPackageName = deploymentDef.getStartLevelsByPackageName();
 
 		// Load and merge environment properties
 		String envFileContent = appPackageExtractor.getEnvironmentFile(envName, appPackage);
@@ -83,6 +84,18 @@ public class SledgeInstallerImpl implements Installer {
 				if (packageNamesForConfiguration.contains(packageEntry.getKey())) {
 					log.info("Configuring package: " + packageEntry.getKey());
 					packageEntry.setValue(packageConfigurer.configure(packageEntry.getValue(), packageEntry.getKey(), envProps));
+				}
+
+				Resource installLocationResource = defaultInstallLocationResource;
+				if (startLevelsByPackageName.containsKey(packageEntry.getKey())) {
+					Integer startLevel = startLevelsByPackageName.get(packageEntry.getKey());
+					log.info("Setting start level: " + startLevel + " for the package: " + packageEntry.getKey());
+					Map<String, Object> props = new HashMap<>();
+					props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_FOLDER);
+					installLocationResource = resourceResolver.getResource(defaultInstallLocationResource.getPath() + "/" + String.valueOf(startLevel));
+					if (installLocationResource == null) {
+						installLocationResource = resourceResolver.create(defaultInstallLocationResource, String.valueOf(startLevel), props);
+					}
 				}
 
 				Map<String, Object> props = new HashMap<>();

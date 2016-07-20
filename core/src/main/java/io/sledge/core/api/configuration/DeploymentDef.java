@@ -17,6 +17,7 @@ package io.sledge.core.api.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -26,7 +27,8 @@ import java.util.stream.Collectors;
  */
 public class DeploymentDef {
 
-	private List<String> environments = new ArrayList<>();;
+	private List<String> environments = new ArrayList<>();
+	;
 
 	private List<PackageElement> packages = new ArrayList<>();
 
@@ -47,7 +49,19 @@ public class DeploymentDef {
 	}
 
 	public List<String> getPackageNamesForConfiguration() {
-		return packages.stream().filter(p -> p.isConfigure()).map(p -> p.getPackageName()).collect(Collectors.toList());
+		return packages.stream()
+				.filter(p -> p.isConfigure())
+				.map(p -> p.getPackageName())
+				.collect(Collectors.toList());
+	}
+
+	public Map<String, Integer> getStartLevelsByPackageName() {
+		return packages.stream()
+				.filter(p -> p.getStartLevel() > 0)
+				.collect(Collectors.toMap(
+						p -> p.getPackageName(),
+						p -> Integer.valueOf(p.getStartLevel())
+				));
 	}
 
 	public void addPackage(PackageElement packageElement) {

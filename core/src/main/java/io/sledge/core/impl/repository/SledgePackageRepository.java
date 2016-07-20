@@ -15,12 +15,9 @@
 
 package io.sledge.core.impl.repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import io.sledge.core.api.SledgeConstants;
+import io.sledge.core.api.models.ApplicationPackage;
+import io.sledge.core.api.repository.PackageRepository;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingConstants;
 import org.apache.sling.api.resource.ModifiableValueMap;
@@ -28,9 +25,11 @@ import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
-import io.sledge.core.api.SledgeConstants;
-import io.sledge.core.api.models.ApplicationPackage;
-import io.sledge.core.api.repository.PackageRepository;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Defines the central package repository of the Sledge app.
@@ -110,7 +109,7 @@ public class SledgePackageRepository implements PackageRepository {
 		try {
 			packageResource = getRepositoryRootResource().getChild(appPackage.getPackageFilename());
 
-			if(packageResource != null) {
+			if (packageResource != null) {
 				ModifiableValueMap props = packageResource.adaptTo(ModifiableValueMap.class);
 				props.putAll(getPropsFromApplicationPackage(appPackage));
 				resourceResolver.commit();
@@ -130,6 +129,10 @@ public class SledgePackageRepository implements PackageRepository {
 		Map<String, Object> props = new HashMap<>();
 		props.put("packageFilename", appPackage.getPackageFilename());
 		props.put("state", appPackage.getState().toString());
+		String usedEnvironment = appPackage.getUsedEnvironment();
+		if (usedEnvironment != null) {
+			props.put("usedEnvironment", appPackage.getUsedEnvironment());
+		}
 
 		return props;
 	}

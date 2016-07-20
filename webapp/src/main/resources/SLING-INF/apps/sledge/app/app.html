@@ -1,38 +1,44 @@
 <!doctype html>
 <html>
-	<head data-sly-unwrap data-sly-include="head.html"></head>
-    <body>
-        <div class="container-fluid">
-            <div class="page-header">
-            	<h1>Sledge - A Sling Application Manager</h1>
+<head data-sly-unwrap data-sly-include="head.html"></head>
+<body>
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Sledge - A Sling Application Manager</h1>
+    </div>
+    <h2>Application Packages</h2>
+    <a href="${resource.path}.upload.html" class="add-package-button">
+        <button class="btn btn-default" type="submit">Add new application package</button>
+    </a>
+    <div class="application-packages-list" data-sly-list="${resource.listChildren}">
+        <div class="row app-package-item">
+            <div class="col-md-3 app-package-item-description"><strong>${item.name}</strong></div>
+            <div class="col-md-1">
+                <span class="label label-primary" data-sly-test="${item.valueMap.state == 'UPLOADED'}">${item.valueMap.state}</span>
+                <span class="label label-success" data-sly-test="${item.valueMap.state == 'INSTALLED'}">${item.valueMap.state}</span>
+                <span class="label label-info" data-sly-test="${item.valueMap.state == 'UNINSTALLED'}">${item.valueMap.state}</span>
             </div>
-            <h2>Application Packages</h2>
-            <a href="${resource.path}.upload.html" class="add-package-button"><button class="btn btn-default" type="submit">Add new application package</button></a>
-            <div class="application-packages-list" data-sly-list="${resource.listChildren}">
-				<div class="row app-package-item">
-					<div class="col-md-3 app-package-item-description"><strong>${item.name}</strong></div>
-                    <div class="col-md-1">
-                        <span class="label label-primary" data-sly-test="${item.valueMap.state == 'UPLOADED'}">${item.valueMap.state}</span>
-                        <span class="label label-success" data-sly-test="${item.valueMap.state == 'INSTALLED'}">${item.valueMap.state}</span>
-                        <span class="label label-info" data-sly-test="${item.valueMap.state == 'UNINSTALLED'}">${item.valueMap.state}</span>
-                    </div>
-					<div class="col-md-2 app-package-item-actions">
-						<a href="/etc/sledge/packages/${item.name}.html" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
-							<button class="btn btn-primary btn-sm" type="submit">Install</button>
-						</a>
-						<form action="${item.path}.uninstall.html" method="POST" data-sly-test="${item.valueMap.state == 'INSTALLED'}">
-							<input type="hidden" name=":redirect" value="/etc/sledge/packages.html" />
-							<button class="btn btn-warning btn-sm" type="submit">Uninstall</button>
-						</form>
-						<form action="/etc/sledge/packages/${item.name}" method="POST" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
-							<input type="hidden" name=":operation" value="delete">
-							<input type="hidden" name=":redirect" value="${resource.path}.html" />
-							<button class="btn btn-danger btn-sm" type="submit">Remove</button>
-						</form>
-					</div>
-				</div>
+            <div class="col-md-1">
+                <span class="label label-success"
+                      data-sly-test="${item.valueMap.state == 'INSTALLED'}">${item.valueMap.usedEnvironment}</span>
+            </div>
+            <div class="col-md-2 app-package-item-actions">
+                <a href="/etc/sledge/packages/${item.name}.html" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
+                    <button class="btn btn-primary btn-sm" type="submit">Install</button>
+                </a>
+                <form action="${item.path}.uninstall.html" method="POST" data-sly-test="${item.valueMap.state == 'INSTALLED'}">
+                    <input type="hidden" name=":redirect" value="/etc/sledge/packages.html"/>
+                    <button class="btn btn-warning btn-sm" type="submit">Uninstall</button>
+                </form>
+                <form action="/etc/sledge/packages/${item.name}" method="POST" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
+                    <input type="hidden" name=":operation" value="delete">
+                    <input type="hidden" name=":redirect" value="${resource.path}.html"/>
+                    <button class="btn btn-danger btn-sm" type="submit">Remove</button>
+                </form>
             </div>
         </div>
-        <div data-sly-unwrap data-sly-include="bodyEnd.html"></div>
-    </body>
+    </div>
+</div>
+<div data-sly-unwrap data-sly-include="bodyEnd.html"></div>
+</body>
 </html>

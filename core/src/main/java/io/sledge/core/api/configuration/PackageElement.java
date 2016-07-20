@@ -25,10 +25,16 @@ public class PackageElement {
 
 	private final boolean configure;
 	private final String packageName;
+	private final int startLevel;
 
 	public PackageElement(boolean configure, String packageName) {
+		 this(configure, packageName, 0);
+	}
+
+	public PackageElement(boolean configure, String packageName, int startLevel) {
 		this.configure = configure;
 		this.packageName = packageName;
+		this.startLevel = startLevel;
 	}
 
 	public boolean isConfigure() {
@@ -37,5 +43,9 @@ public class PackageElement {
 
 	public String getPackageName() {
 		return packageName;
+	}
+
+	public int getStartLevel() {
+		return startLevel;
 	}
 }

@@ -52,6 +52,9 @@ public class ApplicationPackage {
 	@ValueMapValue
 	private String state;
 
+	@ValueMapValue(optional = true)
+	private String usedEnvironment;
+
 	public ApplicationPackage() {
 	}
 
@@ -92,6 +95,14 @@ public class ApplicationPackage {
 	 */
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getUsedEnvironment() {
+		return usedEnvironment;
+	}
+
+	public void setUsedEnvironment(String usedEnvironment) {
+		this.usedEnvironment = usedEnvironment;
 	}
 
 	public List<String> getEnvironmentNames() {

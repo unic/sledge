@@ -16,6 +16,8 @@
 package io.sledge.core.impl.servlets;
 
 import io.sledge.core.api.SledgeConstants;
+import io.sledge.core.api.configuration.DeploymentConfiguration;
+import io.sledge.core.api.configuration.DeploymentDef;
 import io.sledge.core.api.extractor.ApplicationPackageExtractor;
 import io.sledge.core.api.models.ApplicationPackage;
 import io.sledge.core.api.models.ApplicationPackageState;
@@ -59,20 +61,40 @@ public class SledgeUninstallServlet extends SlingAllMethodsServlet {
 		ApplicationPackage appPackage = request.getResource().adaptTo(ApplicationPackage.class);
 
 		ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
+		DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(appPackage.getPackageFile());
+		final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(appPackage.getUsedEnvironment());
+		final Map<String, Integer> startLevelsByPackageName = deploymentDef.getStartLevelsByPackageName();
+
+
 		Map<String, InputStream> packages = appPackageExtractor.getPackages(appPackage);
 
 		for (Map.Entry<String, InputStream> packageEntry : packages.entrySet()) {
 			ResourceResolver resolver = request.getResourceResolver();
-			Resource packageResource = resolver.getResource(SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + packageEntry.getKey());
+			String packageName = packageEntry.getKey();
+			String packagePath = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + packageName;
+			String startLevelFolder = null;
+			if (startLevelsByPackageName.keySet().contains(packageName)) {
+				Integer startLevel = startLevelsByPackageName.get(packageName);
+				startLevelFolder = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + String.valueOf(startLevel);
+				packagePath = startLevelFolder + "/" + packageName;
+			}
+			Resource packageResource = resolver.getResource(packagePath);
+			Resource startLevelFolderResource = resolver.getResource(startLevelFolder);
 
 			if (packageResource != null) {
 				resolver.delete(packageResource);
-				resolver.commit();
 			}
+
+			if (startLevelFolderResource != null && !startLevelFolderResource.hasChildren()) {
+				resolver.delete(startLevelFolderResource);
+			}
+
+			resolver.commit();
 		}
 
 		PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
 		appPackage.setState(ApplicationPackageState.UNINSTALLED.toString());
+		appPackage.setUsedEnvironment("");
 		packageRepository.updateApplicationPackage(appPackage);
 
 		String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);

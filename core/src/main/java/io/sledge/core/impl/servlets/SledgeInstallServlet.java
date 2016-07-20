@@ -72,6 +72,7 @@ public class SledgeInstallServlet extends SlingAllMethodsServlet {
 
 		PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
 		appPackage.setState(ApplicationPackageState.INSTALLED.toString());
+		appPackage.setUsedEnvironment(envName);
 		packageRepository.updateApplicationPackage(appPackage);
 
 		String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);

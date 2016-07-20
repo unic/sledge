@@ -75,6 +75,7 @@ public class DeploymentConfigurationReaderXml implements DeploymentConfiguration
 
 	private boolean isStartPackageElement = false;
 	private boolean isConfigureAttribute = false;
+	private int startLevel = 0;
 
 	@Override
 	public DeploymentConfiguration parseDeploymentConfiguration(InputStream deployConfigFile) {
@@ -105,6 +106,7 @@ public class DeploymentConfigurationReaderXml implements DeploymentConfiguration
 					} else if (isPackageElement(elementName)) {
 						isStartPackageElement = true;
 						isConfigureAttribute = getConfigureAttribute(event);
+						startLevel = getStartLevelAttribute(event);
 					}
 				}
 
@@ -112,7 +114,7 @@ public class DeploymentConfigurationReaderXml implements DeploymentConfiguration
 					String elementData = event.asCharacters().getData().trim();
 
 					if (!elementData.isEmpty() && isStartPackageElement) {
-						packageElement = new PackageElement(isConfigureAttribute, elementData);
+						packageElement = new PackageElement(isConfigureAttribute, elementData, startLevel);
 						deploymentDef.addPackage(packageElement);
 					}
 
@@ -159,6 +161,25 @@ public class DeploymentConfigurationReaderXml implements DeploymentConfiguration
 		}
 
 		return configure;
+	}
+
+	private int getStartLevelAttribute(XMLEvent event) {
+		int startLevel = 0;
+
+		Iterator<Attribute> iter = event.asStartElement().getAttributes();
+		while (iter.hasNext()) {
+			Attribute attr = iter.next();
+			String attributeName = attr.getName().getLocalPart();
+
+			if ("startLevel".equalsIgnoreCase(attributeName)) {
+				startLevel = Integer.parseInt(attr.getValue());
+				break;
+			}
+
+			log.debug("/@" + attributeName + "=\"" + attr.getValue() + "\"");
+		}
+
+		return startLevel;
 	}
 
 	private void handleEnvironmentsAttribute(DeploymentDef deploymentDef, XMLEvent event) {
