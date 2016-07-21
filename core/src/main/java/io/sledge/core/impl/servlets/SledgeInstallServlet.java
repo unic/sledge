@@ -22,6 +22,7 @@ import io.sledge.core.api.models.ApplicationPackageState;
 import io.sledge.core.api.repository.PackageRepository;
 import io.sledge.core.impl.installer.SledgeInstallerImpl;
 import io.sledge.core.impl.repository.SledgePackageRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
@@ -58,6 +59,10 @@ public class SledgeInstallServlet extends SlingAllMethodsServlet {
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
 		String envName = request.getParameter(SledgeConstants.ENVIRONMENT_NAME_PARAM);
 		String overwriteEnvFileContent = request.getParameter(SledgeConstants.ENVIRONMENT_FILE_CONTENT_PARAM);
+
+		if (StringUtils.isBlank(envName)) {
+			envName = System.getenv(SledgeConstants.ENVIRONMENT_NAME_VARIABLE);
+		}
 
 		java.util.Properties overwriteEnvProps = new java.util.Properties();
 		if(overwriteEnvFileContent != null) {
