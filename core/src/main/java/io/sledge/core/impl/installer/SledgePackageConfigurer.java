@@ -15,6 +15,7 @@
 
 package io.sledge.core.impl.installer;
 
+import io.sledge.core.api.installer.InstallationException;
 import io.sledge.core.api.installer.PackageConfigurer;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -34,6 +35,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -80,6 +83,36 @@ public class SledgePackageConfigurer implements PackageConfigurer {
 		}
 
 		return resultStream;
+	}
+
+
+	@Override
+	public Properties mergeProperties(String envFileContent, Properties propsForMerge) {
+		Properties mergedProps = new Properties();
+		try {
+
+			// Support internal property references for application package provided properties
+			Properties origProps = new Properties();
+			origProps.load(new StringReader(envFileContent));
+			String configuredEnvironmentFileContent = StrSubstitutor.replace(envFileContent, origProps);
+
+			mergedProps.load(new StringReader(configuredEnvironmentFileContent));
+
+			// Support internal property references for overwrite properties
+			StringWriter propsForMergeWriter = new StringWriter();
+			propsForMerge.store(propsForMergeWriter, "");
+			String propsForMergeAsString = propsForMergeWriter.getBuffer().toString();
+			String configuredPropsForMerge = StrSubstitutor.replace(propsForMergeAsString, propsForMerge);
+			Properties reconfiguredPropsForMerge = new Properties();
+			reconfiguredPropsForMerge.load(new StringReader(configuredPropsForMerge));
+
+			mergedProps.putAll(reconfiguredPropsForMerge);
+
+		} catch (IOException e) {
+			throw new InstallationException("Could not load environment properties.", e);
+		}
+
+		return mergedProps;
 	}
 
 	private void createNewZipfileWithReplacedPlaceholders(InputStream packageStream, Path configurationPackagePath, Properties envProps)

@@ -77,6 +77,11 @@
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+
 		
 		<!-- JCR -->
 		<dependency>

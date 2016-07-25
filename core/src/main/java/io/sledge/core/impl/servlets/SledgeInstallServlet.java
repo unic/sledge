@@ -65,7 +65,7 @@ public class SledgeInstallServlet extends SlingAllMethodsServlet {
 		}
 
 		java.util.Properties overwriteEnvProps = new java.util.Properties();
-		if(overwriteEnvFileContent != null) {
+		if (overwriteEnvFileContent != null) {
 			overwriteEnvProps.load(new StringReader(overwriteEnvFileContent));
 		}
 

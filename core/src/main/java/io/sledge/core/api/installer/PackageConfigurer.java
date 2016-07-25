@@ -16,7 +16,6 @@
 package io.sledge.core.api.installer;
 
 import java.io.InputStream;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -33,4 +32,12 @@ public interface PackageConfigurer {
 	 * @return Returns a new environment configured package stream.
 	 */
 	InputStream configure(InputStream packageStream, String packageName, Properties props);
+
+	/**
+	 *
+	 * @param envFileContent environment properties
+	 * @param propsForMerge initial Properties object
+	 * @return merged Properies object
+	 */
+	Properties mergeProperties(String envFileContent, Properties propsForMerge);
 }

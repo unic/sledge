@@ -8,7 +8,7 @@
 	 * @param $envFileContent - The element where the environment file content is displayed.
 	 * @param $environmentFileList - The list element containing all the config files.
 	 */
-	app.LoadConfigButton = function (selector, $environmentFileList, $envFileContent) {
+	app.LoadConfigButton = function (selector, $environmentFileList, $envFileContent, $configPackagesList) {
 
 		// Private variables and functions
 		var $button = $(selector);
@@ -27,14 +27,22 @@
 		}
 
 		var getConfigFileLoadUrl = function () {
-			var envName= $environmentFileList.find(":selected").val();
+			var envName = $environmentFileList.find(":selected").val();
 			return resourcePath + ".config.html?environmentName=" + envName;
 		};
 
 		var loadConfigFileContent = function () {
-			$.ajax(getConfigFileLoadUrl())
+			$.getJSON(getConfigFileLoadUrl())
 				.done(function (response) {
-					$envFileContent.val(response);
+					var configurablePackageNames = response.configurablePackageNames;
+					$configPackagesList.empty();
+					$.each(configurablePackageNames, function (index, packageName) {
+						$('<li/>')
+							.addClass('list-group-item')
+							.text(packageName)
+							.appendTo($configPackagesList);
+					});
+					$envFileContent.val(response.configurationProperties);
 				})
 				.fail(function () {
 					alert("Error occured during loading configuration file, please check logs!");
@@ -62,7 +70,9 @@ $(document).ready(function () {
 	// Package view
 	var $environmentFileList = $("select#environment-file-list");
 	var $envFileContent = $("textarea#environment-file-content");
-	var loadConfigButton = new Sledge.LoadConfigButton("button.js-load-config-button", $environmentFileList, $envFileContent);
+	var $configPackagesList = $("#configurable-packages");
+	var loadConfigButton =
+		new Sledge.LoadConfigButton("button.js-load-config-button", $environmentFileList, $envFileContent, $configPackagesList);
 
 
 	loadConfigButton.init();

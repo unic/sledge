@@ -24,7 +24,6 @@ import io.sledge.core.api.installer.Installer;
 import io.sledge.core.api.installer.PackageConfigurer;
 import io.sledge.core.api.models.ApplicationPackage;
 import io.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.PersistenceException;
@@ -33,10 +32,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +70,7 @@ public class SledgeInstallerImpl implements Installer {
 
 		// Load and merge environment properties
 		String envFileContent = appPackageExtractor.getEnvironmentFile(envName, appPackage);
-		Properties envProps = mergeProperties(envFileContent, propsForMerge);
+		Properties envProps = packageConfigurer.mergeProperties(envFileContent, propsForMerge);
 
 		// Install the packages
 		List<Map.Entry<String, InputStream>> packages = appPackageExtractor.getPackagesByEnvironment(appPackage, envName);
@@ -112,33 +108,5 @@ public class SledgeInstallerImpl implements Installer {
 				throw new InstallationException("Could not install package: " + packageEntry.getKey(), e);
 			}
 		}
-	}
-
-	private Properties mergeProperties(String envFileContent, Properties propsForMerge) {
-		Properties mergedProps = new Properties();
-		try {
-
-			// Support internal property references for application package provided properties
-			Properties origProps = new Properties();
-			origProps.load(new StringReader(envFileContent));
-			String configuredEnvironmentFileContent = StrSubstitutor.replace(envFileContent, origProps);
-
-			mergedProps.load(new StringReader(configuredEnvironmentFileContent));
-
-			// Support internal property references for overwrite properties
-			StringWriter propsForMergeWriter = new StringWriter();
-			propsForMerge.store(propsForMergeWriter, "");
-			String propsForMergeAsString = propsForMergeWriter.getBuffer().toString();
-			String configuredPropsForMerge = StrSubstitutor.replace(propsForMergeAsString, propsForMerge);
-			Properties reconfiguredPropsForMerge = new Properties();
-			reconfiguredPropsForMerge.load(new StringReader(configuredPropsForMerge));
-
-			mergedProps.putAll(reconfiguredPropsForMerge);
-
-		} catch (IOException e) {
-			throw new InstallationException("Could not load environment properties.", e);
-		}
-
-		return mergedProps;
 	}
 }

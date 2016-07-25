@@ -7,7 +7,7 @@
 
 	<name>Sledge Docs</name>
 	<description>
-		This is the parent module for the Richemont Intranet project.
+		This is the docs module for the Sledge project.
 	</description>
 
 	<parent>
