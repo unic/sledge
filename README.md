@@ -3,9 +3,20 @@
 Sledge - "One-Click Rollout"
 ============================
 
-Sledge is a Sling Application Manager which provides a simple user interface to easily deploy, uninstall, monitor and configure your applications in one step. 
+Sledge is a _Sling Application Manager_ which provides a simple user interface to easily deploy, uninstall, monitor and configure your applications in one step. 
 Furthermore it provides a command line interface, best suited for remote management of your application in large enterprises. This allows for a nice integration into existing Continuous Delivery environments.
 
+# Why Sledge?
+
+Most Sling/AEM applications consists of a collection of several bundles and configurations. Sledge wants to support here and offers a concept of an [_Application Package_](https://github.com/unic/sledge/blob/develop/docs/src/main/markdown/sledge-architecture.md#applicationpackage) which includes all needed bundles and configurations for a specific environment. It simplifies the deployment of these bundles and the environment-specific configuration.
+
+# What does Sledge do exactly?
+
+Sledge is based completely on the [Apache Sling framework](https://sling.apache.org) (which is also heavily used in [_Adobe Experience Manager_](docs.adobe.com/docs/en/aem.html)) and leverages the functionalities provided by Sling, e.g. [_OSGi Installer_](https://sling.apache.org/documentation/bundles/osgi-installer.html), [_CRUD APIs_](https://sling.apache.org/documentation/the-sling-engine/sling-api-crud-support.html), etc.
+
+Sledge tasks are mainly: Managing _Application Packages_ and handling configurations replacement in the _Application Package_ before the deployment. 
+
+Therefore Sledge is not a _special new_ Configuration mechanism for Sling but rather a "controller/manager/conductor" of _Application Packages_.
 
 # Requirements
 
