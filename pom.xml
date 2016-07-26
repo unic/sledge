@@ -22,6 +22,7 @@
 		<module>connectors</module>
         <module>webapp</module>
         <module>docs</module>
+		<module>integration</module>
 		<module>delivery</module>
     </modules>
 
