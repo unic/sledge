@@ -14,22 +14,47 @@
 	<inceptionYear>2015</inceptionYear>
 
 	<scm>
-		<connection>scm:git:https://git.unic.com/scm/sledge/sledge.git
-		</connection>
-		<developerConnection>scm:git:https://git.unic.com/scm/sledge/sledge.git
-		</developerConnection>
-		<url>https://git.unic.com/scm/sledge/sledge.git</url>
+		<url>https://github.com/unic/sledge</url>
+		<connection>scm:git:git://github.com/unic/sledge.git</connection>
+		<developerConnection>scm:git:git@github.com:unic/sledge.git</developerConnection>
 	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<issueManagement>
+		<url>https://github.com/unic/sledge/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<developers>
 		<developer>
-			<id>oliver.burkhalter</id>
+			<id>olimination</id>
 			<name>Oliver Burkhalter</name>
 			<email>oliver.burkhalter@unic.com</email>
+			<organization>Unic AG</organization>
+			<organizationUrl>http://www.unic.com</organizationUrl>
+		</developer>
+		<developer>
+			<id>al-dexter</id>
+			<name>Alexander Bershadsky</name>
+			<email>alexander.bershadsky@unic.com</email>
+			<organization>Unic AG</organization>
+			<organizationUrl>http://www.unic.com</organizationUrl>
+		</developer>
+		<developer>
+			<id>peterKoellner</id>
+			<name>Peter Köllner</name>
+			<email>peter.koellner@unic.com</email>
 			<organization>Unic AG</organization>
 			<organizationUrl>http://www.unic.com</organizationUrl>
 		</developer>
