@@ -1,0 +1,12 @@
+<sledgefile>
+	<deployment-def environments="author">
+		<packages>
+			<package startLevel="20">commons-lang3-3.3.2.jar</package>
+            <package startLevel="20">composum-sling-core-commons-1.5.3.jar</package>
+			<package startLevel="20">composum-sling-core-console-1.5.3.jar</package>
+			<package startLevel="20">composum-sling-core-jslibs-1.5.3.jar</package>
+			<package startLevel="20">composum-sling-package-manager-1.5.3.jar</package>
+			<package startLevel="20">composum-sling-user-management-1.5.3.jar</package>
+		</packages>
+	</deployment-def>
+</sledgefile>
