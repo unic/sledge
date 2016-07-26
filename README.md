@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/unic/sledge.svg?branch=develop)](https://travis-ci.org/unic/sledge)
+
 Sledge - "One-Click Rollout"
 ============================
 
