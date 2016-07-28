@@ -49,9 +49,15 @@
                                         <artifactItem>
                                             <groupId>org.apache.commons</groupId>
                                             <artifactId>commons-lang3</artifactId>
-                                            <version>3.4</version>
+                                            <version>${libs.commons.lang3.version}</version>
                                             <outputDirectory>target</outputDirectory>
                                         </artifactItem>
+                                        <dependency>
+                                            <groupId>com.google.code.gson</groupId>
+                                            <artifactId>gson</artifactId>
+                                            <version>${libs.google.gson.version}</version>
+                                            <outputDirectory>target</outputDirectory>
+                                        </dependency>
                                         <artifactItem>
                                             <groupId>io.sledge</groupId>
                                             <artifactId>io.sledge.core</artifactId>
@@ -134,7 +140,17 @@
                                     <goal>install</goal>
                                 </goals>
                                 <configuration>
-                                    <bundleFileName>${basedir}/target/commons-lang3-3.4.jar</bundleFileName>
+                                    <bundleFileName>${basedir}/target/commons-lang3-${libs.commons.lang3.version}.jar</bundleFileName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>install-gson</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>install</goal>
+                                </goals>
+                                <configuration>
+                                    <bundleFileName>${basedir}/target/gson-${libs.google.gson.version}.jar</bundleFileName>
                                 </configuration>
                             </execution>
                             <execution>
@@ -144,8 +160,7 @@
                                     <goal>install</goal>
                                 </goals>
                                 <configuration>
-                                    <bundleFileName>${basedir}/target/io.sledge.core-${project.version}.jar
-                                    </bundleFileName>
+                                    <bundleFileName>${basedir}/target/io.sledge.core-${project.version}.jar</bundleFileName>
                                 </configuration>
                             </execution>
                             <execution>
@@ -155,8 +170,7 @@
                                     <goal>install</goal>
                                 </goals>
                                 <configuration>
-                                    <bundleFileName>${basedir}/target/io.sledge.connectors-${project.version}.jar
-                                    </bundleFileName>
+                                    <bundleFileName>${basedir}/target/io.sledge.connectors-${project.version}.jar></bundleFileName>
                                 </configuration>
                             </execution>
                             <execution>
@@ -166,8 +180,7 @@
                                     <goal>install</goal>
                                 </goals>
                                 <configuration>
-                                    <bundleFileName>${basedir}/target/io.sledge.webapp-${project.version}.jar
-                                    </bundleFileName>
+                                    <bundleFileName>${basedir}/target/io.sledge.webapp-${project.version}.jar</bundleFileName>
                                 </configuration>
                             </execution>
                         </executions>

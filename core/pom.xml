@@ -61,10 +61,6 @@
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 		</dependency>
-        <dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-        </dependency>        
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -76,6 +72,10 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

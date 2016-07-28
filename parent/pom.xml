@@ -21,6 +21,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<libs.commons.lang3.version>3.4</libs.commons.lang3.version>
+		<libs.google.gson.version>2.3</libs.google.gson.version>
 	</properties>
 
 	<issueManagement>
@@ -185,12 +187,6 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>3.4</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>2.6</version>
@@ -215,9 +211,15 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${libs.commons.lang3.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
 				<groupId>com.google.code.gson</groupId>
 				<artifactId>gson</artifactId>
-				<version>2.3</version>
+				<version>${libs.google.gson.version}</version>
 				<scope>provided</scope>
 			</dependency>
 
