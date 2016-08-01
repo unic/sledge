@@ -35,21 +35,51 @@ Execute the following command from the root directory:
 mvn clean install
 ```
 
+# Using the _Sledge Launchpad_
+
+This is the simplest and fastest way how to get started with Sledge and check it out.
+
+The _Sledge Launchpad_ module defines a simple [_Provisioning model_](https://sling.apache.org/documentation/development/slingstart.html) which
+provides you with a full Sling 8 server and with all the needed _Sledge_ artifacts to run it properly.
+
+* Build the project as mentioned above
+* In the `laundpad` directory execute the following:
+```
+launchpad#> mvn slingstart:start -Dlaunchpad.keep.running=true
+```
+
+This configures and starts up a Sling 8 server with the _Sledge_ web application.
+
+Access then the Sledge webapp here: http://localhost:8080/etc/sledge/packages.html
 
 # Sling Installation
 
-* Install and run Sling 8
+* Install and run Sling 8 Launchpad
 * Install manually the [Commons Lang 3.4 bundle](https://commons.apache.org/proper/commons-lang/download_lang.cgi)
 * Install `core`, `connectors` and `webapp` packages, check the `deploy.sh` script for the Maven commands
 * Open browser and enter this url: http://localhost:8080/etc/sledge/packages.html
 
 The logged in user needs write permission to: `/apps/sledge_packages` and `/etc/sledge/packages` to make the application work properly.
 
-
 # AEM installation
 
 * Install the `io.sledge.delivery-VERSION-aem.zip` package
 * Open url: http://localhost:4502/etc/sledge/packages.html
+
+# Testing
+
+## Unit tests
+
+Sledge heavily uses Mockito and AssertJ for Unit Testing.
+
+## Integration/Web Testing
+
+Sledge uses the great [ScalaTest Selenium framework](http://www.scalatest.org/user_guide/using_selenium) for writing Integration/Web tests.
+
+To run a full Integration test build just execute the following command:
+```
+root#> mvn clean install -P integration
+```
 
 
 # Documentation
