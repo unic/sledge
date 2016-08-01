@@ -185,7 +185,7 @@
 									<host>localhost</host>
 									<port>8080</port>
 									<file>/</file>
-									<maxcount>3</maxcount>
+									<maxcount>5</maxcount>
 									<timeout>10000</timeout>
 								</configuration>
 							</execution>
