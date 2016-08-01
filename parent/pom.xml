@@ -119,6 +119,11 @@
 					<artifactId>maven-sling-plugin</artifactId>
 					<version>2.1.0</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.sling</groupId>
+					<artifactId>slingstart-maven-plugin</artifactId>
+					<version>1.4.4</version>
+				</plugin>
 
 				<plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
@@ -223,7 +228,6 @@
 				<scope>provided</scope>
 			</dependency>
 
-
 			<!-- JCR -->
 			<dependency>
 				<groupId>javax.jcr</groupId>
@@ -243,7 +247,6 @@
 				<version>2.11.0</version>
 				<scope>provided</scope>
 			</dependency>
-
 
 			<!-- OSGi -->
 			<dependency>

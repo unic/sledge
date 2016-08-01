@@ -21,8 +21,9 @@
 		<module>core</module>
 		<module>connectors</module>
         <module>webapp</module>
-        <module>docs</module>
+        <module>launchpad</module>
 		<module>integration</module>
+        <module>docs</module>
 		<module>delivery</module>
     </modules>
 
