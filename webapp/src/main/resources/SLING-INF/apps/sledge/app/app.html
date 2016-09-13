@@ -35,9 +35,11 @@
                                   data-sly-test="${item.valueMap.state == 'INSTALLED'}">${item.valueMap.state}</span>
                             <span class="label label-info"
                                   data-sly-test="${item.valueMap.state == 'UNINSTALLED'}">${item.valueMap.state}</span>
+                            <span class="label label-danger"
+                                  data-sly-test="${item.valueMap.state == 'FAILED'}">${item.valueMap.state}, check error logs!</span>
                         </div>
                         <div class="col-md-1">
-                            <span class="label label-info" data-sly-test="${item.valueMap.state == 'INSTALLED'}">
+                            <span class="label label-info" data-sly-test="${item.valueMap.state == 'INSTALLED' || item.valueMap.state == 'FAILED'}">
                                 ${item.valueMap.usedEnvironment}
                             </span>
                         </div>
@@ -45,7 +47,7 @@
                             <a href="/etc/sledge/packages/${item.name}.html" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
                                 <button class="btn btn-primary btn-sm" type="submit">Install</button>
                             </a>
-                            <form action="${item.path}.uninstall.html" method="POST" data-sly-test="${item.valueMap.state == 'INSTALLED'}">
+                            <form action="${item.path}.uninstall.html" method="POST" data-sly-test="${item.valueMap.state == 'INSTALLED' || item.valueMap.state == 'FAILED'}">
                                 <input type="hidden" name=":redirect" value="/etc/sledge/packages.html"/>
                                 <button class="btn btn-warning btn-sm" type="submit">Uninstall</button>
                             </form>

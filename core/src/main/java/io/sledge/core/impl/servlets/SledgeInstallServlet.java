@@ -16,6 +16,7 @@
 package io.sledge.core.impl.servlets;
 
 import io.sledge.core.api.SledgeConstants;
+import io.sledge.core.api.installer.InstallationException;
 import io.sledge.core.api.installer.Installer;
 import io.sledge.core.api.models.ApplicationPackage;
 import io.sledge.core.api.models.ApplicationPackageState;
@@ -31,6 +32,8 @@ import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.servlets.post.SlingPostConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -54,6 +57,7 @@ import java.io.StringReader;
 public class SledgeInstallServlet extends SlingAllMethodsServlet {
 
 	private static final long serialVersionUID = -8845139979153006842L;
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Override
 	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
@@ -71,14 +75,23 @@ public class SledgeInstallServlet extends SlingAllMethodsServlet {
 
 		Resource packageResource = request.getResource();
 		ApplicationPackage appPackage = packageResource.adaptTo(ApplicationPackage.class);
-
-		Installer installer = new SledgeInstallerImpl(request);
-		installer.install(appPackage, envName, overwriteEnvProps);
+		appPackage.setUsedEnvironment(envName);
 
 		PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
-		appPackage.setState(ApplicationPackageState.INSTALLED.toString());
-		appPackage.setUsedEnvironment(envName);
-		packageRepository.updateApplicationPackage(appPackage);
+
+		try {
+			Installer installer = new SledgeInstallerImpl(request);
+			installer.install(appPackage, envName, overwriteEnvProps);
+
+			appPackage.setState(ApplicationPackageState.INSTALLED.toString());
+			packageRepository.updateApplicationPackage(appPackage);
+
+		} catch (InstallationException e) {
+			log.warn("Could not install Sledge package. ", e);
+			appPackage.setState(ApplicationPackageState.FAILED.toString());
+			packageRepository.updateApplicationPackage(appPackage);
+		}
+
 
 		String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);
 		response.sendRedirect(redirectUrl);

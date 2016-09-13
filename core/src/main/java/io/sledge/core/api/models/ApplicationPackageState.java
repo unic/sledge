@@ -21,5 +21,5 @@ package io.sledge.core.api.models;
  * @author oliver.burkhalter
  */
 public enum ApplicationPackageState {
-	UPLOADED, INSTALLED, UNINSTALLED
+	UPLOADED, INSTALLED, UNINSTALLED, FAILED
 }
