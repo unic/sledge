@@ -65,7 +65,6 @@ public class SledgeInstallerImpl implements Installer {
 		PackageConfigurer packageConfigurer = request.adaptTo(SledgePackageConfigurer.class);
 		DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(appPackage.getPackageFile());
 		final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(envName);
-		final List<String> packageNamesForConfiguration = deploymentDef.getPackageNamesForConfiguration();
 		final Map<String, Integer> startLevelsByPackageName = deploymentDef.getStartLevelsByPackageName();
 
 		// Load and merge environment properties
@@ -77,10 +76,7 @@ public class SledgeInstallerImpl implements Installer {
 		for (Map.Entry<String, InputStream> packageEntry : packages) {
 			try {
 
-				if (packageNamesForConfiguration.contains(packageEntry.getKey())) {
-					log.info("Configuring package: " + packageEntry.getKey());
-					packageEntry.setValue(packageConfigurer.configure(packageEntry.getValue(), packageEntry.getKey(), envProps));
-				}
+				configurePackage(deploymentDef, packageConfigurer, envProps, packageEntry);
 
 				Resource installLocationResource = defaultInstallLocationResource;
 				if (startLevelsByPackageName.containsKey(packageEntry.getKey())) {
@@ -96,17 +92,36 @@ public class SledgeInstallerImpl implements Installer {
 
 				Map<String, Object> props = new HashMap<>();
 				props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_FILE);
-				Resource fileResource = resourceResolver.create(installLocationResource, packageEntry.getKey(), props);
 
-				props = new HashMap<>();
-				props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_RESOURCE);
-				props.put(JcrConstants.JCR_DATA, packageEntry.getValue());
-				resourceResolver.create(fileResource, JcrConstants.JCR_CONTENT, props);
+				String packageResourcePath = installLocationResource.getPath() + "/" + packageEntry.getKey();
+				if (!packageResourceExists(packageResourcePath)) {
+					Resource fileResource = resourceResolver.create(installLocationResource, packageEntry.getKey(), props);
 
-				resourceResolver.commit();
+					props = new HashMap<>();
+					props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_RESOURCE);
+					props.put(JcrConstants.JCR_DATA, packageEntry.getValue());
+					resourceResolver.create(fileResource, JcrConstants.JCR_CONTENT, props);
+
+					resourceResolver.commit();
+				} else {
+					log.warn("Package: " + packageEntry.getKey()
+							+ " has not been installed because it exists already. If you want to update your application, please uninstall first. ");
+				}
 			} catch (PersistenceException e) {
 				throw new InstallationException("Could not install package: " + packageEntry.getKey(), e);
 			}
 		}
+	}
+
+	private void configurePackage(DeploymentDef deploymentDef, PackageConfigurer packageConfigurer, Properties envProps, Map.Entry<String, InputStream> packageEntry) {
+		final List<String> packageNamesForConfiguration = deploymentDef.getPackageNamesForConfiguration();
+		if (packageNamesForConfiguration.contains(packageEntry.getKey())) {
+			log.info("Configuring package: " + packageEntry.getKey());
+			packageEntry.setValue(packageConfigurer.configure(packageEntry.getValue(), packageEntry.getKey(), envProps));
+		}
+	}
+
+	private boolean packageResourceExists(String packageResourcePath) {
+		return resourceResolver.getResource(packageResourcePath) != null;
 	}
 }
