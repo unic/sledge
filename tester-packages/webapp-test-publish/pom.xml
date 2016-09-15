@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>io.sledge.webapp-tester-publish</artifactId>
+	<packaging>bundle</packaging>
+	<name>Sledge Tester Webapp Publish</name>
+	<description>Tester Webapp Publish for Sledge</description>
+
+	<parent>
+		<groupId>io.sledge</groupId>
+		<artifactId>io.sledge.parent</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../parent/pom.xml</relativePath>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Sling-Initial-Content>
+							SLING-INF/apps/sledge-tester-publish;path:=/apps/sledge-tester-publish;overwrite:=true,
+							SLING-INF/content/sledge-tester-publish.json;overwrite:=true;path:=/content
+						</Sling-Initial-Content>
+						<Import-Package>
+							!org.slf4j.impl,*
+						</Import-Package>
+						<Export-Package>
+							io.sledge.tester.webapp.publish.models.*;version=${project.version}
+						</Export-Package>
+						<Sling-Model-Packages>
+							io.sledge.tester.webapp.publish.models
+						</Sling-Model-Packages>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+
+		<!-- Misc -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+		</dependency>
+
+		<!-- Felix -->
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.annotations</artifactId>
+		</dependency>
+
+		<!-- Sling -->
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.models.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.models.impl</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>

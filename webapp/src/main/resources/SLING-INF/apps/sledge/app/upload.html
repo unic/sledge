@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+	<head data-sly-unwrap data-sly-include="head.html"></head>
+    <body>
+        <div class="container-fluid">
+            <div class="page-header">
+            	<h1>Sledge - A Sling Application Manager</h1>
+            </div>
+            
+            <a href="${resource.path}.html"><button class="btn btn-default" type="submit">Back to overview</button></a>
+            <div class="connector-list" data-sly-use.mainModel="io.sledge.webapp.models.MainViewModel" data-sly-list="${mainModel.connectorResources}">
+            	<div data-sly-resource="${item.path}"></div>
+            </div>
+        </div>
+
+		<div data-sly-unwrap data-sly-include="bodyEnd.html"></div>
+    </body>
+</html>

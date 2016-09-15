@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+actor Admin <<User>>
+actor "Package source" as packageSource <<System>>
+Admin -- (Sledge system) : installs/uninstalls application
+(Sledge system) -- packageSource : provides app packages
+@enduml

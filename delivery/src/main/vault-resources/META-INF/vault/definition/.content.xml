@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:vlt="http://www.day.com/jcr/vault/1.0"
+		  xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+		  jcr:created="{Date}2016-06-06T16:48:39.313+02:00"
+		  jcr:createdBy="admin"
+		  jcr:description="${project.description}"
+		  jcr:primaryType="vlt:PackageDefinition"
+		  sling:resourceType="cq/packaging/components/pack/definition"
+		  buildCount="1"
+		  acHandling="Ignore"
+		  group="${project.groupId}"
+		  name="${project.name}"
+		  path="/etc/packages/${project.groupId}/${project.artifactId}-${project.version}"
+		  providerLink=""
+		  providerName="Unic AG"
+		  providerUrl="http://www.unic.com"
+		  testedWith=""
+		  version="${project.version}">
+	<thumbnail.png/>
+	<filter jcr:primaryType="nt:unstructured">
+		<f0 jcr:primaryType="nt:unstructured"
+			mode="replace"
+			root="/apps/${project.artifactId}"
+			rules="[]"/>
+		<f1 jcr:primaryType="nt:unstructured"
+			mode="replace"
+			root="/apps/sledge"
+			rules="[]"/>
+		<f2 jcr:primaryType="nt:unstructured"
+			mode="replace"
+			root="/apps/sledge-connectors"
+			rules="[]"/>
+	</filter>
+	<thumbnail jcr:primaryType="nt:unstructured">
+		<file/>
+	</thumbnail>
+</jcr:root>
+

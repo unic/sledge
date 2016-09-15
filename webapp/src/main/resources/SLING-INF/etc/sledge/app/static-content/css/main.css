@@ -1,0 +1,32 @@
+.page-header {
+	margin: 0;
+	margin-bottom: 0.5em;
+}
+.application-packages-list {
+	margin-left: 1em;
+}
+.environment-file-area, .configurable-packages-area {
+	margin-bottom: 1em;
+	margin-top: 1em;
+}
+
+.app-package-item .app-package-item-actions button.btn {
+	float: left;
+	margin-left: 5px;
+}
+.app-package-header {
+	font-weight: bold;
+}
+
+.show-grid [class^=col-] {
+	min-height: 4em;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #eee;
+	background-color: rgba(86,61,124,.15);
+	border: 1px solid #ddd;
+	border: 1px solid rgba(86,61,124,.2);
+}
+
+
+
