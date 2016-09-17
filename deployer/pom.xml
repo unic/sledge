@@ -14,7 +14,7 @@
 	<parent>
 		<artifactId>io.sledge.parent</artifactId>
 		<groupId>io.sledge</groupId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.2.0</version>
 	</parent>
 
 	<dependencies>
