@@ -20,7 +20,7 @@
 [feature name=sledge]
 
 [variables]
-	sledge.version=0.2.0-SNAPSHOT
+	sledge.version=0.3.0-SNAPSHOT
     
 [artifacts]
     org.apache.commons/commons-lang3/3.4
