@@ -98,6 +98,18 @@ root#> mvn clean install -P integration
 See here: [Sledge Architecture](docs/src/main/markdown/sledge-architecture.md)
 
 
+# Release process
+
+* Make sure your _develop_ branch is up-to-date and does not contain any local changes
+* Execute locally the ```release.sh``` script
+* Create a new release on GitHub
+* Add some release description
+* Upload the following artifacts for the release:
+  * delivery
+  * deployer
+* Publish the release
+
+
 # License
 
 Sledge is licensed under the terms of the Apache License, version 2.0.
