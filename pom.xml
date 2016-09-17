@@ -4,7 +4,7 @@
 
 	<groupId>io.sledge</groupId>
 	<artifactId>io.sledge.parent</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>Sledge Parent POM</name>
@@ -70,8 +70,9 @@
         <module>launchpad</module>
 		<module>integration</module>
         <module>docs</module>
+		<module>deployer</module>
 		<module>delivery</module>
-    </modules>
+	</modules>
 
 	<build>
 		<pluginManagement>
