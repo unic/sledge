@@ -70,8 +70,9 @@
         <module>launchpad</module>
 		<module>integration</module>
         <module>docs</module>
+		<module>deployer</module>
 		<module>delivery</module>
-    </modules>
+	</modules>
 
 	<build>
 		<pluginManagement>
