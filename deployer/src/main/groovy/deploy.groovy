@@ -1,9 +1,9 @@
 import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
 import io.sledge.deployer.SledgeDeployer
+import io.sledge.deployer.NexusArtifactProvider
 import org.apache.commons.io.FileUtils
 
-evaluate(new File("./commons.groovy"))
 
 def defaultDeployConfig = [
         artifactId            : "",
@@ -61,9 +61,10 @@ def deliveryPackageFilename = "${deployConfig.artifactId}-${deployConfig.version
 def uninstallDeliveryPackageFilename = "${deployConfig.artifactId}-${deployConfig.uninstallVersion}.${deployConfig.packageType}"
 
 // Get delivery package
-InputStream deliveryPackageStream = getDeliveryPackageFromNexus(deployConfig)
+NexusArtifactProvider nexusArtifactProvider = new NexusArtifactProvider(deployConfig.nexusRepositoryBaseUrl, deployConfig.nexusRepositoryName)
+InputStream packageStream = nexusArtifactProvider.fetch(deployConfig.artifactId, deployConfig.groupId, deployConfig.packageType, deployConfig.version, deployConfig.classifier)
 File deliveryPackageFile = new File(deliveryPackageFilename)
-FileUtils.copyInputStreamToFile(deliveryPackageStream, deliveryPackageFile)
+FileUtils.copyInputStreamToFile(packageStream, deliveryPackageFile)
 
 def sledgeDeployer = new SledgeDeployer(deployConfig.targetHost, deployConfig.targetHostUsername, deployConfig.targetHostPassword);
 

@@ -11,9 +11,19 @@ In ```src/main/groovy``` you can see some example on how to use the ```SledgeDep
 on how to download a package from a Nexus repository and install it via the ```SledgeDeployer``` and how to handle options passed
 to the Groovy script for overwriting default deploy configurations.
 
-To use it in an own project it is needed to build some _deployment_ package/module with all the needed dependencies:
+With the following command you can call your groovy script and pass the needed options:
 
 ```
+groovy -cp "lib/*" deploy.groovy -DartifactId=foo.bar -DgroupId=foo.bar.group -Dversion=${version} -DuninstallVersion=${uninstallVersion} -DnexusRepositoryName=${repoName} -DenvironmentName=${environmentName} -DenvironmentFileContent=${environmentFileContent} -DtargetHostUsername=admin -DtargetHostPassword=${targetHostPassword} ${targetHost}
+```
+
+Replace the "${...}" variables with your correct value.
+
+The "lib" directory is used to hold all needed dependencies.
+
+To use it in an own project it is needed to build some _deployment_ package/module with all the needed dependencies:
+
+```xml
 <dependency>
 	<groupId>io.sledge</groupId>
 	<artifactId>io.sledge.deployer</artifactId>
