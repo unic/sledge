@@ -20,11 +20,14 @@
 [feature name=sledge]
 
 [variables]
-	sledge.version=0.3.0-SNAPSHOT
-    
+  sledge.version=0.3.0-SNAPSHOT
+
 [artifacts]
-    org.apache.commons/commons-lang3/3.4
-    com.google.code.gson/gson/2.3
-    io.sledge/io.sledge.core/${sledge.version}
-    io.sledge/io.sledge.connectors/${sledge.version}
-    io.sledge/io.sledge.webapp/${sledge.version}
+  org.apache.sling/org.apache.sling.launchpad/8/slingstart
+
+[artifacts startLevel=15]
+  org.apache.commons/commons-lang3/3.4
+  com.google.code.gson/gson/2.3
+  io.sledge/io.sledge.core/${sledge.version}
+  io.sledge/io.sledge.connectors/${sledge.version}
+  io.sledge/io.sledge.webapp/${sledge.version}
