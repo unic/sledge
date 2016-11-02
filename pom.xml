@@ -4,7 +4,7 @@
 
 	<groupId>io.sledge</groupId>
 	<artifactId>io.sledge.parent</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<packaging>pom</packaging>
 
 	<name>Sledge Parent POM</name>
