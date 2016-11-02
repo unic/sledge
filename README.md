@@ -102,6 +102,8 @@ See here: [Sledge Architecture](docs/src/main/markdown/sledge-architecture.md)
 
 * Make sure your _develop_ branch is up-to-date and does not contain any local changes
 * Execute locally the ```release.sh``` script
+* Adapt the `sledge.txt` Launchpad model to reflect the next development version and commit
+* Finally push everything to GitHub remote
 * Create a new release on GitHub
 * Add some release description
 * Upload the following artifacts for the release:
