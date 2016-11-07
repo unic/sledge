@@ -5,6 +5,18 @@ The Sledge Deployer Toolset provides small tools to easily integrate into existi
 It provides common functions like uploading, installing and uninstalling Sledge applications. But it also offers some general functions
 like removing nodes via the _SlingPostServlet_.
 
+The idea is to build up some standard scripts for AEM/Sling app deployments.
+
+# Prerequisite
+
+- Groovy 2.4.x
+- Access to Nexus repository
+- Running AEM/Sling
+
+**Why Groovy?**
+
+We use currently Groovy scripts because it offers more flexibility to handle responses, for example JSON responses.
+
 # Usage examples
 
 In ```src/main/groovy``` you can see some example on how to use the ```SledgeDeployer``` in a Groovy script. It also gives an example
