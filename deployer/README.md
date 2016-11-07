@@ -14,12 +14,21 @@ to the Groovy script for overwriting default deploy configurations.
 With the following command you can call your groovy script and pass the needed options:
 
 ```
-groovy -cp "lib/*" deploy.groovy -DartifactId=foo.bar -DgroupId=foo.bar.group -Dversion=${version} -DuninstallVersion=${uninstallVersion} -DnexusRepositoryName=${repoName} -DenvironmentName=${environmentName} -DenvironmentFileContent=${environmentFileContent} -DtargetHostUsername=admin -DtargetHostPassword=${targetHostPassword} ${targetHost}
+groovy -cp "lib/*" deploy.groovy -DartifactId=foo.bar -DgroupId=foo.bar.group -DpackageType=zip -Dversion=${version} -DuninstallVersion=${uninstallVersion} -DnexusRepositoryName=${repoName} -DenvironmentName=${environmentName} -DenvironmentFileContent=${environmentFileContent} -DtargetHostUsername=admin -DtargetHostPassword=${targetHostPassword} ${targetHost}
 ```
 
 Replace the "${...}" variables with your correct value.
 
 The "lib" directory is used to hold all needed dependencies.
+
+Here is an example of a `deploy.groovy` call:
+
+```
+groovy -cp "lib/*" deploy.groovy -DartifactId=test-app-package -DgroupId=io.sledge.tester-packages -DpackageType=zip -Dversion=0.3.0 -DuninstallVersion=0.3.0 -DnexusRepositoryName=my-nexusrepoName -DnexusRepositoryBaseUrl=https://nexus.host.com/nexus/service/local/artifact/maven/redirect -DnexusUser=my-nexususr -DnexusUserPw=my-nexuspw -DenvironmentName=test-author -DenvironmentFileContent=TESTCONFIG=Foo -DtargetHostUsername=admin -DtargetHostPassword=admin http://localhost:8080
+```
+
+with the `nexusUser` and `nexusUserPw` you can set needed credentials data if your Nexus repository requires an Authentication.
+
 
 To use it in an own project it is needed to build some _deployment_ package/module with all the needed dependencies:
 
