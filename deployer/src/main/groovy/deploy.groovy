@@ -16,6 +16,8 @@ def defaultDeployConfig = [
         // or: snapshots or releases
         nexusRepositoryName   : "releases",
         nexusRepositoryBaseUrl: "",
+        nexusUser             : "",
+        nexusUserPw           : "",
 
         environmentName       : "",
         environmentFileContent: "",
@@ -62,6 +64,11 @@ def uninstallDeliveryPackageFilename = "${deployConfig.artifactId}-${deployConfi
 
 // Get delivery package
 NexusArtifactProvider nexusArtifactProvider = new NexusArtifactProvider(deployConfig.nexusRepositoryBaseUrl, deployConfig.nexusRepositoryName)
+
+if(!deployConfig.nexusUser.empty) {
+    nexusArtifactProvider = new NexusArtifactProvider(deployConfig.nexusRepositoryBaseUrl, deployConfig.nexusRepositoryName, deployConfig.nexusUser, deployConfig.nexusUserPw)
+}
+
 InputStream packageStream = nexusArtifactProvider.fetch(deployConfig.artifactId, deployConfig.groupId, deployConfig.packageType, deployConfig.version, deployConfig.classifier)
 File deliveryPackageFile = new File(deliveryPackageFilename)
 FileUtils.copyInputStreamToFile(packageStream, deliveryPackageFile)
@@ -148,7 +155,7 @@ def uninstallApp(SledgeDeployer sledgeDeployer, deliveryPackageName) {
 }
 
 def removeApp(SledgeDeployer sledgeDeployer, deliveryPackageName) {
-    HttpResponse<String> response  = sledgeDeployer.removeApp(deliveryPackageName)
+    HttpResponse<String> response = sledgeDeployer.removeApp(deliveryPackageName)
 
     if (response.status >= 400) {
         println "Remove HTTP status: ${response.status}"
@@ -168,11 +175,11 @@ def removeResource(SledgeDeployer sledgeDeployer, resourcePath) {
         println "Resource Removal has failed."
     }
 
-    if(response.status == 404 || response.status == 403) {
+    if (response.status == 404 || response.status == 403) {
         println "Resource ${resourcePath} was not available or operation was forbidden on this resource."
     }
 
-    if(response.status < 400) {
+    if (response.status < 400) {
         println "Resource Removal successfully finished."
     }
 }
