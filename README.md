@@ -30,8 +30,8 @@ Therefore Sledge is not a _special new_ Configuration mechanism for Sling but ra
 # Requirements
 
 * Java 8
-* Sling 8 or AEM 6.2
-* Commons Lang 3.4 Osgi bundle
+* Sling 8 or AEM 6.2, for AEM 6.1 you first need to install the `aem61-deps` package
+* Commons Lang 3.3+ Osgi bundle
 
 
 # Building from source
@@ -109,6 +109,7 @@ See here: [Sledge Architecture](docs/src/main/markdown/sledge-architecture.md)
 * Upload the following artifacts for the release:
   * delivery
   * deployer
+  * aem61-deps
 * Publish the release
 
 
