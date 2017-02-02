@@ -24,6 +24,11 @@
 						<Private-Package>
 							io.sledge.core.impl.*
 						</Private-Package>
+						<Import-Package>
+							org.apache.commons.lang3;version="[3.3,4)",
+							org.apache.commons.lang3.text;version="[3.3,4)",
+							*
+						</Import-Package>
 						<Export-Package>
 							io.sledge.core.api.*;version=${project.version}
 						</Export-Package>
