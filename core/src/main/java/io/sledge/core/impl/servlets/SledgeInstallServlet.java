@@ -18,10 +18,10 @@ package io.sledge.core.impl.servlets;
 import io.sledge.core.api.SledgeConstants;
 import io.sledge.core.api.installer.InstallationException;
 import io.sledge.core.api.installer.Installer;
-import io.sledge.core.api.models.ApplicationPackage;
+import io.sledge.core.api.models.ApplicationPackageModel;
 import io.sledge.core.api.models.ApplicationPackageState;
 import io.sledge.core.api.repository.PackageRepository;
-import io.sledge.core.impl.installer.SledgeInstallerImpl;
+import io.sledge.core.impl.installer.SledgeInstaller;
 import io.sledge.core.impl.repository.SledgePackageRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Properties;
@@ -74,21 +74,21 @@ public class SledgeInstallServlet extends SlingAllMethodsServlet {
 		}
 
 		Resource packageResource = request.getResource();
-		ApplicationPackage appPackage = packageResource.adaptTo(ApplicationPackage.class);
+		ApplicationPackageModel appPackage = packageResource.adaptTo(ApplicationPackageModel.class);
 		appPackage.setUsedEnvironment(envName);
 
 		PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
 
 		try {
-			Installer installer = new SledgeInstallerImpl(request);
+			Installer installer = new SledgeInstaller(request);
 			installer.install(appPackage, envName, overwriteEnvProps);
 
-			appPackage.setState(ApplicationPackageState.INSTALLED.toString());
+			appPackage.setState(ApplicationPackageState.INSTALLED);
 			packageRepository.updateApplicationPackage(appPackage);
 
 		} catch (InstallationException e) {
 			log.warn("Could not install Sledge package. ", e);
-			appPackage.setState(ApplicationPackageState.FAILED.toString());
+			appPackage.setState(ApplicationPackageState.FAILED);
 			packageRepository.updateApplicationPackage(appPackage);
 		}
 

@@ -36,7 +36,6 @@
 						<Import-Package>
 							!org.slf4j.impl,*
 						</Import-Package>
-						<Private-Package>io.sledge.webapp.impl.*</Private-Package>
 						<Export-Package>
 							io.sledge.webapp.models.*;version=${project.version}
 						</Export-Package>
