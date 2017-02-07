@@ -25,4 +25,9 @@ public interface Uninstaller {
      * @throws UninstallationException if something goes wrong during uninstallation.
      */
     void uninstall(ApplicationPackage applicationPackage);
+
+    /**
+     * @return Returns true if this Uninstaller is handling this application package type.
+     */
+    boolean handles(ApplicationPackage appPackage);
 }

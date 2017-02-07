@@ -247,6 +247,11 @@ public class SledgeApplicationPackageExtractor implements ApplicationPackageExtr
         return deploymentConfig;
     }
 
+    @Override
+    public boolean hasSledgefileXml(InputStream appPackageInputStream) {
+        return getDeploymentConfiguration(appPackageInputStream) != null;
+    }
+
     private ZipInputStream getNewUtf8ZipInputStream(ApplicationPackage appPackage) {
         return new ZipInputStream(new BufferedInputStream(appPackage.getPackageFile()), Charset.forName("UTF-8"));
     }
