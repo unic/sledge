@@ -17,7 +17,7 @@ package io.sledge.core.api.connectors;
 
 import java.util.List;
 
-import io.sledge.core.api.models.ApplicationPackage;
+import io.sledge.core.api.models.ApplicationPackageModel;
 
 /**
  * @author oliver.burkhalter
@@ -29,6 +29,6 @@ public interface PackageSourceConnector {
      * 
      * @return Returns a list of loaded Application packages from the remote source.
      */
-    List<ApplicationPackage> loadApplicationPackages();
+    List<ApplicationPackageModel> loadApplicationPackages();
 
 }

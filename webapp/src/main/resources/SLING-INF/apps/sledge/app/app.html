@@ -27,7 +27,7 @@
                 </div>
                 <div data-sly-list="${resource.listChildren}">
                     <div class="row app-package-item show-grid">
-                        <div class="col-md-3 app-package-item-description">${item.name}</div>
+                        <div class="col-md-3 app-package-item-description">${item.name}<br/>groupId=${item.valueMap.groupId}, artifactId=${item.valueMap.artifactId}, version=${item.valueMap.version}</div>
                         <div class="col-md-1">
                             <span class="label label-primary"
                                   data-sly-test="${item.valueMap.state == 'UPLOADED'}">${item.valueMap.state}</span>

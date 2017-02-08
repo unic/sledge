@@ -157,6 +157,10 @@
 			<artifactId>mockito-core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.easytesting</groupId>
 			<artifactId>fest-reflect</artifactId>
 		</dependency>

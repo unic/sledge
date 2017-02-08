@@ -15,28 +15,22 @@
 
 package io.sledge.core.api.repository;
 
-import io.sledge.core.api.ApplicationPackage;
 import org.apache.sling.api.resource.Resource;
 
 import java.util.List;
 
 /**
- * Defines a package repository where the app manages all the loaded {@link ApplicationPackage} resources.
- *
- * @author oliver.burkhalter
+ * Finds Application packages in the Sledge repository by the groupId, artifactId or version properties.
  */
-public interface PackageRepository {
-
-    List<ApplicationPackage> getApplicationPackages();
-
-    void addApplicationPackage(ApplicationPackage appPackage);
-
-    void updateApplicationPackage(ApplicationPackage appPackage);
+public interface ApplicationPackageSearchService {
 
     /**
-     * @return Returns the root node of the repository of the packages. Mostly /etc/sledge/packages.
+     * Returns a list with Application packages found by the given parameters.
+     * The parameters are only taken into account if they are not null or empty.
+     *
+     * @return A list of Application packages with the adaptable type of T or an empty list. The type T must be adaptable to a Sling Resource.
      */
-    Resource getRepositoryRootResource();
+    <T> List<T> find(String groupId, String artifactId, String version, Class<T> adaptableType);
 
-    void addOrUpdate(ApplicationPackage appPackage);
+    List<Resource> find(String groupId, String artifactId, String version);
 }

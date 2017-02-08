@@ -15,11 +15,14 @@
 
 package io.sledge.core.api.installer;
 
-/**
- * Exception thrown for installation errors.
- */
-public class InstallationException extends RuntimeException {
-    public InstallationException(String message, Exception e) {
-        super(message, e);
-    }
+import io.sledge.core.api.ApplicationPackage;
+
+public interface Uninstaller {
+
+    /**
+     * Uninstalls the given Application package from the Sledge install directory.
+     *
+     * @throws UninstallationException if something goes wrong during uninstallation.
+     */
+    void uninstall(ApplicationPackage applicationPackage);
 }

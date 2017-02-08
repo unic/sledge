@@ -15,12 +15,12 @@
 
 package io.sledge.core.api.installer;
 
-import io.sledge.core.api.models.ApplicationPackage;
+import io.sledge.core.api.models.ApplicationPackageModel;
 
 import java.util.Properties;
 
 /**
- * The Installer takes an {@link ApplicationPackage} and installs it.
+ * The Installer takes an {@link ApplicationPackageModel} and installs it.
  *
  * @author oliver.burkhalter
  */
@@ -35,5 +35,5 @@ public interface Installer {
 	 * @param envName       The name of the installing environment.
 	 * @param propsForMerge A properties string which overwrites the provided environment properties from the Application package.
 	 */
-	void install(ApplicationPackage appPackage, String envName, Properties propsForMerge) throws InstallationException;
+	void install(ApplicationPackageModel appPackage, String envName, Properties propsForMerge) throws InstallationException;
 }

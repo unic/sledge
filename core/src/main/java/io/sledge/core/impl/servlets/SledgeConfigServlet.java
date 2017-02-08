@@ -21,7 +21,7 @@ import io.sledge.core.api.configuration.DeploymentConfiguration;
 import io.sledge.core.api.configuration.DeploymentDef;
 import io.sledge.core.api.extractor.ApplicationPackageExtractor;
 import io.sledge.core.api.installer.PackageConfigurer;
-import io.sledge.core.api.models.ApplicationPackage;
+import io.sledge.core.api.models.ApplicationPackageModel;
 import io.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
 import io.sledge.core.impl.installer.SledgePackageConfigurer;
 import org.apache.commons.io.Charsets;
@@ -90,7 +90,7 @@ public class SledgeConfigServlet extends SlingAllMethodsServlet {
 		if (envNameParam != null) {
 			String envName = envNameParam.getString();
 
-			ApplicationPackage appPackage = packageResource.adaptTo(ApplicationPackage.class);
+			ApplicationPackageModel appPackage = packageResource.adaptTo(ApplicationPackageModel.class);
 			ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
 			DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(appPackage.getPackageFile());
 			final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(envName);
@@ -110,7 +110,7 @@ public class SledgeConfigServlet extends SlingAllMethodsServlet {
 		String envName = request.getParameter(SledgeConstants.ENVIRONMENT_NAME_PARAM);
 		String overwriteEnvFileContent = request.getParameter(SledgeConstants.ENVIRONMENT_FILE_CONTENT_PARAM);
 		Resource packageResource = request.getResource();
-		ApplicationPackage appPackage = packageResource.adaptTo(ApplicationPackage.class);
+		ApplicationPackageModel appPackage = packageResource.adaptTo(ApplicationPackageModel.class);
 
 		java.util.Properties overwriteEnvProps = new java.util.Properties();
 		if (overwriteEnvFileContent != null) {
