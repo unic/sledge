@@ -22,7 +22,7 @@ import io.sledge.core.api.configuration.DeploymentDef;
 import io.sledge.core.api.extractor.ApplicationPackageExtractor;
 import io.sledge.core.api.installer.UninstallationException;
 import io.sledge.core.api.installer.Uninstaller;
-import io.sledge.core.api.models.ApplicationPackageState;
+import io.sledge.core.api.models.ApplicationPackageType;
 import io.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
@@ -78,5 +78,10 @@ public class SledgeUninstaller implements Uninstaller {
             }
         }
 
+    }
+
+    @Override
+    public boolean handles(ApplicationPackage appPackage) {
+        return appPackage.getApplicationPackageType().equals(ApplicationPackageType.sledgepackage);
     }
 }

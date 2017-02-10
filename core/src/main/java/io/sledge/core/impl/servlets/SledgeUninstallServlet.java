@@ -16,17 +16,17 @@
 package io.sledge.core.impl.servlets;
 
 import io.sledge.core.api.installer.UninstallationException;
-import io.sledge.core.api.installer.Uninstaller;
 import io.sledge.core.api.models.ApplicationPackageModel;
-import io.sledge.core.api.models.ApplicationPackageState;
 import io.sledge.core.api.repository.PackageRepository;
-import io.sledge.core.impl.installer.SledgeUninstaller;
+import io.sledge.core.impl.installer.SledgeInstallationManager;
+import io.sledge.core.impl.installer.SledgePackageConfigurer;
 import io.sledge.core.impl.repository.SledgePackageRepository;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.servlets.post.SlingPostConstants;
 import org.slf4j.Logger;
@@ -55,17 +55,13 @@ public class SledgeUninstallServlet extends SlingAllMethodsServlet {
     protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
         ApplicationPackageModel appPackage = request.getResource().adaptTo(ApplicationPackageModel.class);
 
-        Uninstaller uninstaller = new SledgeUninstaller(request.getResourceResolver());
-
         String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);
 
         try {
-            uninstaller.uninstall(appPackage);
-
-            PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
-            appPackage.setState(ApplicationPackageState.UNINSTALLED);
-            appPackage.setUsedEnvironment("");
-            packageRepository.updateApplicationPackage(appPackage);
+            ResourceResolver resourceResolver = request.getResourceResolver();
+            PackageRepository packageRepository = new SledgePackageRepository(resourceResolver);
+            SledgeInstallationManager installationManager = new SledgeInstallationManager(resourceResolver, packageRepository, request.adaptTo(SledgePackageConfigurer.class));
+            installationManager.uninstall(appPackage);
 
         } catch (UninstallationException e) {
             LOG.error("Failed uninstalling Application package. ", e);

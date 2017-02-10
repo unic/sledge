@@ -15,19 +15,20 @@
 
 package io.sledge.core.api.installer;
 
-import io.sledge.core.api.ApplicationPackage;
+import java.util.Properties;
 
-public interface Uninstaller {
-
-    /**
-     * Uninstalls the given Application package from the Sledge install directory.
-     *
-     * @throws UninstallationException if something goes wrong during uninstallation.
-     */
-    void uninstall(ApplicationPackage applicationPackage);
+/**
+ * The {@link ConfigurableInstaller} allows to set an appropriate environment configuration with given configurations for Overwriting.
+ */
+public interface ConfigurableInstaller extends Installer {
 
     /**
-     * @return Returns true if this Uninstaller is handling this application package type.
+     * @param envName The name of the installing environment.
      */
-    boolean handles(ApplicationPackage appPackage);
+    void setEnvironmentName(String envName);
+
+    /**
+     * @param propsForMerge A properties string which overwrites the provided environment properties from the Application package.
+     */
+    void setPropertiesForMerge(Properties propsForMerge);
 }

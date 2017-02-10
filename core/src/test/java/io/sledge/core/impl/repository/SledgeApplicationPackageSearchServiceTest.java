@@ -2,7 +2,6 @@ package io.sledge.core.impl.repository;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -13,10 +12,12 @@ import org.mockito.quality.Strictness;
 
 import java.util.List;
 
+import static java.util.Collections.emptyIterator;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
-@Ignore
 public class SledgeApplicationPackageSearchServiceTest {
 
     @Rule
@@ -34,6 +35,7 @@ public class SledgeApplicationPackageSearchServiceTest {
         String groupId = "io.sledge";
         String artifactId = "sledge-test-app";
         String version = "1.0.0-SNAPSHOT";
+        withResourceResolver();
 
         // When:
         List<Resource> applicationPackages = testee.find(groupId, artifactId, version);
@@ -42,12 +44,17 @@ public class SledgeApplicationPackageSearchServiceTest {
         verify(resourceResolver).findResources("/jcr:root/etc/sledge/packages//*[@sling:resourceType='sledge/package' and @groupId='io.sledge' and @artifactId='sledge-test-app' and @version='1.0.0-SNAPSHOT']", "xpath");
     }
 
+    private void withResourceResolver() {
+        when(resourceResolver.findResources(anyString(), anyString())).thenReturn(emptyIterator());
+    }
+
     @Test
     public void findOnlyWithGroupId() throws Exception {
         // Given:
         String groupId = "io.sledge";
         String artifactId = "";
         String version = "";
+        withResourceResolver();
 
         // When:
         List<Resource> applicationPackages = testee.find(groupId, artifactId, version);
@@ -62,6 +69,7 @@ public class SledgeApplicationPackageSearchServiceTest {
         String groupId = null;
         String artifactId = "sledge-test-app";
         String version = "";
+        withResourceResolver();
 
         // When:
         List<Resource> applicationPackages = testee.find(groupId, artifactId, version);

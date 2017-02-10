@@ -15,17 +15,17 @@
 
 package io.sledge.core.impl.installer;
 
+import io.sledge.core.api.ApplicationPackage;
 import io.sledge.core.api.SledgeConstants;
 import io.sledge.core.api.configuration.DeploymentConfiguration;
 import io.sledge.core.api.configuration.DeploymentDef;
 import io.sledge.core.api.extractor.ApplicationPackageExtractor;
+import io.sledge.core.api.installer.ConfigurableInstaller;
 import io.sledge.core.api.installer.InstallationException;
-import io.sledge.core.api.installer.Installer;
 import io.sledge.core.api.installer.PackageConfigurer;
-import io.sledge.core.api.models.ApplicationPackageModel;
+import io.sledge.core.api.models.ApplicationPackageType;
 import io.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
 import org.apache.jackrabbit.JcrConstants;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
@@ -43,38 +43,42 @@ import java.util.Properties;
  * It loads the sledgefile configuration for the given environment, merges the current configuration with the given configuration
  * and installs the appropriate packages.
  */
-public class SledgeInstaller implements Installer {
+public class SledgeInstaller implements ConfigurableInstaller {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(SledgeInstaller.class);
 
-    private SlingHttpServletRequest request;
+    private final PackageConfigurer packageConfigurer;
     private ResourceResolver resourceResolver;
+    private String environmentName;
+    private Properties propertiesForMerge;
 
-    public SledgeInstaller(SlingHttpServletRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Cannot initialize SledgeInstallerImpl because the request is null.");
+    public SledgeInstaller(ResourceResolver resourceResolver, PackageConfigurer packageConfigurer) {
+        if (resourceResolver == null) {
+            throw new IllegalArgumentException("Cannot initialize SledgeInstallerImpl because the resourceResolver is null.");
+        }
+        if (packageConfigurer == null) {
+            throw new IllegalArgumentException("Cannot initialize SledgeInstallerImpl because the packageConfigurer is null.");
         }
 
-        this.request = request;
-        this.resourceResolver = request.getResourceResolver();
+        this.packageConfigurer = packageConfigurer;
+        this.resourceResolver = resourceResolver;
     }
 
     @Override
-    public void install(ApplicationPackageModel appPackage, String envName, Properties propsForMerge) throws InstallationException {
+    public void install(ApplicationPackage appPackage) throws InstallationException {
         Resource defaultInstallLocationResource = resourceResolver.getResource(SledgeConstants.SLEDGE_INSTALL_LOCATION);
         ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
 
-        PackageConfigurer packageConfigurer = request.adaptTo(SledgePackageConfigurer.class);
         DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(appPackage.getPackageFile());
-        final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(envName);
+        final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(environmentName);
         final Map<String, Integer> startLevelsByPackageName = deploymentDef.getStartLevelsByPackageName();
 
         // Load and merge environment properties
-        String envFileContent = appPackageExtractor.getEnvironmentFile(envName, appPackage);
-        Properties envProps = packageConfigurer.mergeProperties(envFileContent, propsForMerge);
+        String envFileContent = appPackageExtractor.getEnvironmentFile(environmentName, appPackage);
+        Properties envProps = packageConfigurer.mergeProperties(envFileContent, propertiesForMerge);
 
         // Install the packages
-        List<Map.Entry<String, InputStream>> packages = appPackageExtractor.getPackagesByEnvironment(appPackage, envName);
+        List<Map.Entry<String, InputStream>> packages = appPackageExtractor.getPackagesByEnvironment(appPackage, environmentName);
         for (Map.Entry<String, InputStream> packageEntry : packages) {
             try {
 
@@ -83,7 +87,7 @@ public class SledgeInstaller implements Installer {
                 Resource installLocationResource = defaultInstallLocationResource;
                 if (startLevelsByPackageName.containsKey(packageEntry.getKey())) {
                     Integer startLevel = startLevelsByPackageName.get(packageEntry.getKey());
-                    log.info("Setting start level: " + startLevel + " for the package: " + packageEntry.getKey());
+                    LOG.info("Setting start level: " + startLevel + " for the package: " + packageEntry.getKey());
                     Map<String, Object> props = new HashMap<>();
                     props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_FOLDER);
                     installLocationResource = resourceResolver.getResource(defaultInstallLocationResource.getPath() + "/" + String.valueOf(startLevel));
@@ -106,8 +110,7 @@ public class SledgeInstaller implements Installer {
 
                     resourceResolver.commit();
                 } else {
-                    log.warn("Package: " + packageEntry.getKey()
-                            + " has not been installed because it exists already. If you want to update your application, please uninstall first. ");
+                    LOG.warn("Package: " + packageEntry.getKey() + " has not been installed because it exists already. If you want to update your application, please uninstall first. ");
                 }
             } catch (PersistenceException e) {
                 throw new InstallationException("Could not install package: " + packageEntry.getKey(), e);
@@ -115,15 +118,30 @@ public class SledgeInstaller implements Installer {
         }
     }
 
+    @Override
+    public boolean handles(ApplicationPackage appPackage) {
+        return appPackage.getApplicationPackageType().equals(ApplicationPackageType.sledgepackage);
+    }
+
     private void configurePackage(DeploymentDef deploymentDef, PackageConfigurer packageConfigurer, Properties envProps, Map.Entry<String, InputStream> packageEntry) {
         final List<String> packageNamesForConfiguration = deploymentDef.getPackageNamesForConfiguration();
         if (packageNamesForConfiguration.contains(packageEntry.getKey())) {
-            log.info("Configuring package: " + packageEntry.getKey());
+            LOG.info("Configuring package: " + packageEntry.getKey());
             packageEntry.setValue(packageConfigurer.configure(packageEntry.getValue(), packageEntry.getKey(), envProps));
         }
     }
 
     private boolean packageResourceExists(String packageResourcePath) {
         return resourceResolver.getResource(packageResourcePath) != null;
+    }
+
+    @Override
+    public void setEnvironmentName(String envName) {
+        this.environmentName = envName;
+    }
+
+    @Override
+    public void setPropertiesForMerge(Properties propsForMerge) {
+        this.propertiesForMerge = propsForMerge;
     }
 }

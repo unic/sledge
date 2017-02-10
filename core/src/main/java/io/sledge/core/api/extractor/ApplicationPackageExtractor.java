@@ -66,4 +66,9 @@ public interface ApplicationPackageExtractor {
      * @return Returns the deployment configuration object parsed from the sledgefile.xml contained at the root level in the application package.
      */
     DeploymentConfiguration getDeploymentConfiguration(InputStream appPackageInputStream);
+
+    /**
+     * @return Returns true if there is a sledgefile.xml available in the package.
+     */
+    boolean hasSledgefileXml(InputStream appPackageInputStream);
 }

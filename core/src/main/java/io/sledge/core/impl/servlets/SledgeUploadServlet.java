@@ -15,10 +15,12 @@
 
 package io.sledge.core.impl.servlets;
 
+import io.sledge.core.api.extractor.ApplicationPackageExtractor;
 import io.sledge.core.api.models.ApplicationPackageModel;
 import io.sledge.core.api.models.ApplicationPackageState;
 import io.sledge.core.api.models.ApplicationPackageType;
 import io.sledge.core.api.repository.PackageRepository;
+import io.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
 import io.sledge.core.impl.repository.SledgePackageRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Properties;
@@ -68,7 +70,13 @@ public class SledgeUploadServlet extends SlingAllMethodsServlet {
 
             appPackage.setState(ApplicationPackageState.UPLOADED);
             appPackage.setPackageFile(packageRequestParam.getInputStream());
-            appPackage.setApplicationPackageType(ApplicationPackageType.sledgepackage);
+
+            ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
+            if (appPackageExtractor.hasSledgefileXml(packageRequestParam.getInputStream())) {
+                appPackage.setApplicationPackageType(ApplicationPackageType.sledgepackage);
+            } else {
+                appPackage.setApplicationPackageType(ApplicationPackageType.generic);
+            }
 
             PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
             packageRepository.addOrUpdate(appPackage);

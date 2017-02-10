@@ -17,12 +17,11 @@ package io.sledge.core.impl.servlets;
 
 import io.sledge.core.api.ApplicationPackage;
 import io.sledge.core.api.installer.UninstallationException;
-import io.sledge.core.api.installer.Uninstaller;
 import io.sledge.core.api.models.ApplicationPackageModel;
-import io.sledge.core.api.models.ApplicationPackageState;
 import io.sledge.core.api.repository.ApplicationPackageSearchService;
 import io.sledge.core.api.repository.PackageRepository;
-import io.sledge.core.impl.installer.SledgeUninstaller;
+import io.sledge.core.impl.installer.SledgeInstallationManager;
+import io.sledge.core.impl.installer.SledgePackageConfigurer;
 import io.sledge.core.impl.repository.SledgeApplicationPackageSearchService;
 import io.sledge.core.impl.repository.SledgePackageRepository;
 import org.apache.felix.scr.annotations.Properties;
@@ -31,6 +30,7 @@ import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
 import org.apache.sling.api.request.RequestParameter;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,23 +68,21 @@ public class SledgePackagesUninstallServlet extends SlingAllMethodsServlet {
         String artifactId = artifactIdReqParam == null ? "" : artifactIdReqParam.getString();
         String version = versionReqParam == null ? "" : versionReqParam.getString();
 
-        ApplicationPackageSearchService appPackageSearchService = new SledgeApplicationPackageSearchService(request.getResourceResolver());
+        ResourceResolver resourceResolver = request.getResourceResolver();
+
+        ApplicationPackageSearchService appPackageSearchService = new SledgeApplicationPackageSearchService(resourceResolver);
         List<ApplicationPackageModel> applicationPackages = appPackageSearchService.find(groupId, artifactId, version, ApplicationPackageModel.class);
 
-        PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
-        Uninstaller uninstaller = new SledgeUninstaller(request.getResourceResolver());
+        PackageRepository packageRepository = new SledgePackageRepository(resourceResolver);
 
         for (ApplicationPackage appPackage : applicationPackages) {
             try {
                 // Only uninstall packages with INSTALLED state
                 if (INSTALLED.equals(appPackage.getState())) {
                     LOG.info("Uninstalling..." + appPackage.getPackageFilename());
-                    uninstaller.uninstall(appPackage);
 
-                    appPackage.setState(ApplicationPackageState.UNINSTALLED);
-                    appPackage.setUsedEnvironment("");
-
-                    packageRepository.updateApplicationPackage(appPackage);
+                    SledgeInstallationManager installationManager = new SledgeInstallationManager(resourceResolver, packageRepository, request.adaptTo(SledgePackageConfigurer.class));
+                    installationManager.uninstall(appPackage);
 
                     LOG.info("Uninstalled package: " + appPackage.getPackageFilename());
                 }

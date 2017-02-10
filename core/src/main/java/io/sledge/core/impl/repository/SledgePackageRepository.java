@@ -26,6 +26,7 @@ import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
+import java.io.BufferedInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -89,7 +90,10 @@ public class SledgePackageRepository implements PackageRepository {
 
             props = new HashMap<>();
             props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_RESOURCE);
-            props.put(JcrConstants.JCR_DATA, appPackage.getPackageFile());
+
+            BufferedInputStream bin = new BufferedInputStream(appPackage.getPackageFile());
+
+            props.put(JcrConstants.JCR_DATA, bin);
 
             resourceResolver.create(fileResource, JcrConstants.JCR_CONTENT, props);
 
@@ -98,7 +102,6 @@ public class SledgePackageRepository implements PackageRepository {
         } catch (PersistenceException e) {
             throw new RuntimeException("Could not add the Application Package to the repository.", e);
         }
-
     }
 
     @Override
