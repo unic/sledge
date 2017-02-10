@@ -26,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static java.lang.Thread.sleep;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -164,47 +163,52 @@ public class SledgeDeployer {
                 .asString();
     }
 
-    public void checkActiveBundles(int checkCount, int checkWaitTimeInMilliseconds) throws UnirestException, InterruptedException {
+    public HttpResponse<String> checkSledgeStatus() throws UnirestException {
+        String sledgeCheckUrl = targetHost + SLEDGE_BASE_PATH + ".html";
+
+        return Unirest.get(sledgeCheckUrl)
+                .basicAuth(targetHostUser, targetHostPassword)
+                .asString();
+    }
+
+    public BundlesStatusResponse checkActiveBundles() throws UnirestException {
         JsonSlurper jsonSlurper = new JsonSlurper();
 
         // Felix Bundles json url
-        String bundlesJsonUrl = this.targetHost + "/system/console/bundles.json";
+        String bundlesJsonUrl = targetHost + "/system/console/bundles.json";
 
         int bundlesResolved = 0;
         int bundlesInstalled = 0;
 
-        LOG.info("Checking bundles state...");
-        for (int i = 1; i <= checkCount; i++) {
+        HttpResponse<String> bundlesResponse = Unirest.get(bundlesJsonUrl)
+                .basicAuth(targetHostUser, targetHostPassword)
+                .asString();
 
-            HttpResponse<String> bundlesResponse = Unirest.get(bundlesJsonUrl).
-                    basicAuth(this.targetHostUser, this.targetHostPassword)
-                    .asString();
+        Map bundlesObject = (Map) jsonSlurper.parseText(bundlesResponse.getBody());
 
-            Map bundlesObject = (Map) jsonSlurper.parseText(bundlesResponse.getBody());
+        // status result array: (bundles existing, active, fragment, resolved, installed)
+        ArrayList<Integer> bundlesStatusItems = (ArrayList<Integer>) bundlesObject.get("s");
+        bundlesResolved = bundlesStatusItems.get(3);
+        bundlesInstalled = bundlesStatusItems.get(4);
 
-            // status result array: (bundles existing, active, fragment, resolved, installed)
-            ArrayList<Integer> bundlesStatusItems = (ArrayList<Integer>) bundlesObject.get("s");
-            bundlesResolved = bundlesStatusItems.get(3);
-            bundlesInstalled = bundlesStatusItems.get(4);
+        return new BundlesStatusResponse(bundlesResolved, bundlesInstalled);
+    }
 
-            LOG.info("Check " + i + "/" + checkCount + " - " + bundlesObject.get("status"));
+    private class BundlesStatusResponse {
+        private final int resolved;
+        private final int installed;
 
-            sleep(checkWaitTimeInMilliseconds);
+        public BundlesStatusResponse(int bundlesResolved, int bundlesInstalled) {
+            this.resolved = bundlesResolved;
+            this.installed = bundlesInstalled;
         }
 
-        if (bundlesInstalled > 0) {
-            LOG.info("******");
-            LOG.info("ERROR: There are " + bundlesInstalled + " bundles in INSTALLED state.");
-            LOG.info("******");
+        public int getResolved() {
+            return resolved;
         }
-        if (bundlesResolved > 0) {
-            LOG.info("******");
-            LOG.info("ERROR: There are " + bundlesResolved + " bundles in RESOLVED state.");
-            LOG.info("******");
-        }
-        if (bundlesResolved > 0 || bundlesInstalled > 0) {
-            LOG.info("Please check Felix console for more details and restart instance if needed...");
-            LOG.info("------");
+
+        public int getInstalled() {
+            return installed;
         }
     }
 }
