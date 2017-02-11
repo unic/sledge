@@ -18,7 +18,6 @@
 			<plugin>
 				<groupId>org.apache.sling</groupId>
 				<artifactId>slingstart-maven-plugin</artifactId>
-				<version>1.4.4</version>
 				<extensions>true</extensions>
 				<configuration>
 					<!-- Start command: mvn slingstart:start -Dlaunchpad.keep.running=true -->

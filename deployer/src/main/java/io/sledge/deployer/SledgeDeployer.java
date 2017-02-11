@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -43,6 +45,7 @@ public class SledgeDeployer {
 
     public static final String SLEDGE_BASE_PATH = "/etc/sledge/packages";
     public static final String SLEDGE_INSTALL_PATH = "/apps/sledge_packages/install";
+    public static final String SLEDGE_PACKAGES_SEARCH_URL = "/etc/sledge/packages.search.json";
 
     /**
      * Constructs a SledgeDeployer object with the given settings.
@@ -161,6 +164,24 @@ public class SledgeDeployer {
                 .field(":redirect", SLEDGE_PACKAGES_REDIRECT_URL)
                 .field(":operation", "delete")
                 .asString();
+    }
+
+    public List<HashMap> searchPackages(String groupId, String artifactId, String version) throws UnirestException {
+        List<HashMap> packageList;
+        JsonSlurper jsonSlurper = new JsonSlurper();
+
+        String url = targetHost + SLEDGE_PACKAGES_SEARCH_URL;
+        HttpResponse<String> response = Unirest.get(url)
+                .basicAuth(targetHostUser, targetHostPassword)
+                .queryString("groupId", groupId)
+                .queryString("artifactId", artifactId)
+                .queryString("version", version)
+                .asString();
+
+        Map packagesObject = (Map) jsonSlurper.parseText(response.getBody());
+        packageList = (ArrayList<HashMap>) packagesObject.get("packages");
+
+        return packageList;
     }
 
     public HttpResponse<String> checkSledgeStatus() throws UnirestException {

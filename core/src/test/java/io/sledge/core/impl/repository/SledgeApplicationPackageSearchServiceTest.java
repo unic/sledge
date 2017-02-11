@@ -78,4 +78,19 @@ public class SledgeApplicationPackageSearchServiceTest {
         verify(resourceResolver).findResources("/jcr:root/etc/sledge/packages//*[@sling:resourceType='sledge/package' and @artifactId='sledge-test-app']", "xpath");
     }
 
+    @Test
+    public void findByAllEmpty() throws Exception {
+        // Given:
+        String groupId = null;
+        String artifactId = "";
+        String version = "";
+        withResourceResolver();
+
+        // When:
+        List<Resource> applicationPackages = testee.find(groupId, artifactId, version);
+
+        // Then:
+        verify(resourceResolver).findResources("/jcr:root/etc/sledge/packages//*[@sling:resourceType='sledge/package']", "xpath");
+    }
+
 }

@@ -29,7 +29,7 @@ import static org.apache.commons.lang3.StringUtils.join;
 
 public class SledgeApplicationPackageSearchService implements ApplicationPackageSearchService {
 
-    private static final String QUERY_BASE = "/jcr:root/etc/sledge/packages//*[@sling:resourceType='sledge/package' and %s]";
+    private static final String QUERY_BASE = "/jcr:root/etc/sledge/packages//*[@sling:resourceType='sledge/package'%s]";
     private static final String GROUPID_PREDICATE = "@groupId='%s'";
     private static final String ARTIFACTID_PREDICATE = "@artifactId='%s'";
     private static final String VERSION_PREDICATE = "@version='%s'";
@@ -62,9 +62,15 @@ public class SledgeApplicationPackageSearchService implements ApplicationPackage
         }
 
         String predicatesAndString = join(predicates, " and ");
-        final String query = String.format(QUERY_BASE, predicatesAndString);
-        Iterator<Resource> result = resourceResolver.findResources(query, "xpath");
+        final String query;
 
+        if (predicates.isEmpty()) {
+            query = String.format(QUERY_BASE, "");
+        } else {
+            query = String.format(QUERY_BASE, " and " + predicatesAndString);
+        }
+
+        Iterator<Resource> result = resourceResolver.findResources(query, "xpath");
         result.forEachRemaining(resource -> {
             applicationPackageResources.add(resource);
         });

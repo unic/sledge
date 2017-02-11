@@ -142,6 +142,10 @@
 			<groupId>org.apache.sling</groupId>
 			<artifactId>org.apache.sling.servlets.post</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.commons.json</artifactId>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>
@@ -164,5 +168,6 @@
 			<groupId>org.easytesting</groupId>
 			<artifactId>fest-reflect</artifactId>
 		</dependency>
-	</dependencies>
+
+    </dependencies>
 </project>
