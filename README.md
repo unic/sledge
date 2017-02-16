@@ -90,6 +90,9 @@ To run a full Integration test build just execute the following command:
 root#> mvn clean install -P integration
 ```
 
+# Automated Deployment
+
+Checkout the `deployer` module if you want to automate your installation.
 
 # Documentation
 
