@@ -15,8 +15,9 @@
 
 package io.sledge.core.impl.repository;
 
+import io.sledge.core.api.ApplicationPackage;
 import io.sledge.core.api.SledgeConstants;
-import io.sledge.core.api.models.ApplicationPackage;
+import io.sledge.core.api.models.ApplicationPackageModel;
 import io.sledge.core.api.repository.PackageRepository;
 import org.apache.jackrabbit.JcrConstants;
 import org.apache.sling.api.SlingConstants;
@@ -25,6 +26,7 @@ import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 
+import java.io.BufferedInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,8 +37,6 @@ import java.util.Map;
  * Defines the central package repository of the Sledge app.
  * <p>
  * By default this is: <code>/etc/sledge/packages</code>.
- * 
- * @author oliver.burkhalter
  */
 public class SledgePackageRepository implements PackageRepository {
 
@@ -77,72 +77,94 @@ public class SledgePackageRepository implements PackageRepository {
         props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_UNSTRUCTURED);
         props.put(SlingConstants.NAMESPACE_PREFIX + ":" + SlingConstants.PROPERTY_RESOURCE_TYPE, SledgeConstants.RT_PACKAGE);
 
-		Resource packageResource = null;
-		try {
-			packageResource = resourceResolver.create(getRepositoryRootResource(), appPackage.getPackageFilename(), props);
+        Resource packageResource = null;
+        try {
+            packageResource = resourceResolver.create(getRepositoryRootResource(), appPackage.getPackageFilename(), props);
 
-			resourceResolver.commit();
+            resourceResolver.commit();
 
-			props = new HashMap<>();
-			props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_FILE);
+            props = new HashMap<>();
+            props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_FILE);
 
-			Resource fileResource = resourceResolver.create(packageResource, "packageFile", props);
+            Resource fileResource = resourceResolver.create(packageResource, "packageFile", props);
 
-			props = new HashMap<>();
-			props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_RESOURCE);
-			props.put(JcrConstants.JCR_DATA, appPackage.getPackageFile());
+            props = new HashMap<>();
+            props.put(JcrConstants.JCR_PRIMARYTYPE, JcrConstants.NT_RESOURCE);
 
-			resourceResolver.create(fileResource, JcrConstants.JCR_CONTENT, props);
+            BufferedInputStream bin = new BufferedInputStream(appPackage.getPackageFile());
 
-			resourceResolver.commit();
+            props.put(JcrConstants.JCR_DATA, bin);
 
-		} catch (PersistenceException e) {
-			throw new RuntimeException("Could not add the Application Package to the repository.", e);
-		}
+            resourceResolver.create(fileResource, JcrConstants.JCR_CONTENT, props);
 
+            resourceResolver.commit();
+
+        } catch (PersistenceException e) {
+            throw new RuntimeException("Could not add the Application Package to the repository.", e);
+        }
     }
 
-	@Override
-	public void updateApplicationPackage(ApplicationPackage appPackage) {
-		Resource packageResource = null;
+    @Override
+    public void updateApplicationPackage(ApplicationPackage appPackage) {
+        Resource packageResource = null;
 
-		try {
-			packageResource = getRepositoryRootResource().getChild(appPackage.getPackageFilename());
+        try {
+            packageResource = getRepositoryRootResource().getChild(appPackage.getPackageFilename());
 
-			if (packageResource != null) {
-				ModifiableValueMap props = packageResource.adaptTo(ModifiableValueMap.class);
-				props.putAll(getPropsFromApplicationPackage(appPackage));
-				resourceResolver.commit();
-			}
+            if (packageResource != null) {
+                ModifiableValueMap props = packageResource.adaptTo(ModifiableValueMap.class);
+                props.putAll(getPropsFromApplicationPackage(appPackage));
+                resourceResolver.commit();
+            }
 
-		} catch (PersistenceException e) {
-			throw new RuntimeException("Could not update the Application Package in the repository.", e);
-		}
-	}
+        } catch (PersistenceException e) {
+            throw new RuntimeException("Could not update the Application Package in the repository.", e);
+        }
+    }
 
-	@Override
+    @Override
     public Resource getRepositoryRootResource() {
         return resourceResolver.getResource(APP_PACKAGES_ROOT_PATH);
     }
 
-	private Map<String, Object> getPropsFromApplicationPackage(ApplicationPackage appPackage) {
-		Map<String, Object> props = new HashMap<>();
-		props.put("packageFilename", appPackage.getPackageFilename());
-		props.put("state", appPackage.getState().toString());
-		String usedEnvironment = appPackage.getUsedEnvironment();
-		if (usedEnvironment != null) {
-			props.put("usedEnvironment", appPackage.getUsedEnvironment());
-		}
+    @Override
+    public void addOrUpdate(ApplicationPackage appPackage) {
+        List<ApplicationPackage> installedPackages = getApplicationPackages();
 
-		return props;
-	}
+        boolean update = false;
+        for (ApplicationPackage installedPackage : installedPackages) {
+            if (installedPackage.getPackageFilename().equals(appPackage.getPackageFilename())) {
+                update = true;
+                break;
+            }
+        }
+        if (!update) {
+            addApplicationPackage(appPackage);
+        } else {
+            updateApplicationPackage(appPackage);
+        }
+    }
+
+    private Map<String, Object> getPropsFromApplicationPackage(ApplicationPackage appPackage) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("groupId", appPackage.getGroupId());
+        props.put("artifactId", appPackage.getArtifactId());
+        props.put("version", appPackage.getVersion());
+        props.put("applicationPackageType", appPackage.getApplicationPackageType() == null ? "" : appPackage.getApplicationPackageType().toString());
+        props.put("packageFilename", appPackage.getPackageFilename());
+        props.put("state", appPackage.getState().toString());
+        props.put("usedEnvironment", appPackage.getUsedEnvironment() == null ? "" : appPackage.getUsedEnvironment());
+
+        return props;
+    }
 
     private boolean isAclPrimaryType(Resource appPackageResource) {
         return appPackageResource.getValueMap().get("jcr:primaryType", "").equals("rep:ACL");
     }
 
-    private ApplicationPackage createApplicationPackage(Resource appPackageResource) {
-        ApplicationPackage appPackage = new ApplicationPackage(appPackageResource.getName());
+    private ApplicationPackageModel createApplicationPackage(Resource appPackageResource) {
+        ApplicationPackageModel appPackage = appPackageResource.adaptTo(ApplicationPackageModel.class);
+        appPackage.setPackageFilename(appPackageResource.getName());
         appPackage.setPath(appPackageResource.getPath());
 
         return appPackage;

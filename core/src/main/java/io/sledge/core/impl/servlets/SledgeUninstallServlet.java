@@ -15,89 +15,59 @@
 
 package io.sledge.core.impl.servlets;
 
-import io.sledge.core.api.SledgeConstants;
-import io.sledge.core.api.configuration.DeploymentConfiguration;
-import io.sledge.core.api.configuration.DeploymentDef;
-import io.sledge.core.api.extractor.ApplicationPackageExtractor;
-import io.sledge.core.api.models.ApplicationPackage;
-import io.sledge.core.api.models.ApplicationPackageState;
+import io.sledge.core.api.installer.UninstallationException;
+import io.sledge.core.api.models.ApplicationPackageModel;
 import io.sledge.core.api.repository.PackageRepository;
-import io.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
+import io.sledge.core.impl.installer.SledgeInstallationManager;
+import io.sledge.core.impl.installer.SledgePackageConfigurer;
 import io.sledge.core.impl.repository.SledgePackageRepository;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 import org.apache.sling.servlets.post.SlingPostConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
 
-/**
- * @author oliver.burkhalter
- */
 @SlingServlet(
-		selectors = "uninstall",
-		resourceTypes = "sledge/package",
-		methods = "POST")
+        selectors = "uninstall",
+        resourceTypes = "sledge/package",
+        methods = "POST")
 @Properties({
-		@Property(name = "service.description",
-				value = "Sledge: Handles uninstallation of application packages",
-				propertyPrivate = false),
-		@Property(name = "service.vendor",
-				value = "Unic AG - Sledge",
-				propertyPrivate = false)
+        @Property(name = "service.description",
+                value = "Sledge: Handles uninstallation of application packages",
+                propertyPrivate = false),
+        @Property(name = "service.vendor",
+                value = "Unic AG - Sledge",
+                propertyPrivate = false)
 })
 public class SledgeUninstallServlet extends SlingAllMethodsServlet {
 
-	@Override
-	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-		ApplicationPackage appPackage = request.getResource().adaptTo(ApplicationPackage.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SledgeUninstallServlet.class);
 
-		ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
-		DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(appPackage.getPackageFile());
-		final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(appPackage.getUsedEnvironment());
-		final Map<String, Integer> startLevelsByPackageName = deploymentDef.getStartLevelsByPackageName();
+    @Override
+    protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
+        ApplicationPackageModel appPackage = request.getResource().adaptTo(ApplicationPackageModel.class);
 
+        String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);
 
-		Map<String, InputStream> packages = appPackageExtractor.getPackages(appPackage);
+        try {
+            ResourceResolver resourceResolver = request.getResourceResolver();
+            PackageRepository packageRepository = new SledgePackageRepository(resourceResolver);
+            SledgeInstallationManager installationManager = new SledgeInstallationManager(resourceResolver, packageRepository, request.adaptTo(SledgePackageConfigurer.class));
+            installationManager.uninstall(appPackage);
 
-		for (Map.Entry<String, InputStream> packageEntry : packages.entrySet()) {
-			ResourceResolver resolver = request.getResourceResolver();
-			String packageName = packageEntry.getKey();
-			String packagePath = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + packageName;
-			String startLevelFolder = null;
-			if (startLevelsByPackageName.keySet().contains(packageName)) {
-				Integer startLevel = startLevelsByPackageName.get(packageName);
-				startLevelFolder = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + String.valueOf(startLevel);
-				packagePath = startLevelFolder + "/" + packageName;
-			}
-			Resource packageResource = resolver.getResource(packagePath);
-			Resource startLevelFolderResource = resolver.getResource(startLevelFolder);
+        } catch (UninstallationException e) {
+            LOG.error("Failed uninstalling Application package. ", e);
+            redirectUrl += "?error=failed";
+        }
 
-			if (packageResource != null) {
-				resolver.delete(packageResource);
-			}
-
-			if (startLevelFolderResource != null && !startLevelFolderResource.hasChildren()) {
-				resolver.delete(startLevelFolderResource);
-			}
-
-			resolver.commit();
-		}
-
-		PackageRepository packageRepository = new SledgePackageRepository(request.getResourceResolver());
-		appPackage.setState(ApplicationPackageState.UNINSTALLED.toString());
-		appPackage.setUsedEnvironment("");
-		packageRepository.updateApplicationPackage(appPackage);
-
-		String redirectUrl = request.getParameter(SlingPostConstants.RP_REDIRECT_TO);
-		response.sendRedirect(redirectUrl);
-	}
+        response.sendRedirect(redirectUrl);
+    }
 }

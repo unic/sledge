@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>io.sledge</groupId>
 		<artifactId>io.sledge.parent</artifactId>
-		<version>0.3.0</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<build>
@@ -36,7 +36,6 @@
 						<Import-Package>
 							!org.slf4j.impl,*
 						</Import-Package>
-						<Private-Package>io.sledge.webapp.impl.*</Private-Package>
 						<Export-Package>
 							io.sledge.webapp.models.*;version=${project.version}
 						</Export-Package>

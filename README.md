@@ -30,8 +30,8 @@ Therefore Sledge is not a _special new_ Configuration mechanism for Sling but ra
 # Requirements
 
 * Java 8
-* Sling 8 or AEM 6.2
-* Commons Lang 3.4 Osgi bundle
+* Sling 8 or AEM 6.2, for AEM 6.1 you first need to install the `aem61-deps` package
+* Commons Lang 3.3+ Osgi bundle
 
 
 # Building from source
@@ -90,6 +90,9 @@ To run a full Integration test build just execute the following command:
 root#> mvn clean install -P integration
 ```
 
+# Automated Deployment
+
+Checkout the `deployer` module if you want to automate your installation.
 
 # Documentation
 
@@ -102,11 +105,14 @@ See here: [Sledge Architecture](docs/src/main/markdown/sledge-architecture.md)
 
 * Make sure your _develop_ branch is up-to-date and does not contain any local changes
 * Execute locally the ```release.sh``` script
+* Adapt the `sledge.txt` Launchpad model to reflect the next development version and commit
+* Finally push everything to GitHub remote
 * Create a new release on GitHub
 * Add some release description
 * Upload the following artifacts for the release:
   * delivery
   * deployer
+  * aem61-deps
 * Publish the release
 
 

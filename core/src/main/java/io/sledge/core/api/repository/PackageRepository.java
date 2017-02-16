@@ -15,15 +15,14 @@
 
 package io.sledge.core.api.repository;
 
-import java.util.List;
-
+import io.sledge.core.api.ApplicationPackage;
 import org.apache.sling.api.resource.Resource;
 
-import io.sledge.core.api.models.ApplicationPackage;
+import java.util.List;
 
 /**
  * Defines a package repository where the app manages all the loaded {@link ApplicationPackage} resources.
- * 
+ *
  * @author oliver.burkhalter
  */
 public interface PackageRepository {
@@ -38,4 +37,6 @@ public interface PackageRepository {
      * @return Returns the root node of the repository of the packages. Mostly /etc/sledge/packages.
      */
     Resource getRepositoryRootResource();
+
+    void addOrUpdate(ApplicationPackage appPackage);
 }

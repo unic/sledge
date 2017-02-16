@@ -15,27 +15,30 @@
 
 package io.sledge.core.impl;
 
+import io.sledge.core.api.models.ApplicationPackageModel;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+import org.mockito.quality.Strictness;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.fest.reflect.core.Reflection.field;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
-
-import io.sledge.core.api.models.ApplicationPackage;
 
 /**
  * @author oliver.burkhalter
  */
-@RunWith(MockitoJUnitRunner.class)
-public class ApplicationPackageTest {
+public class ApplicationPackageModelTest {
+
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
 
     private String packageFilename = "com.test.webapp.zip";
 
     @InjectMocks
-    private ApplicationPackage testee;
+    private ApplicationPackageModel testee;
 
     @Before
     public void setup() {

@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>io.sledge</groupId>
 		<artifactId>io.sledge.parent</artifactId>
-		<version>0.3.0</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<build>
@@ -18,7 +18,6 @@
 			<plugin>
 				<groupId>org.apache.sling</groupId>
 				<artifactId>slingstart-maven-plugin</artifactId>
-				<version>1.4.4</version>
 				<extensions>true</extensions>
 				<configuration>
 					<!-- Start command: mvn slingstart:start -Dlaunchpad.keep.running=true -->

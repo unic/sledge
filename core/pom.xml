@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>io.sledge</groupId>
 		<artifactId>io.sledge.parent</artifactId>
-		<version>0.3.0</version>
+		<version>0.4.0</version>
 	</parent>
 
 	<build>
@@ -24,6 +24,11 @@
 						<Private-Package>
 							io.sledge.core.impl.*
 						</Private-Package>
+						<Import-Package>
+							org.apache.commons.lang3;version="[3.3,4)",
+							org.apache.commons.lang3.text;version="[3.3,4)",
+							*
+						</Import-Package>
 						<Export-Package>
 							io.sledge.core.api.*;version=${project.version}
 						</Export-Package>
@@ -137,6 +142,10 @@
 			<groupId>org.apache.sling</groupId>
 			<artifactId>org.apache.sling.servlets.post</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.sling</groupId>
+			<artifactId>org.apache.sling.commons.json</artifactId>
+		</dependency>
 
 		<!-- Testing -->
 		<dependency>
@@ -152,8 +161,13 @@
 			<artifactId>mockito-core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.easytesting</groupId>
 			<artifactId>fest-reflect</artifactId>
 		</dependency>
-	</dependencies>
+
+    </dependencies>
 </project>

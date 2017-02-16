@@ -20,6 +20,7 @@
                 <div>
                     <div class="row app-package-header show-grid">
                         <div class="col-md-3">Package name</div>
+                        <div class="col-md-1">Package Type</div>
                         <div class="col-md-1">Status</div>
                         <div class="col-md-1">Environment</div>
                         <div class="col-md-2">Actions</div>
@@ -27,7 +28,11 @@
                 </div>
                 <div data-sly-list="${resource.listChildren}">
                     <div class="row app-package-item show-grid">
-                        <div class="col-md-3 app-package-item-description">${item.name}</div>
+                        <div class="col-md-3 app-package-item-description">${item.name}<br/>
+                            groupId=${item.valueMap.groupId}, artifactId=${item.valueMap.artifactId}, version=${item.valueMap.version}</div>
+                        <div class="col-md-1">
+                            <span>${item.valueMap.applicationPackageType}</span>
+                        </div>
                         <div class="col-md-1">
                             <span class="label label-primary"
                                   data-sly-test="${item.valueMap.state == 'UPLOADED'}">${item.valueMap.state}</span>
@@ -39,14 +44,18 @@
                                   data-sly-test="${item.valueMap.state == 'FAILED'}">${item.valueMap.state}, check error logs!</span>
                         </div>
                         <div class="col-md-1">
-                            <span class="label label-info" data-sly-test="${item.valueMap.state == 'INSTALLED' || item.valueMap.state == 'FAILED'}">
+                            <span class="label label-info" data-sly-test="${item.valueMap.applicationPackageType == 'sledgepackage' && (item.valueMap.state == 'INSTALLED' || item.valueMap.state == 'FAILED')}">
                                 ${item.valueMap.usedEnvironment}
                             </span>
                         </div>
                         <div class="col-md-2 app-package-item-actions">
-                            <a href="/etc/sledge/packages/${item.name}.html" data-sly-test="${item.valueMap.state != 'INSTALLED'}">
+                            <a href="/etc/sledge/packages/${item.name}.html" data-sly-test="${item.valueMap.applicationPackageType == 'sledgepackage' && item.valueMap.state != 'INSTALLED'}">
                                 <button class="btn btn-primary btn-sm" type="submit">Install</button>
                             </a>
+                            <form action="${item.path}.install.html" method="POST" data-sly-test="${item.valueMap.applicationPackageType == 'generic' && item.valueMap.state != 'INSTALLED'}">
+                                <input type="hidden" name=":redirect" value="/etc/sledge/packages.html"/>
+                                <button class="btn btn-primary btn-sm" type="submit">Install</button>
+                            </form>
                             <form action="${item.path}.uninstall.html" method="POST" data-sly-test="${item.valueMap.state == 'INSTALLED' || item.valueMap.state == 'FAILED'}">
                                 <input type="hidden" name=":redirect" value="/etc/sledge/packages.html"/>
                                 <button class="btn btn-warning btn-sm" type="submit">Uninstall</button>
