@@ -137,7 +137,7 @@
 
                 <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.5.4</version>
+                    <version>3.0.0</version>
                     <executions>
                         <execution>
                             <id>make-assembly</id>
@@ -315,6 +315,12 @@
                 <groupId>org.apache.sling</groupId>
                 <artifactId>org.apache.sling.servlets.post</artifactId>
                 <version>2.3.8</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.sling</groupId>
+                <artifactId>org.apache.sling.commons.json</artifactId>
+                <version>2.0.16</version>
                 <scope>provided</scope>
             </dependency>
 

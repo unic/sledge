@@ -10,7 +10,6 @@ The idea is to build up some standard scripts for AEM/Sling app deployments.
 # Prerequisite
 
 - Groovy 2.4.x
-- Access to Nexus repository
 - Running AEM/Sling
 
 **Why Groovy?**
@@ -19,27 +18,16 @@ We use currently Groovy scripts because it offers more flexibility to handle res
 
 # Usage examples
 
-In ```src/main/groovy``` you can see some example on how to use the ```SledgeDeployer``` in a Groovy script. It also gives an example
-on how to download a package from a Nexus repository and install it via the ```SledgeDeployer``` and how to handle options passed
-to the Groovy script for overwriting default deploy configurations.
+In ```src/main/groovy``` you can see some example on how to use the ```SledgeDeployer``` in a Groovy script. It also gives an example on how to handle options passed
+to the Groovy script for overwriting default deploy configurations. We use here the Groovy `CliBuilder`.
 
-With the following command you can call your groovy script and pass the needed options:
+You can use the `deploy.groovy` and adapt it to your needs.
 
-```
-groovy -cp "lib/*" deploy.groovy -DartifactId=foo.bar -DgroupId=foo.bar.group -DpackageType=zip -Dversion=${version} -DuninstallVersion=${uninstallVersion} -DnexusRepositoryName=${repoName} -DenvironmentName=${environmentName} -DenvironmentFileContent=${environmentFileContent} -DtargetHostUsername=admin -DtargetHostPassword=${targetHostPassword} ${targetHost}
-```
+The current version handles automatically uninstallation and installation of packages.
 
-Replace the "${...}" variables with your correct value.
+It uses a `release-def.groovy` config file for defining all needed packages to install.
 
-The "lib" directory is used to hold all needed dependencies.
-
-Here is an example of a `deploy.groovy` call:
-
-```
-groovy -cp "lib/*" deploy.groovy -DartifactId=test-app-package -DgroupId=io.sledge.tester-packages -DpackageType=zip -Dversion=0.3.0 -DuninstallVersion=0.3.0 -DnexusRepositoryName=my-nexusrepoName -DnexusRepositoryBaseUrl=https://nexus.host.com/nexus/service/local/artifact/maven/redirect -DnexusUser=my-nexususr -DnexusUserPw=my-nexuspw -DenvironmentName=test-author -DenvironmentFileContent=TESTCONFIG=Foo -DtargetHostUsername=admin -DtargetHostPassword=admin http://localhost:8080
-```
-
-with the `nexusUser` and `nexusUserPw` you can set needed credentials data if your Nexus repository requires an Authentication.
+If you want to download the packages from Nexus you can use the `NexusArtifactProvider` class.
 
 
 To use it in an own project it is needed to build some _deployment_ package/module with all the needed dependencies:
@@ -95,6 +83,11 @@ To use it in an own project it is needed to build some _deployment_ package/modu
 	<artifactId>commons-io</artifactId>
 	<version>2.5</version>
 	<scope>compile</scope>
+</dependency>
+<dependency>
+    <groupId>commons-cli</groupId>
+    <artifactId>commons-cli</artifactId>
+    <version>1.2</version>
 </dependency>
 <dependency>
 	<groupId>org.apache.commons</groupId>
