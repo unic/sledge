@@ -65,9 +65,7 @@ releaseConfigObject.packages.each { key, value ->
     def packageList = searchPackages(sledgeDeployer, 20, value.groupId, value.artifactId, value.version);
 
     if (packageList.size() == 1 && !value.forceUpdate) {
-        printMessage("Package <${value.artifactId}> does exist already in same version and won't be installed.")
-    } else if (packageList.size() == 0) {
-        printMessage("Package <${value.artifactId}> does not exist yet, no uninstallation needed.")
+        printMessage("Package <${value.artifactId}> does exist already in same version and won't be installed (use forceUpdate to overwrite this behaviour).")
     } else {
         def packageFilename = "${value.artifactId}-${value.version}${value.classifier ? '-' + value.classifier : ''}.${value.type}"
 
