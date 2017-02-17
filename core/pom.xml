@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>io.sledge</groupId>
 		<artifactId>io.sledge.parent</artifactId>
-		<version>0.4.0</version>
+		<version>0.4.1</version>
 	</parent>
 
 	<build>
