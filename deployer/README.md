@@ -14,7 +14,16 @@ The idea is to build up some standard scripts for AEM/Sling app deployments.
 
 **Why Groovy?**
 
-We use currently Groovy scripts because it offers more flexibility to handle responses, for example JSON responses.
+We use currently Groovy scripts because it offers more flexibility to handle responses, for example JSON responses and it runs on the JVM.
+
+# Artifacts
+
+The deployer module generates two artifacts:
+
+* deployer.jar: Includes a compiled version of the deploy.groovy script and all the SledgeDeployer classes
+* deployer-all.zip: Packs together the jar artifact and the needed external libraries in a `lib/` folder. This is usually used for generating a complete delivery package for the customer in which
+the `deploy`script is executable by an installed JRE (without Groovy compilation).
+
 
 # Usage examples
 
@@ -27,86 +36,60 @@ The current version handles automatically uninstallation and installation of pac
 
 It uses a `release-def.groovy` config file for defining all needed packages to install.
 
-If you want to download the packages from Nexus you can use the `NexusArtifactProvider` class.
+Example:
 
+```groovy
+packagesPath = "packages"
 
-To use it in an own project it is needed to build some _deployment_ package/module with all the needed dependencies:
+packages {
+    mainApp {
+        groupId = "my.group.id"
+        artifactId = "my-group-artifact"
+        version = "${project.version}"
+        type = "zip"
+        classifier = "sledge"
+        forceUpdate = true
+    }
+    somelib {
+        groupId = "com.some.lib"
+        artifactId = "some-lib-artifact"
+        version = "1.1.0"
+        type = "jar"
+        classifier = "foo"
+    }
+    someOtherlib {
+        groupId = "com.someOtherlib.group"
+        artifactId = "some-other-lib-artifact"
+        version = "1.0.0"
+        type = "jar"
+        classifier = ""
+    }
+}
+```
+
+With `forceUpdate` you can define that a package should always be updated although it is already installed in the same version, else it will be skipped.
+
+The `packagesPath` defines the location where the packages are stored. In the example above they are below a `packages` folder.
+
+To use it in an own project you can simply add this dependency to your own _deployment/delivery_ module:
 
 ```xml
 <dependency>
-	<groupId>io.sledge</groupId>
-	<artifactId>io.sledge.deployer</artifactId>
-	<version>${sledge.version}</version>
-</dependency>
-<dependency>
-	<groupId>com.mashape.unirest</groupId>
-	<artifactId>unirest-java</artifactId>
-	<version>1.4.9</version>
-</dependency>
-<dependency>
-	<groupId>org.codehaus.groovy</groupId>
-	<artifactId>groovy-json</artifactId>
-	<version>2.4.7</version>
-</dependency>
-<dependency>
-	<groupId>org.apache.httpcomponents</groupId>
-	<artifactId>httpcore</artifactId>
-	<version>4.4.4</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-	<groupId>org.apache.httpcomponents</groupId>
-	<artifactId>httpclient</artifactId>
-	<version>4.5.2</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-	<groupId>org.apache.httpcomponents</groupId>
-	<artifactId>httpcore-nio</artifactId>
-	<version>4.4.4</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-	<groupId>org.apache.httpcomponents</groupId>
-	<artifactId>httpmime</artifactId>
-	<version>4.3.6</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-	<groupId>commons-codec</groupId>
-	<artifactId>commons-codec</artifactId>
-	<version>1.9</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-	<groupId>commons-io</groupId>
-	<artifactId>commons-io</artifactId>
-	<version>2.5</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-    <groupId>commons-cli</groupId>
-    <artifactId>commons-cli</artifactId>
-    <version>1.2</version>
-</dependency>
-<dependency>
-	<groupId>org.apache.commons</groupId>
-	<artifactId>commons-lang3</artifactId>
-	<version>3.4</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-api</artifactId>
-	<version>1.7.21</version>
-	<scope>compile</scope>
-</dependency>
-<dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-simple</artifactId>
-	<version>1.7.21</version>
-	<scope>compile</scope>
+    <groupId>io.sledge</groupId>
+    <artifactId>io.sledge.deployer</artifactId>
+    <version>VERSION</version>
+    <type>zip</type>
+    <classifier>all</classifier>
 </dependency>
 ```
 
+and unpack it and use the `lib/` folder to get the needed libraries for the `deploy.groovy` script execution.
+
+This can done for example very easily with the Maven Assembly Plugin.
+
+## Artifacts from Nexus
+
+If you want to download the packages from Nexus you can use the `NexusArtifactProvider` class.
+
+The current `deploy.groovy` would be needed to be updated.
 

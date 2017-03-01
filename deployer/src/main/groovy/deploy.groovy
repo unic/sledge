@@ -4,8 +4,10 @@ import io.sledge.deployer.SledgeDeployer
 
 
 def defaultDeployConfig = [
+		ignoreBundlesCheckFail: "true",
         environmentName       : "",
         environmentFileContent: "",
+        
 
         targetHost            : "http://localhost:4502",
         targetHostUsername    : "admin",
@@ -86,7 +88,7 @@ releaseConfigObject.packages.each { key, value ->
 }
 
 // Wait for proper AEM state
-checkAndWaitForBundles(sledgeDeployer, 5, 4000)
+checkAndWaitForBundles(sledgeDeployer, 5, 4000, deployConfig.ignoreBundlesCheckFail)
 checkAndWaitForSledgeApp(sledgeDeployer, 20, 3000)
 
 printMessage("Uninstallation has been successful\nStarting now with the installation of packages...")
@@ -112,7 +114,7 @@ releaseConfigObject.packages.each { key, value ->
 }
 
 checkAndWaitForSledgeApp(sledgeDeployer, 30, 3000)
-checkAndWaitForBundles(sledgeDeployer, 12, 5000)
+checkAndWaitForBundles(sledgeDeployer, 12, 5000, deployConfig.ignoreBundlesCheckFail)
 
 
 printMessage("Deployment has been finished successfully!")
@@ -150,7 +152,7 @@ def checkAndWaitForSledgeApp(sledgeDeployer, maxCount, waitTimeInMs) {
 
     if (status >= 400) {
         println ""
-        println "Stopping installation: Sledge Application is not available."
+        println "Stopping installation: Sledge Application is not available or you use an invalid login."
         println "Please check your instance and restart it, if needed."
         println ""
         System.exit(1)
@@ -161,7 +163,7 @@ def checkAndWaitForSledgeApp(sledgeDeployer, maxCount, waitTimeInMs) {
 }
 
 
-def checkAndWaitForBundles(sledgeDeployer, maxCount, waitTimeInMs) {
+def checkAndWaitForBundles(sledgeDeployer, maxCount, waitTimeInMs, ignoreBundlesCheckFail) {
     def checkCount = 0
     def bundlesResolved = 1
     def bundlesInstalled = 1
@@ -185,9 +187,13 @@ def checkAndWaitForBundles(sledgeDeployer, maxCount, waitTimeInMs) {
         if (checkCount > maxCount) {
             println ""
             println "*** Check failed: Felix Container is not ready, bundles are not all in Active state."
-            println "*** Restart your instance and check again."
+            println "*** Restart your instance later and check again."
             println ""
-            System.exit(1)
+            
+            if(ignoreBundlesCheckFail == "false") {
+            	println "*** Installation will be stopped."
+            	System.exit(1)
+            }
         }
 
         sleep(waitTimeInMs)
