@@ -18,6 +18,7 @@ package io.sledge.deployer;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import groovy.json.JsonException;
 import groovy.json.JsonSlurper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -198,19 +199,24 @@ public class SledgeDeployer {
         // Felix Bundles json url
         String bundlesJsonUrl = targetHost + "/system/console/bundles.json";
 
-        int bundlesResolved = 0;
-        int bundlesInstalled = 0;
+        int bundlesResolved = 1;
+        int bundlesInstalled = 1;
 
         HttpResponse<String> bundlesResponse = Unirest.get(bundlesJsonUrl)
                 .basicAuth(targetHostUser, targetHostPassword)
                 .asString();
 
-        Map bundlesObject = (Map) jsonSlurper.parseText(bundlesResponse.getBody());
+        try {
+            Map bundlesObject = (Map) jsonSlurper.parseText(bundlesResponse.getBody());
 
-        // status result array: (bundles existing, active, fragment, resolved, installed)
-        ArrayList<Integer> bundlesStatusItems = (ArrayList<Integer>) bundlesObject.get("s");
-        bundlesResolved = bundlesStatusItems.get(3);
-        bundlesInstalled = bundlesStatusItems.get(4);
+            // status result array: (bundles existing, active, fragment, resolved, installed)
+            ArrayList<Integer> bundlesStatusItems = (ArrayList<Integer>) bundlesObject.get("s");
+            bundlesResolved = bundlesStatusItems.get(3);
+            bundlesInstalled = bundlesStatusItems.get(4);
+
+        } catch (JsonException ex) {
+            LOG.debug("Calling bundles state failed with a JsonException, retrying...\n");
+        }
 
         return new BundlesStatusResponse(bundlesResolved, bundlesInstalled);
     }

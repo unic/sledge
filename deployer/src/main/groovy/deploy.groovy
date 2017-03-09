@@ -187,6 +187,7 @@ def checkAndWaitForBundles(sledgeDeployer, maxCount, waitTimeInMs, ignoreBundles
         if (checkCount > maxCount) {
             println ""
             println "*** Check failed: Felix Container is not ready, bundles are not all in Active state."
+            println "*** Please check the non-active bundles in the Felix console."
             println "*** Restart your instance later and check again."
             println ""
             
