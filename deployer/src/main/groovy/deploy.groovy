@@ -2,12 +2,16 @@ import com.mashape.unirest.http.HttpResponse
 import com.mashape.unirest.http.Unirest
 import io.sledge.deployer.SledgeDeployer
 
+import java.util.concurrent.TimeUnit
+
 
 def defaultDeployConfig = [
 		ignoreBundlesCheckFail: "true",
         environmentName       : "",
         environmentFileContent: "",
-        
+
+        installWaitCount: 20,
+        installWaitTimeInSeconds: 3,
 
         targetHost            : "http://localhost:4502",
         targetHostUsername    : "admin",
@@ -91,7 +95,7 @@ releaseConfigObject.packages.each { key, value ->
 checkAndWaitForBundles(sledgeDeployer, 5, 4000, deployConfig.ignoreBundlesCheckFail)
 checkAndWaitForSledgeApp(sledgeDeployer, 20, 3000)
 
-printMessage("Uninstallation has been successful\nStarting now with the installation of packages...")
+printMessage("Uninstallation has been successful\n\nStarting now with the installation of packages...")
 
 // Installation
 releaseConfigObject.packages.each { key, value ->
@@ -109,7 +113,7 @@ releaseConfigObject.packages.each { key, value ->
         uploadApp(sledgeDeployer, packageFile, value.groupId, value.artifactId, value.version, 10)
         installApp(sledgeDeployer, packageFilename, deployConfig.environmentName, deployConfig.environmentFileContent)
 
-        checkAndWaitForSledgeApp(sledgeDeployer, 10, 3000)
+        checkAndWaitForSledgeApp(sledgeDeployer, deployConfig.installWaitCount, TimeUnit.SECONDS.toMillis(deployConfig.installWaitTimeInSeconds))
     }
 }
 
