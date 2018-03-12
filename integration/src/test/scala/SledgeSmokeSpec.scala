@@ -3,8 +3,6 @@ import org.scalatest.{FlatSpec, ShouldMatchers}
 
 /**
   * Simple smoke test for Sledge main view.
-  *
-  * @author oliver.burkhalter
   */
 class SledgeSmokeSpec extends FlatSpec with ShouldMatchers with HtmlUnit {
 

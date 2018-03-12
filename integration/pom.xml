@@ -144,9 +144,9 @@
 					<plugin>
 						<groupId>org.apache.sling</groupId>
 						<artifactId>slingstart-maven-plugin</artifactId>
-						<extensions>true</extensions>
 						<executions>
 							<execution>
+								<id>launchpad-start</id>
 								<phase>pre-integration-test</phase>
 								<goals>
 									<goal>start</goal>
@@ -154,6 +154,9 @@
 							</execution>
 						</executions>
 						<configuration>
+							<!-- Should actually not be used because we reference a Launchpad dependency, but the plugin fails if
+							 there are no model files. That's why we simply set the model directory to the launchpad module one -->
+							<modelDirectory>${basedir}/../launchpad/src/main/provisioning</modelDirectory>
 							<launchpadDependency>
 								<groupId>io.sledge</groupId>
 								<artifactId>io.sledge.launchpad</artifactId>
