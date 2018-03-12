@@ -23,7 +23,8 @@
   sledge.version=0.6.0-SNAPSHOT
 
 [artifacts]
-  org.apache.sling/org.apache.sling.launchpad/8/slingstart
+  org.apache.sling/org.apache.sling.starter/10/slingstart
+  org.apache.sling/org.apache.sling.commons.json/2.0.20
 
 [artifacts startLevel=15]
   org.apache.commons/commons-lang3/3.4

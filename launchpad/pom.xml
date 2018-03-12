@@ -20,7 +20,7 @@
 				<artifactId>slingstart-maven-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
-					<!-- Start command: mvn slingstart:start -Dlaunchpad.keep.running=true -->
+					<shouldBlockUntilKeyIsPressed>true</shouldBlockUntilKeyIsPressed>
 					<servers>
 						<server>
 							<port>8080</port>
