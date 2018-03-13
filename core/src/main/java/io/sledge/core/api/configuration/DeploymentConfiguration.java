@@ -23,8 +23,6 @@ import java.util.Optional;
  *
  * You can load a deployment definition for a specific environment which provides you with the needed packages for installation for
  * this environment.
-
- * @author oliver.burkhalter
  */
 public class DeploymentConfiguration {
 

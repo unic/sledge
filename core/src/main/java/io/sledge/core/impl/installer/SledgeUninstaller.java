@@ -33,55 +33,54 @@ import java.util.Map;
 
 public class SledgeUninstaller implements Uninstaller {
 
-    private final ResourceResolver resourceResolver;
+	private final ResourceResolver resourceResolver;
 
-    public SledgeUninstaller(ResourceResolver resourceResolver) {
-        this.resourceResolver = resourceResolver;
-    }
+	public SledgeUninstaller(ResourceResolver resourceResolver) {
+		this.resourceResolver = resourceResolver;
+	}
 
-    @Override
-    public void uninstall(ApplicationPackage applicationPackage) {
-        ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
-        DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(applicationPackage.getPackageFile());
-        final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(applicationPackage.getUsedEnvironment());
-        final Map<String, Integer> startLevelsByPackageName = deploymentDef.getStartLevelsByPackageName();
+	@Override
+	public void uninstall(ApplicationPackage applicationPackage) {
+		ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
+		DeploymentConfiguration deploymentConfiguration = appPackageExtractor
+				.getDeploymentConfiguration(applicationPackage.getPackageFileStream());
+		final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(applicationPackage.getUsedEnvironment());
+		final Map<String, Integer> startLevelsByPackageName = deploymentDef.getStartLevelsByPackageName();
 
-        Map<String, InputStream> packages = appPackageExtractor.getPackages(applicationPackage);
+		Map<String, InputStream> packages = appPackageExtractor.getPackages(applicationPackage);
 
-        for (Map.Entry<String, InputStream> packageEntry : packages.entrySet()) {
-            String packageName = packageEntry.getKey();
-            String packagePath = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + packageName;
-            String startLevelFolder = null;
+		for (Map.Entry<String, InputStream> packageEntry : packages.entrySet()) {
+			String packageName = packageEntry.getKey();
+			String packagePath = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + packageName;
+			String startLevelFolder = null;
 
-            if (startLevelsByPackageName.keySet().contains(packageName)) {
-                Integer startLevel = startLevelsByPackageName.get(packageName);
-                startLevelFolder = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + String.valueOf(startLevel);
-                packagePath = startLevelFolder + "/" + packageName;
-            }
+			if (startLevelsByPackageName.keySet().contains(packageName)) {
+				Integer startLevel = startLevelsByPackageName.get(packageName);
+				startLevelFolder = SledgeConstants.SLEDGE_INSTALL_LOCATION + "/" + String.valueOf(startLevel);
+				packagePath = startLevelFolder + "/" + packageName;
+			}
 
-            Resource packageResource = resourceResolver.getResource(packagePath);
-            Resource startLevelFolderResource = resourceResolver.getResource(startLevelFolder);
+			Resource packageResource = resourceResolver.getResource(packagePath);
+			Resource startLevelFolderResource = resourceResolver.getResource(startLevelFolder);
 
-            try {
-                if (packageResource != null) {
-                    resourceResolver.delete(packageResource);
-                }
+			try {
+				if (packageResource != null) {
+					resourceResolver.delete(packageResource);
+				}
 
-                if (startLevelFolderResource != null && !startLevelFolderResource.hasChildren()) {
-                    resourceResolver.delete(startLevelFolderResource);
-                }
+				if (startLevelFolderResource != null && !startLevelFolderResource.hasChildren()) {
+					resourceResolver.delete(startLevelFolderResource);
+				}
 
-                resourceResolver.commit();
+				resourceResolver.commit();
+			} catch (PersistenceException ex) {
+				throw new UninstallationException("Could not uninstall Application package properly.", ex);
+			}
+		}
+	}
 
-            } catch (PersistenceException ex) {
-                throw new UninstallationException("Could not uninstall Application package properly.", ex);
-            }
-        }
-
-    }
-
-    @Override
-    public boolean handles(ApplicationPackage appPackage) {
-        return appPackage.getApplicationPackageType().equals(ApplicationPackageType.sledgepackage);
-    }
+	@Override
+	public boolean handles(ApplicationPackage appPackage) {
+		return appPackage.getApplicationPackageType().equals(ApplicationPackageType.sledgepackage);
+	}
 }

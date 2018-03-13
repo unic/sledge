@@ -19,6 +19,7 @@ import io.sledge.core.api.extractor.ApplicationPackageExtractor;
 import io.sledge.core.api.models.ApplicationPackageModel;
 import io.sledge.core.api.models.ApplicationPackageState;
 import io.sledge.core.api.models.ApplicationPackageType;
+import io.sledge.core.api.models.UploadApplicationPackage;
 import io.sledge.core.api.repository.PackageRepository;
 import io.sledge.core.impl.extractor.SledgeApplicationPackageExtractor;
 import io.sledge.core.impl.repository.SledgePackageRepository;
@@ -66,10 +67,9 @@ public class SledgeUploadServlet extends SlingAllMethodsServlet {
             String artifactId = request.getRequestParameter("artifactId").getString();
             String version = request.getRequestParameter("version").getString();
 
-            ApplicationPackageModel appPackage = new ApplicationPackageModel(fileName, groupId, artifactId, version);
+			UploadApplicationPackage appPackage = new UploadApplicationPackage(fileName, groupId, artifactId, version, packageRequestParam.getInputStream());
 
             appPackage.setState(ApplicationPackageState.UPLOADED);
-            appPackage.setPackageFile(packageRequestParam.getInputStream());
 
             ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
             if (appPackageExtractor.hasSledgefileXml(packageRequestParam.getInputStream())) {

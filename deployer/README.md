@@ -34,6 +34,12 @@ You can use the `deploy.groovy` and adapt it to your needs.
 
 The current version handles automatically uninstallation and installation of packages.
 
+You can use the compiled `deploy.groovy` script with the following command:
+
+```
+java -cp "lib/*" deploy -DenvironmentName=<ENV_NAME> -DtargetHostPassword=<ADMIN_PW> <AEM_SERVER>
+```
+
 It uses a `release-def.groovy` config file for defining all needed packages to install.
 
 Example:

@@ -6,16 +6,16 @@ import java.util.concurrent.TimeUnit
 
 
 def defaultDeployConfig = [
-		ignoreBundlesCheckFail: "true",
-        environmentName       : "",
-        environmentFileContent: "",
+        ignoreBundlesCheckFail  : "true",
+        environmentName         : "",
+        environmentFileContent  : "",
 
-        installWaitCount: 20,
+        installWaitCount        : 120,
         installWaitTimeInSeconds: 3,
 
-        targetHost            : "http://localhost:4502",
-        targetHostUsername    : "admin",
-        targetHostPassword    : "admin"
+        targetHost              : "http://localhost:4502",
+        targetHostUsername      : "admin",
+        targetHostPassword      : "admin"
 ]
 
 //
@@ -43,6 +43,13 @@ Properties dOptionsMap = options.getInner().getOptionProperties("D")
 // Set given targetHost
 dOptionsMap.put("targetHost", options.arguments()[0])
 
+// Convert to propert types
+dOptionsMap.installWaitCount = dOptionsMap.installWaitCount?.isInteger() ?
+        dOptionsMap.installWaitCount.toInteger() : defaultDeployConfig.installWaitCount
+
+dOptionsMap.installWaitTimeInSeconds = dOptionsMap.installWaitTimeInSeconds?.isInteger() ?
+        dOptionsMap.installWaitTimeInSeconds.toInteger() : defaultDeployConfig.installWaitTimeInSeconds
+
 // Merge default deploy configs with given deploy configs
 def deployConfig = defaultDeployConfig << dOptionsMap
 
@@ -63,15 +70,15 @@ if (!deployConfig.environmentName) {
 }
 
 // Only execute Sledge commands if Sledge is installed properly
-checkAndWaitForSledgeApp(sledgeDeployer, 5, 1000)
+checkAndWaitForSledgeApp(sledgeDeployer, 20, 3000)
 
-// Uninstallation
-releaseConfigObject.packages.each { key, value ->
+// Uninstallation of apps
+releaseConfigObject.packages.apps.each { key, value ->
 
     def packageList = searchPackages(sledgeDeployer, 20, value.groupId, value.artifactId, value.version);
 
     if (packageList.size() == 1 && !value.forceUpdate) {
-        printMessage("Package <${value.artifactId}> does exist already in same version and won't be installed (use forceUpdate to overwrite this behaviour).")
+        printMessage("Package <${value.artifactId}> does exist already in same version and won't be uninstalled (use forceUpdate to overwrite this behaviour).")
     } else {
         def packageFilename = "${value.artifactId}-${value.version}${value.classifier ? '-' + value.classifier : ''}.${value.type}"
 
@@ -87,7 +94,37 @@ releaseConfigObject.packages.each { key, value ->
             System.exit(1)
         }
 
-        checkAndWaitForSledgeApp(sledgeDeployer, 20, 3000)
+        checkAndWaitForSledgeApp(sledgeDeployer, deployConfig.installWaitCount, TimeUnit.SECONDS.toMillis(deployConfig.installWaitTimeInSeconds))
+    }
+}
+
+// Uninstallation of configs
+releaseConfigObject.packages.configs.each { key, value ->
+
+    def packageList = searchPackages(sledgeDeployer, 20, value.groupId, value.artifactId, value.version);
+
+    if (value.environment == deployConfig.environmentName) {
+
+        if (packageList.size() == 1 && !value.forceUpdate) {
+            printMessage("Config Package <${value.artifactId}> does exist already in same version and won't be uninstalled (use forceUpdate to overwrite this behaviour).")
+        } else {
+            def packageFilename = "${value.artifactId}-${value.version}${value.classifier ? '-' + value.classifier : ''}.${value.type}"
+
+            printMessage("Handling uninstallation for config package file: ${packageFilename}...")
+
+            // Uninstall all related packages
+            def uninstallSucceeded = uninstallApp(sledgeDeployer, value.groupId, value.artifactId, "")
+
+            if (uninstallSucceeded) {
+                removeApp(sledgeDeployer, value.groupId, value.artifactId, "")
+            } else {
+                printMessage("*** Stopping Installation process, there were Uninstallation problems. Please check the errors with your Admin and retry execution. ***")
+                System.exit(1)
+            }
+
+            checkAndWaitForSledgeApp(sledgeDeployer, deployConfig.installWaitCount, TimeUnit.SECONDS.toMillis(deployConfig.installWaitTimeInSeconds))
+        }
+
     }
 }
 
@@ -98,7 +135,7 @@ checkAndWaitForSledgeApp(sledgeDeployer, 20, 3000)
 printMessage("Uninstallation has been successful\n\nStarting now with the installation of packages...")
 
 // Installation
-releaseConfigObject.packages.each { key, value ->
+releaseConfigObject.packages.apps.each { key, value ->
 
     def packageList = searchPackages(sledgeDeployer, 20, value.groupId, value.artifactId, value.version);
 
@@ -117,8 +154,32 @@ releaseConfigObject.packages.each { key, value ->
     }
 }
 
-checkAndWaitForSledgeApp(sledgeDeployer, 30, 3000)
-checkAndWaitForBundles(sledgeDeployer, 12, 5000, deployConfig.ignoreBundlesCheckFail)
+printMessage("Installation of apps packages have been successful\n\nStarting now with the installation of config packages...")
+
+// Installation of configurations
+releaseConfigObject.packages.configs.each { key, value ->
+
+    def packageList = searchPackages(sledgeDeployer, 20, value.groupId, value.artifactId, value.version);
+
+    if (value.environment == deployConfig.environmentName) {
+
+        if (packageList.size() == 1 && !value.forceUpdate) {
+            printMessage("Skip config package <${value.artifactId}> because it is already available.")
+        } else {
+            def packageFilename = "${value.artifactId}-${value.version}${value.classifier ? '-' + value.classifier : ''}.${value.type}"
+            File packageFile = new File("${releaseConfigObject.packagesPath}/${packageFilename}")
+
+            printMessage("Handling installation for config package file: ${packageFilename}...")
+
+            uploadApp(sledgeDeployer, packageFile, value.groupId, value.artifactId, value.version, 10)
+            installApp(sledgeDeployer, packageFilename, deployConfig.environmentName, deployConfig.environmentFileContent)
+        }
+
+    }
+}
+
+checkAndWaitForSledgeApp(sledgeDeployer, deployConfig.installWaitCount, TimeUnit.SECONDS.toMillis(deployConfig.installWaitTimeInSeconds))
+checkAndWaitForBundles(sledgeDeployer, 8, 5000, deployConfig.ignoreBundlesCheckFail)
 
 
 printMessage("Deployment has been finished successfully!")
@@ -194,10 +255,10 @@ def checkAndWaitForBundles(sledgeDeployer, maxCount, waitTimeInMs, ignoreBundles
             println "*** Please check the non-active bundles in the Felix console."
             println "*** Restart your instance later and check again."
             println ""
-            
-            if(ignoreBundlesCheckFail == "false") {
-            	println "*** Installation will be stopped."
-            	System.exit(1)
+
+            if (ignoreBundlesCheckFail == "false") {
+                println "*** Installation will be stopped."
+                System.exit(1)
             }
         }
 

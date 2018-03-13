@@ -27,110 +27,107 @@ import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * This {@link ApplicationPackage} implementation uses Sling Models to map a Application package resource to a Java model.
+ * <p/>
+ * Use {@link UploadApplicationPackage} if you need an Application package which is not yet bound to a resource.
+ */
 @Model(adaptables = Resource.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
 public class ApplicationPackageModel implements ApplicationPackage {
 
-    private String path;
+	private String path;
 
-    @ValueMapValue
-    private String groupId;
+	@ValueMapValue
+	private String groupId;
 
-    @ValueMapValue
-    private String artifactId;
+	@ValueMapValue
+	private String artifactId;
 
-    @ValueMapValue
-    private String version;
+	@ValueMapValue
+	private String version;
 
-    @ValueMapValue
-    private String applicationPackageType;
+	@ValueMapValue
+	private String applicationPackageType;
 
-    @ValueMapValue
-    private String packageFilename;
+	@ValueMapValue
+	private String packageFilename;
 
-    @ChildResource(name = "packageFile/jcr:content")
-    private InputStream packageFile;
+	@ChildResource(name = "packageFile/jcr:content")
+	private Resource packageFileResource;
 
-    @ValueMapValue
-    private String state;
+	@ValueMapValue
+	private String state;
 
-    @ValueMapValue
-    private String usedEnvironment;
+	@ValueMapValue
+	private String usedEnvironment;
 
-    public ApplicationPackageModel() {
-    }
+	public ApplicationPackageModel() {
+	}
 
-    public ApplicationPackageModel(String packageFileName, String groupId, String artifactId, String version) {
-        this.packageFilename = packageFileName;
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
-    }
+	public ApplicationPackageModel(String packageFileName, String groupId, String artifactId, String version) {
+		this.packageFilename = packageFileName;
+		this.groupId = groupId;
+		this.artifactId = artifactId;
+		this.version = version;
+	}
 
-    public String getPackageFilename() {
-        return packageFilename;
-    }
+	public String getPath() {
+		return path;
+	}
 
-    public void setPackageFilename(String packageFilename) {
-        this.packageFilename = packageFilename;
-    }
+	public void setPath(String path) {
+		this.path = path;
+	}
 
-    public InputStream getPackageFile() {
-        return packageFile;
-    }
+	public String getPackageFilename() {
+		return packageFilename;
+	}
 
-    public void setPackageFile(InputStream packageFile) {
-        this.packageFile = packageFile;
-    }
+	public void setPackageFilename(String packageFilename) {
+		this.packageFilename = packageFilename;
+	}
 
-    public String getPath() {
-        return path;
-    }
+	public InputStream getPackageFileStream() {
+		return packageFileResource.adaptTo(InputStream.class);
+	}
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+	public ApplicationPackageState getState() {
+		return ApplicationPackageState.valueOf(state);
+	}
 
-    public ApplicationPackageState getState() {
-        return ApplicationPackageState.valueOf(state);
-    }
+	/**
+	 * @param state A defined string from the {@link ApplicationPackageState} enum
+	 */
+	public void setState(ApplicationPackageState state) {
+		this.state = state.toString();
+	}
 
-    /**
-     * @param state A defined string from the {@link ApplicationPackageState} enum
-     */
-    public void setState(ApplicationPackageState state) {
-        this.state = state.toString();
-    }
+	public String getUsedEnvironment() {
+		return usedEnvironment;
+	}
 
-    public String getUsedEnvironment() {
-        return usedEnvironment;
-    }
+	public void setUsedEnvironment(String usedEnvironment) {
+		this.usedEnvironment = usedEnvironment;
+	}
 
-    public void setUsedEnvironment(String usedEnvironment) {
-        this.usedEnvironment = usedEnvironment;
-    }
+	public String getGroupId() {
+		return groupId;
+	}
 
-    public List<String> getEnvironmentNames() {
-        ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
-        return appPackageExtractor.getEnvironmentNames(this);
-    }
+	public String getArtifactId() {
+		return artifactId;
+	}
 
-    public String getGroupId() {
-        return groupId;
-    }
+	public String getVersion() {
+		return version;
+	}
 
-    public String getArtifactId() {
-        return artifactId;
-    }
+	public ApplicationPackageType getApplicationPackageType() {
+		return ApplicationPackageType.valueOf(applicationPackageType);
+	}
 
-    public String getVersion() {
-        return version;
-    }
-
-    public ApplicationPackageType getApplicationPackageType() {
-        return ApplicationPackageType.valueOf(applicationPackageType);
-    }
-
-    public void setApplicationPackageType(ApplicationPackageType applicationPackageType) {
-        this.applicationPackageType = applicationPackageType.toString();
-    }
+	public List<String> getEnvironmentNames() {
+		ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
+		return appPackageExtractor.getEnvironmentNames(this);
+	}
 }
