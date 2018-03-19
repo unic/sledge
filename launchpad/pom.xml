@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>io.sledge</groupId>
 		<artifactId>io.sledge.parent</artifactId>
-		<version>0.5.3</version>
+		<version>0.6.0</version>
 	</parent>
 
 	<build>
@@ -20,7 +20,7 @@
 				<artifactId>slingstart-maven-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
-					<!-- Start command: mvn slingstart:start -Dlaunchpad.keep.running=true -->
+					<shouldBlockUntilKeyIsPressed>true</shouldBlockUntilKeyIsPressed>
 					<servers>
 						<server>
 							<port>8080</port>

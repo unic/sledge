@@ -30,13 +30,13 @@ Therefore Sledge is not a _special new_ Configuration mechanism for Sling but ra
 # Requirements
 
 * Java 8
-* Sling 8 or AEM 6.2, for AEM 6.1 you first need to install the `aem61-deps` package
+* Sling 10 or AEM 6.1+, for AEM 6.1 you first need to install the `aem61-deps` package
 * Commons Lang 3.3+ Osgi bundle
 
 
 # Building from source
 
-Sledge uses Maven 3.3.x.
+Sledge uses Maven 3.5.x.
 
 Execute the following command from the root directory:
 
@@ -54,17 +54,18 @@ provides you with a full Sling 8 server and with all the needed _Sledge_ artifac
 * Build the project as mentioned above
 * In the `laundpad` directory execute the following:
 ```
-launchpad#> mvn slingstart:start -Dlaunchpad.keep.running=true
+launchpad#> mvn slingstart:start
 ```
 
-This configures and starts up a Sling 8 server with the _Sledge_ web application.
+This configures and starts up a Sling server with the _Sledge_ web application.
 
 Access then the Sledge webapp here: http://localhost:8080/etc/sledge/packages.html
 
 # Manual Sling Installation
 
-* Install and run Sling 8 Launchpad
+* Install and run Sling Launchpad
 * Install manually the [Commons Lang 3.4 bundle](https://commons.apache.org/proper/commons-lang/download_lang.cgi)
+* Install the Apache Sling Commons JSON bundle (not included anymore because of legal reasons)
 * Install `core`, `connectors` and `webapp` packages, check the `deploy.sh` script for the Maven commands
 * Open browser and enter this url: http://localhost:8080/etc/sledge/packages.html
 
@@ -72,6 +73,7 @@ The logged in user needs write permission to: `/apps/sledge_packages` and `/etc/
 
 # AEM installation
 
+* For AEM 6.1: Install `aem61-deps` package
 * Install the `io.sledge.delivery-VERSION-aem.zip` package
 * Open url: http://localhost:4502/etc/sledge/packages.html
 
@@ -92,7 +94,7 @@ root#> mvn clean install -P integration
 
 # Automated Deployment
 
-Checkout the `deployer` module if you want to automate your installation.
+Checkout the `deployer` module if you want to automate your installation with Groovy scripts.
 
 # Documentation
 

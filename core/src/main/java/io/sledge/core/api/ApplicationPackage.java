@@ -37,7 +37,7 @@ public interface ApplicationPackage {
 
     String getPackageFilename();
 
-    InputStream getPackageFile();
+    InputStream getPackageFileStream();
 
     ApplicationPackageState getState();
 
