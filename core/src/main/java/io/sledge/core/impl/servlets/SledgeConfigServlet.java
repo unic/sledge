@@ -34,24 +34,20 @@ import org.apache.sling.api.request.RequestParameter;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
-/**
- * @author oliver.burkhalter
- */
 @SlingServlet(selectors = "config",
 		resourceTypes = "sledge/package",
-		methods = {"GET", "POST"})
+		methods = { "GET", "POST" })
 @Properties({
 		@Property(name = "service.description",
-				value = "Sledge: Handles configuration of the app packages",
-				propertyPrivate = false),
+				value = "Sledge: Handles configuration of the app packages"
+		),
 		@Property(name = "service.vendor",
-				value = "Unic AG - Sledge",
-				propertyPrivate = false)
+				value = "Unic AG - Sledge"
+		)
 })
 public class SledgeConfigServlet extends SlingAllMethodsServlet {
 
@@ -83,7 +79,7 @@ public class SledgeConfigServlet extends SlingAllMethodsServlet {
 	}
 
 	@Override
-	protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
 		RequestParameter envNameParam = request.getRequestParameter(SledgeConstants.ENVIRONMENT_NAME_PARAM);
 		Resource packageResource = request.getResource();
 
@@ -92,7 +88,9 @@ public class SledgeConfigServlet extends SlingAllMethodsServlet {
 
 			ApplicationPackageModel appPackage = packageResource.adaptTo(ApplicationPackageModel.class);
 			ApplicationPackageExtractor appPackageExtractor = new SledgeApplicationPackageExtractor();
-			DeploymentConfiguration deploymentConfiguration = appPackageExtractor.getDeploymentConfiguration(appPackage.getPackageFile());
+			DeploymentConfiguration deploymentConfiguration = appPackageExtractor
+					.getDeploymentConfiguration(appPackage.getPackageFileStream());
+
 			final DeploymentDef deploymentDef = deploymentConfiguration.getDeploymentDefByEnvironment(envName);
 			final List<String> packageNamesForConfiguration = deploymentDef.getPackageNamesForConfiguration();
 
@@ -106,7 +104,7 @@ public class SledgeConfigServlet extends SlingAllMethodsServlet {
 	}
 
 	@Override
-	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
 		String envName = request.getParameter(SledgeConstants.ENVIRONMENT_NAME_PARAM);
 		String overwriteEnvFileContent = request.getParameter(SledgeConstants.ENVIRONMENT_FILE_CONTENT_PARAM);
 		Resource packageResource = request.getResource();
@@ -122,7 +120,7 @@ public class SledgeConfigServlet extends SlingAllMethodsServlet {
 
 		PackageConfigurer packageConfigurer = request.adaptTo(SledgePackageConfigurer.class);
 		java.util.Properties envProps = packageConfigurer.mergeProperties(envFileContent, overwriteEnvProps);
-		packageConfigurer.configure(appPackage.getPackageFile(), appPackage.getPackageFilename(), envProps);
+		packageConfigurer.configure(appPackage.getPackageFileStream(), appPackage.getPackageFilename(), envProps);
 
 		// TODO: create configuration preview and save it as a metadata in the application package subnode
 	}
