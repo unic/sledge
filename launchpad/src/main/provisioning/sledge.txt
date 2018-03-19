@@ -20,7 +20,7 @@
 [feature name=sledge]
 
 [variables]
-  sledge.version=0.6.0-SNAPSHOT
+  sledge.version=0.7.0-SNAPSHOT
 
 [artifacts]
   org.apache.sling/org.apache.sling.starter/10/slingstart
