@@ -72,32 +72,6 @@ if (!deployConfig.environmentName) {
 // Only execute Sledge commands if Sledge is installed properly
 checkAndWaitForSledgeApp(sledgeDeployer, 20, 3000)
 
-// Uninstallation of apps
-releaseConfigObject.packages.apps.each { key, value ->
-
-    def packageList = searchPackages(sledgeDeployer, 20, value.groupId, value.artifactId, value.version);
-
-    if (packageList.size() == 1 && !value.forceUpdate) {
-        printMessage("Package <${value.artifactId}> does exist already in same version and won't be uninstalled (use forceUpdate to overwrite this behaviour).")
-    } else {
-        def packageFilename = "${value.artifactId}-${value.version}${value.classifier ? '-' + value.classifier : ''}.${value.type}"
-
-        printMessage("Handling uninstallation for package file: ${packageFilename}...")
-
-        // Uninstall all related packages
-        def uninstallSucceeded = uninstallApp(sledgeDeployer, value.groupId, value.artifactId, "")
-
-        if (uninstallSucceeded) {
-            removeApp(sledgeDeployer, value.groupId, value.artifactId, "")
-        } else {
-            printMessage("*** Stopping Installation process, there were Uninstallation problems. Please check the errors with your Admin and retry execution. ***")
-            System.exit(1)
-        }
-
-        checkAndWaitForSledgeApp(sledgeDeployer, deployConfig.installWaitCount, TimeUnit.SECONDS.toMillis(deployConfig.installWaitTimeInSeconds))
-    }
-}
-
 // Uninstallation of configs
 releaseConfigObject.packages.configs.each { key, value ->
 
@@ -125,6 +99,32 @@ releaseConfigObject.packages.configs.each { key, value ->
             checkAndWaitForSledgeApp(sledgeDeployer, deployConfig.installWaitCount, TimeUnit.SECONDS.toMillis(deployConfig.installWaitTimeInSeconds))
         }
 
+    }
+}
+
+// Uninstallation of apps
+releaseConfigObject.packages.apps.each { key, value ->
+
+    def packageList = searchPackages(sledgeDeployer, 20, value.groupId, value.artifactId, value.version);
+
+    if (packageList.size() == 1 && !value.forceUpdate) {
+        printMessage("Package <${value.artifactId}> does exist already in same version and won't be uninstalled (use forceUpdate to overwrite this behaviour).")
+    } else {
+        def packageFilename = "${value.artifactId}-${value.version}${value.classifier ? '-' + value.classifier : ''}.${value.type}"
+
+        printMessage("Handling uninstallation for package file: ${packageFilename}...")
+
+        // Uninstall all related packages
+        def uninstallSucceeded = uninstallApp(sledgeDeployer, value.groupId, value.artifactId, "")
+
+        if (uninstallSucceeded) {
+            removeApp(sledgeDeployer, value.groupId, value.artifactId, "")
+        } else {
+            printMessage("*** Stopping Installation process, there were Uninstallation problems. Please check the errors with your Admin and retry execution. ***")
+            System.exit(1)
+        }
+
+        checkAndWaitForSledgeApp(sledgeDeployer, deployConfig.installWaitCount, TimeUnit.SECONDS.toMillis(deployConfig.installWaitTimeInSeconds))
     }
 }
 
