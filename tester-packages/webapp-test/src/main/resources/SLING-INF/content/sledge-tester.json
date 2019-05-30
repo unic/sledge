@@ -1,5 +1,0 @@
-{
-    "jcr:primaryType" : "nt:unstructured",
-    "jcr:title" : "Sledge Tester webapp",
-    "sling:resourceType" : "sledge-tester/tester"
-}
