@@ -1,12 +1,12 @@
 # Sledgefile example
 
-artifactsPathPrefix: artifacts/
+artifactsPathPrefix: packages/
 
 deploymentDefs:
-  - name: "local"
+  - name: "local-author"
     artifacts:
-      - my-package-1.0.zip
-      - my-package2-1.0.zip
+      - ktbe-newweb-aem-apps-0.0.5-SNAPSHOT.zip
+      - ktbe-newweb-aem-configuration-0.0.5-SNAPSHOT-local-author.zip
   - name: "dev-author"
     artifacts:
       - my-package-1.0.zip

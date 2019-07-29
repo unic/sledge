@@ -6,25 +6,30 @@ import com.github.ajalt.clikt.parameters.options.option
 import io.sledge.deployer.core.api.Deployer
 import io.sledge.deployer.core.api.Deployment
 import io.sledge.deployer.core.api.SledgeFileParser
+import io.sledge.deployer.crx.CrxConfiguration
+import io.sledge.deployer.crx.CrxDeployer
 import java.io.File
 
-class SledgeCommand(val sledgeFileParser: SledgeFileParser, val deployer: Deployer) : CliktCommand(name = "sledge") {
+class SledgeCommand(val sledgeFileParser: SledgeFileParser, val deployer: CrxDeployer) : CliktCommand(name = "sledge") {
     private val deploymentDefinitionName by argument(name = "DEPLOYMENT_DEFINITION_NAME", help = "The name of the Deployment definition, e.g. local, dev-auhor, dev-publish, test, prod, etc.")
     private val targetServer by argument(name = "TARGET_SERVER", help = "The url to the target server, e.g. http://server:4502")
     val user by option()
     val password by option()
+    val deploymentMode by option()
+    val timeout by option()
+    val retries by option()
 
     override fun run() {
         echo("Working dir: ${System.getProperty("user.dir")}")
-
-        val yamlSledgeFile = sledgeFileParser.parseSledgeFile(File("sledgefile.yaml"))
-
+        echo("Deployment definition name: " + deploymentDefinitionName)
+        echo("Target server: " + targetServer)
+        val yamlSledgeFile = sledgeFileParser.parseSledgeFile(File("deployment-configuration.yaml"))
         val deploymentDefinition = yamlSledgeFile.findDeploymentDefinitionByName(deploymentDefinitionName)
-
-        if (deploymentDefinition == null) {
-            echo("ERROR: Deployment definition name not found in Sledge file.", err = true)
-        } else {
-            deployer.deploy(Deployment(deploymentDefinition, targetServer))
+        deploymentDefinition.let {
+            val aemConfiguration = CrxConfiguration(deploymentDefinition!!, deploymentMode, timeout, retries, targetServer, user
+                    ?: "admin", password ?: "admin")
+            deployer.deploy(aemConfiguration)
         }
+
     }
 }
