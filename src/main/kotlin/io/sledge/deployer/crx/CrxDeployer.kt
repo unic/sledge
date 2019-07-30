@@ -21,8 +21,8 @@ class CrxDeployer {
             for (artifact in configuration.deploymentDefinition.deploymentArtifacts) {
                 val packageName = Unarchiver().unzipPropertiesFile(artifact.filePath, VLT_PROPERTIES)
                 executePost(httpClient, Uninstall, packageName)
-                executePost(httpClient, Remove, "x")
-                executePost(httpClient, Upload, "x", Pair("file", File(artifact.filePath)))
+                executePost(httpClient, Remove, packageName)
+                executePost(httpClient, Upload, packageName, Pair("file", File(artifact.filePath)))
                 executePost(httpClient, Install, packageName)
             }
         }
