@@ -1,4 +1,4 @@
-package io.sledge.deployer.zip
+package io.sledge.deployer.crx.zip
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.MapperFeature

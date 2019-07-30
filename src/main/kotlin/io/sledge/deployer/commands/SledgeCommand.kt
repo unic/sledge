@@ -26,8 +26,8 @@ class SledgeCommand(val sledgeFileParser: SledgeFileParser, val deployer: CrxDep
         val yamlSledgeFile = sledgeFileParser.parseSledgeFile(File("deployment-configuration.yaml"))
         val deploymentDefinition = yamlSledgeFile.findDeploymentDefinitionByName(deploymentDefinitionName)
         deploymentDefinition.let {
-            val aemConfiguration = CrxConfiguration(deploymentDefinition!!, deploymentMode, timeout, retries, targetServer, user
-                    ?: "admin", password ?: "admin")
+            val aemConfiguration = CrxConfiguration(deploymentDefinition!!, deploymentMode, retries, targetServer, user
+                    ?: "admin", password ?: "admin", timeout?.toLong()?: 3)
             deployer.deploy(aemConfiguration)
         }
 

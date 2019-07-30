@@ -3,8 +3,8 @@ package io.sledge.deployer.crx
 import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.crx.command.*
 import io.sledge.deployer.http.HttpClient
-import io.sledge.deployer.zip.Unarchiver
-import io.sledge.deployer.zip.Unarchiver.Companion.VLT_PROPERTIES
+import io.sledge.deployer.crx.zip.Unarchiver
+import io.sledge.deployer.crx.zip.Unarchiver.Companion.VLT_PROPERTIES
 import java.io.File
 
 class CrxDeployer {
