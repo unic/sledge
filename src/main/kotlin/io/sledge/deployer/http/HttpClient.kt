@@ -1,6 +1,5 @@
 package io.sledge.deployer.http
 
-import io.sledge.deployer.core.api.Configuration
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody

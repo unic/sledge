@@ -3,10 +3,8 @@ package io.sledge.deployer.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.option
-import io.sledge.deployer.core.api.Deployer
-import io.sledge.deployer.core.api.Deployment
+import io.sledge.deployer.core.api.Configuration
 import io.sledge.deployer.core.api.SledgeFileParser
-import io.sledge.deployer.crx.CrxConfiguration
 import io.sledge.deployer.crx.CrxDeployer
 import java.io.File
 
@@ -15,7 +13,6 @@ class SledgeCommand(val sledgeFileParser: SledgeFileParser, val deployer: CrxDep
     private val targetServer by argument(name = "TARGET_SERVER", help = "The url to the target server, e.g. http://server:4502")
     val user by option()
     val password by option()
-    val deploymentMode by option()
     val timeout by option()
     val retries by option()
 
@@ -26,7 +23,7 @@ class SledgeCommand(val sledgeFileParser: SledgeFileParser, val deployer: CrxDep
         val yamlSledgeFile = sledgeFileParser.parseSledgeFile(File("deployment-configuration.yaml"))
         val deploymentDefinition = yamlSledgeFile.findDeploymentDefinitionByName(deploymentDefinitionName)
         deploymentDefinition.let {
-            val aemConfiguration = CrxConfiguration(deploymentDefinition!!, deploymentMode, retries, targetServer, user
+            val aemConfiguration = Configuration(deploymentDefinition!!, retries?.toLong()?: 5, targetServer, user
                     ?: "admin", password ?: "admin", timeout?.toLong()?: 3)
             deployer.deploy(aemConfiguration)
         }

@@ -1,6 +1,7 @@
 package io.sledge.deployer.crx
 
 import com.github.ajalt.clikt.output.TermUi.echo
+import io.sledge.deployer.core.api.Configuration
 import io.sledge.deployer.crx.command.*
 import io.sledge.deployer.http.HttpClient
 import io.sledge.deployer.crx.zip.Unarchiver
@@ -9,7 +10,7 @@ import java.io.File
 
 class CrxDeployer {
 
-    fun deploy(configuration: CrxConfiguration) {
+    fun deploy(configuration: Configuration) {
 
         if (configuration == null) {
             echo("ERROR: Deployment definition name not found in Sledge file.", err = true)
@@ -19,11 +20,11 @@ class CrxDeployer {
         configuration.deploymentDefinition.let {
             echo("Start deployment for ${configuration.deploymentDefinition.name}")
             for (artifact in configuration.deploymentDefinition.deploymentArtifacts) {
-                val packageName = Unarchiver().unzipPropertiesFile(artifact.filePath, VLT_PROPERTIES)
-                executePost(httpClient, Uninstall, packageName)
-                executePost(httpClient, Remove, packageName)
-                executePost(httpClient, Upload, packageName, Pair("file", File(artifact.filePath)))
-                executePost(httpClient, Install, packageName)
+                val packageName = Unarchiver().extractPackageName(artifact.filePath, VLT_PROPERTIES)
+                executePost(httpClient, Uninstall, packageName, configuration.retries)
+                executePost(httpClient, Remove, packageName, configuration.retries)
+                executePost(httpClient, Upload, packageName, configuration.retries, Pair("file", File(artifact.filePath)))
+                executePost(httpClient, Install, packageName, configuration.retries)
             }
         }
 

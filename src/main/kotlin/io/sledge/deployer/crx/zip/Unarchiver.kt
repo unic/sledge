@@ -24,7 +24,7 @@ class Unarchiver {
             .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false)
 
     @Throws(IOException::class)
-    fun unzipPropertiesFile(zip: String, filePath: String): String {
+    fun extractPackageName(zip: String, filePath: String): String {
         val zipFile = ZipFile(File(zip))
         val zipEntry = zipFile.getEntry(filePath)
         val file = zipFile.getInputStream(zipEntry)
@@ -44,6 +44,7 @@ class Unarchiver {
         const val VLT_PROPERTIES = "$VLT_PATH/properties.xml"
 
     }
+
     @JacksonXmlRootElement(localName = "properties")
     data class Properties(
 
@@ -51,6 +52,7 @@ class Unarchiver {
             @set:JacksonXmlProperty(localName = "entry")
             var entries: List<Entry> = ArrayList()
     )
+
     data class Entry(
             @set:JacksonXmlProperty(localName = "key", isAttribute = true)
             var key: String?) {

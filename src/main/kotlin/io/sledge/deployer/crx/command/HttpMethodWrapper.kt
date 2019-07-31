@@ -1,25 +1,24 @@
 package io.sledge.deployer.crx.command
 
 import com.github.ajalt.clikt.output.TermUi
-import io.sledge.deployer.common.Retry
+import io.sledge.deployer.common.retry
 import io.sledge.deployer.exception.SledgeCommandException
 import io.sledge.deployer.http.HttpClient
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.Response
 
-fun executePost(httpClient: HttpClient, command: Command, packageName: String, parameter: Pair<String, *> = Pair("", "")) {
+fun executePost(httpClient: HttpClient, command: Command, packageName: String, retries: Long, parameter: Pair<String, *> = Pair("", "")) {
     runBlocking {
         delay(2000)
-        Retry().retry {
+        retry(retries = retries) {
             try {
                 val response = executeRequest(command, parameter, packageName, httpClient)
                 TermUi.echo("Response http status " + response.code)
-            } catch (se: SledgeCommandException){
+            } catch (se: SledgeCommandException) {
                 TermUi.echo("Request failed. Reason " + se.localizedMessage)
                 throw se;
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 TermUi.echo("Request failed. Reason " + e.localizedMessage)
                 throw e;
             }

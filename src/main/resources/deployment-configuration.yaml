@@ -5,8 +5,8 @@ artifactsPathPrefix: packages/
 deploymentDefs:
   - name: "local-author"
     artifacts:
-      - ktbe-newweb-aem-apps-0.0.5-SNAPSHOT.zip
-      - ktbe-newweb-aem-configuration-0.0.5-SNAPSHOT-local-author.zip
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
   - name: "dev-author"
     artifacts:
       - my-package-1.0.zip

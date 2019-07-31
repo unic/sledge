@@ -8,7 +8,7 @@ plugins {
     `build-scan`
     `maven-publish`
     kotlin("jvm") version "1.3.31"
-    id ("kotlinx-serialization") version "1.3.40"
+    id ("kotlinx-serialization") version "1.3.41"
     id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 
