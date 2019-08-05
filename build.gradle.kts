@@ -8,7 +8,7 @@ plugins {
     `build-scan`
     `maven-publish`
     kotlin("jvm") version "1.3.31"
-    id("kotlinx-serialization") version "1.3.31"
+    id ("kotlinx-serialization") version "1.3.41"
     id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 
@@ -41,7 +41,10 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.github.ajalt:clikt:2.0.0")
     implementation("com.charleskorn.kaml:kaml:0.11.0")
-    implementation("khttp:khttp:1.0.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8")
+    implementation("com.squareup.okhttp3:okhttp:4.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M2")
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
 }
 

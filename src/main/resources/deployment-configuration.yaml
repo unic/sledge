@@ -1,9 +1,9 @@
 # Sledgefile example
 
-artifactsPathPrefix: artifacts/
+artifactsPathPrefix: packages/
 
 deploymentDefs:
-  - name: "local"
+  - name: "local-author"
     artifacts:
       - my-package-1.0.zip
       - my-package2-1.0.zip
