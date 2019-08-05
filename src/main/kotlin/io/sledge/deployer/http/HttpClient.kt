@@ -1,12 +1,13 @@
 package io.sledge.deployer.http
 
+import io.sledge.deployer.core.api.Configuration
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.time.Duration
 
-class HttpClient(val configuration:Configuration) {
+class HttpClient(val configuration: Configuration) {
 
     val MEDIA_TYPE_ZIP = "application/zip".toMediaTypeOrNull()
 

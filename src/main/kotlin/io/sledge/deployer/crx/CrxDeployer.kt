@@ -11,11 +11,6 @@ import java.io.File
 class CrxDeployer {
 
     fun deploy(configuration: Configuration) {
-
-        if (configuration == null) {
-            echo("ERROR: Deployment definition name not found in Sledge file.", err = true)
-        }
-
         val httpClient = HttpClient(configuration)
         configuration.deploymentDefinition.let {
             echo("Start deployment for ${configuration.deploymentDefinition.name}")
