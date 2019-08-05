@@ -1,0 +1,41 @@
+# Sledgefile example
+
+artifactsPathPrefix: packages/
+
+deploymentDefs:
+  - name: "local-author"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "dev-author"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "dev-publish"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "test-author"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "test-publish"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "prod-author1"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "prod-author2"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "prod-publish1"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip
+  - name: "prod-publish2"
+    artifacts:
+      - my-package-1.0.zip
+      - my-package2-1.0.zip

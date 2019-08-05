@@ -1,9 +1,0 @@
-@startuml
-
-package "sledge-webapp" as webapp {
-	class MainViewModel
-}
-
-hide members
-
-@enduml

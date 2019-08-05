@@ -1,8 +1,0 @@
-<!-- Javascript -->
-<sly data-sly-use.mainModel="io.sledge.webapp.models.MainViewModel" data-sly-test="${mainModel.sightlyGraniteClientlibTemplateAvailable}"
-     data-sly-use.clientLib="${'/libs/granite/sightly/templates/clientlib.html'}">
-    <script data-sly-call="${clientLib.js @ categories='granite.csrf.standalone'}" data-sly-unwrap />
-</sly>
-<script src="${request.contextPath}/etc/sledge/app/static-content/js/vendor/jquery-2.2.3.min.js"></script>
-<script src="${request.contextPath}/etc/sledge/app/static-content/js/vendor/bootstrap-3.3.4.min.js"></script>
-<script type="text/javascript" src="${request.contextPath}/etc/sledge/app/static-content/js/main.js"></script>

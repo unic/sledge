@@ -1,121 +1,49 @@
-[![Build Status](https://travis-ci.org/unic/sledge.svg?branch=develop)](https://travis-ci.org/unic/sledge)
-
 Sledge - "One-Click Rollout"
 ============================
 
-Sledge is a _Sling Application Manager_ which provides a simple user interface to easily deploy, uninstall, monitor and configure your applications in one step. 
-Furthermore it provides a command line interface, best suited for remote management of your application in large enterprises. This allows for a nice integration into existing Continuous Delivery environments.
+Sledge offers a set of scripts to easily deploy vault packages to an AEM instance.
+
 
 # In bullet points
 
 * “One-Click Rollouts”
-* “Application Controller/Manager”
-* Concept of _Applications_ not _Packages_
-  * An _Application_ may contain several packages (vault), bundles (osgi) and configurations
-* “Configuration-Solution-agnostic”: No new/additional solution
-* Based on standards: Sling-way to do stuff (OSGi Installer, CRUD API)
+* Easy integration with CI/CD systems
 
-# Why Sledge?
+# Use Case for Sledge
 
-Most Sling/AEM applications consists of a collection of several bundles and configurations. Sledge wants to support here and offers a concept of an [_Application Package_](https://github.com/unic/sledge/blob/develop/docs/src/main/markdown/sledge-architecture.md#applicationpackage) which includes all needed bundles and configurations for a specific environment. It simplifies the deployment of these bundles and the environment-specific configuration.
+TODO
 
-# What does Sledge do exactly?
-
-Sledge is based completely on the [Apache Sling framework](https://sling.apache.org) (which is also heavily used in [_Adobe Experience Manager_](docs.adobe.com/docs/en/aem.html)) and leverages the functionalities provided by Sling, e.g. [_OSGi Installer_](https://sling.apache.org/documentation/bundles/osgi-installer.html), [_CRUD APIs_](https://sling.apache.org/documentation/the-sling-engine/sling-api-crud-support.html), etc.
-
-Sledge's tasks are mainly: Managing _Application Packages_ and handling configurations replacement in the _Application Package_ before the deployment. 
-
-Therefore Sledge is not a _special new_ Configuration mechanism for Sling but rather a "controller/manager/conductor" of _Application Packages_.
 
 # Requirements
 
-* Java 8
-* Sling 10 or AEM 6.1+, for AEM 6.1 you first need to install the `aem61-deps` package
-* Commons Lang 3.3+ Osgi bundle
+* Kotlin 1.3
+* Gradle 5.x
+
+TODO
 
 
 # Building from source
 
-Sledge uses Maven 3.5.x.
+TODO
 
-Execute the following command from the root directory:
+`gradle build`
 
-```
-mvn clean install
-```
+Create executable jar:
 
-# Using the _Sledge Launchpad_
-
-This is the simplest and fastest way how to get started with Sledge and to check it out.
-
-The _Sledge Launchpad_ module defines a simple [_Provisioning model_](https://sling.apache.org/documentation/development/slingstart.html) which
-provides you with a full Sling 8 server and with all the needed _Sledge_ artifacts to run it properly.
-
-* Build the project as mentioned above
-* In the `laundpad` directory execute the following:
-```
-launchpad#> mvn slingstart:start
-```
-
-This configures and starts up a Sling server with the _Sledge_ web application.
-
-Access then the Sledge webapp here: http://localhost:8080/etc/sledge/packages.html
-
-# Manual Sling Installation
-
-* Install and run Sling Launchpad
-* Install manually the [Commons Lang 3.4 bundle](https://commons.apache.org/proper/commons-lang/download_lang.cgi)
-* Install the Apache Sling Commons JSON bundle (not included anymore because of legal reasons)
-* Install `core`, `connectors` and `webapp` packages, check the `deploy.sh` script for the Maven commands
-* Open browser and enter this url: http://localhost:8080/etc/sledge/packages.html
-
-The logged in user needs write permission to: `/apps/sledge_packages` and `/etc/sledge/packages` to make the application work properly.
-
-# AEM installation
-
-* For AEM 6.1: Install `aem61-deps` package
-* Install the `io.sledge.delivery-VERSION-aem.zip` package
-* Open url: http://localhost:4502/etc/sledge/packages.html
-
-# Testing
-
-## Unit tests
-
-Sledge heavily uses Mockito and AssertJ for Unit Testing.
-
-## Integration/Web Testing
-
-Sledge uses the great [ScalaTest Selenium framework](http://www.scalatest.org/user_guide/using_selenium) for writing Integration/Web tests.
-
-To run a full Integration test build just execute the following command:
-```
-root#> mvn clean install -P integration
-```
-
-# Automated Deployment
-
-Checkout the `deployer` module if you want to automate your installation with Groovy scripts.
+`gradle shadowJar`
 
 # Documentation
 
-## Architecture specification
+TODO
 
-See here: [Sledge Architecture](docs/src/main/markdown/sledge-architecture.md)
+Example command:
+
+java -jar sledge-deployer.jar --user=XX --pwd=XX deploymentDefinitionName targetServer
 
 
 # Release process
 
-* Make sure your _develop_ branch is up-to-date and does not contain any local changes
-* Execute locally the ```release.sh``` script
-* Adapt the `sledge.txt` Launchpad model to reflect the next development version and commit
-* Finally push everything to GitHub remote
-* Create a new release on GitHub
-* Add some release description
-* Upload the following artifacts for the release:
-  * delivery
-  * deployer
-  * aem61-deps
-* Publish the release
+TODO
 
 
 # License
