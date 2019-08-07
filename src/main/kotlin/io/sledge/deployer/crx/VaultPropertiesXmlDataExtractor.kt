@@ -1,4 +1,4 @@
-package io.sledge.deployer.crx.zip
+package io.sledge.deployer.crx
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.MapperFeature
@@ -10,11 +10,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
-import java.util.zip.ZipFile
 import java.io.IOException
+import java.util.zip.ZipFile
 
 
-class Unarchiver {
+class VaultPropertiesXmlDataExtractor {
+
+    companion object {
+        const val VLT_PROPERTIES_PATH = "META-INF/vault/properties.xml"
+    }
 
     val kotlinXmlMapper = XmlMapper(JacksonXmlModule().apply {
         setDefaultUseWrapper(false)
@@ -24,30 +28,21 @@ class Unarchiver {
             .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, false)
 
     @Throws(IOException::class)
-    fun extractPackageName(zip: String, filePath: String): String {
+    fun getEntryValue(zip: String, entryKeyName: String): String {
         val zipFile = ZipFile(File(zip))
-        val zipEntry = zipFile.getEntry(filePath)
-        val file = zipFile.getInputStream(zipEntry)
-        val m = kotlinXmlMapper.readValue(file, Properties::class.java)
-        zipFile.close()
-        return m.entries.find { entry -> entry.key.equals("name") }?.value ?: ""
-    }
+        val zipEntry = zipFile.getEntry(VLT_PROPERTIES_PATH)
+        val zipFileInputStream = zipFile.getInputStream(zipEntry)
 
-    companion object {
-
-        const val META_PATH = "META-INF"
-
-        const val VLT_DIR = "vault"
-
-        const val VLT_PATH = "$META_PATH/$VLT_DIR"
-
-        const val VLT_PROPERTIES = "$VLT_PATH/properties.xml"
-
+        try {
+            val propertiesXml = kotlinXmlMapper.readValue(zipFileInputStream, Properties::class.java)
+            return propertiesXml.entries.find { entry -> entry.key.equals(entryKeyName) }?.value ?: ""
+        } finally {
+            zipFile.close()
+        }
     }
 
     @JacksonXmlRootElement(localName = "properties")
     data class Properties(
-
             @JacksonXmlElementWrapper(useWrapping = false)
             @set:JacksonXmlProperty(localName = "entry")
             var entries: List<Entry> = ArrayList()
@@ -59,5 +54,4 @@ class Unarchiver {
         @set:JacksonXmlText
         lateinit var value: String
     }
-
 }

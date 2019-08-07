@@ -4,16 +4,16 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
-internal class DeploymentDefinitionTest {
+internal class InstallationDefinitionTest {
 
     @Test
     fun shouldReturnNameWhenInitializedWithNameAndEmptyList() {
         // Given
-        val deploymentDefinition = DeploymentDefinition("dev", emptyList())
+        val deploymentDefinition = InstallationDefinition("dev", emptyList())
 
         // When
         // Then
         assertEquals("dev", deploymentDefinition.name);
-        assertNotNull(deploymentDefinition.deploymentArtifacts)
+        assertNotNull(deploymentDefinition.artifacts)
     }
 }

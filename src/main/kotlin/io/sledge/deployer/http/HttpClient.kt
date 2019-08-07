@@ -1,5 +1,7 @@
 package io.sledge.deployer.http
 
+import com.github.ajalt.clikt.output.TermUi
+import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.core.api.Configuration
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -15,13 +17,15 @@ class HttpClient(val configuration: Configuration) {
 
 
     fun postMultipart(url: String,parameters: Map<String,*>): Response {
-        return client.callTimeout(Duration.ofSeconds(configuration.timeout)).build().newCall(createRequest(url,parameters)).execute()
+        val request = createRequest(url, parameters)
+        echo("Request url: " + request.url)
+        return client.callTimeout(Duration.ofSeconds(configuration.timeout.toLong())).build().newCall(request).execute()
     }
 
     private fun createRequest(url: String,parameters: Map<String,*> ): Request {
         return Request.Builder()
                 .header("Authorization", Credentials.basic(configuration.user,configuration.password))
-                .url(configuration.url + url)
+                .url(configuration.targetUrl + url)
                 .post(createMultipartRequestBody(parameters))
                 .build()
     }
