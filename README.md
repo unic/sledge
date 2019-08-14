@@ -28,9 +28,13 @@ Create executable jar containing all needed dependencies:
 
 # Documentation
 
-TODO
+## The deployment-configuration.yaml file
 
-Example commands
+See an example `deployment-configration.yaml` [here](src/main/resources/deployment-configuration.yaml).
+
+Use this file to define the needed _deployment definitions_ for your application.
+
+## Deployment commands
 
 Install packages:
 
@@ -47,9 +51,15 @@ Get the help:
 
 # Release process
 
-TODO
+We use this Gradle release plugin here: https://github.com/researchgate/gradle-release
 
-Still manual process.
+## Process
+
+* Make sure you have committed and pushed everything properly
+* Execute `gradle release`, the command line will guide you through the process
+* Set the needed versions, use the Semantic Versioning approach
+* Create a new release in Github and upload the generated binaries in the `build/libs` folder to the Github release
+* Add the needed release notes and publish the Github release
 
 
 # License

@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "io.sledge"
-version = "2.0.0-SNAPSHOT"
 description = "Easy deployment tool for AEM applications"
 
 plugins {
@@ -9,6 +8,7 @@ plugins {
     kotlin("jvm") version "1.3.31"
     id ("kotlinx-serialization") version "1.3.41"
     id("com.github.johnrengelman.shadow") version "5.0.0"
+    id("net.researchgate.release") version "2.8.1"
 }
 
 publishing {
@@ -58,3 +58,5 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+tasks.named("afterReleaseBuild") { dependsOn("shadowJar") }
