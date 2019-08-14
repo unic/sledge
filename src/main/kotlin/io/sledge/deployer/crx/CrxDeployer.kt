@@ -2,16 +2,16 @@ package io.sledge.deployer.crx
 
 import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.core.api.Configuration
-import io.sledge.deployer.core.api.InstallationDefinition
+import io.sledge.deployer.core.api.DeploymentDefinition
 import io.sledge.deployer.crx.command.*
 import io.sledge.deployer.http.HttpClient
 import java.io.File
 
 class CrxDeployer {
 
-    fun install(installationDefinition: InstallationDefinition, configuration: Configuration) {
+    fun install(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
         val httpClient = HttpClient(configuration)
-        installationDefinition.let {
+        deploymentDefinition.let {
             for (artifact in it.artifacts) {
                 val packageName = VaultPropertiesXmlDataExtractor().getEntryValue(artifact.filePath, "name")
 
@@ -26,17 +26,20 @@ class CrxDeployer {
         }
     }
 
-    fun uninstall(uninstallationDefs: List<String>, configuration: Configuration) {
+    fun uninstall(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
         val httpClient = HttpClient(configuration)
-        for (artifactId in uninstallationDefs) {
-            echo("Uninstalling $artifactId...")
-            executePost(httpClient, Uninstall, mapOf("name" to artifactId), configuration.retries)
-            echo("Uninstalled.\n")
+        deploymentDefinition.let {
+            for (artifact in it.artifacts) {
+                val crxPackageName = VaultPropertiesXmlDataExtractor().getEntryValue(artifact.filePath, "name")
 
-            echo("Deleting $artifactId...")
-            executePost(httpClient, Delete, mapOf("name" to artifactId), configuration.retries)
-            echo("Deleted.\n")
+                echo("Uninstalling $crxPackageName...")
+                executePost(httpClient, Uninstall, mapOf("name" to crxPackageName), configuration.retries)
+                echo("Uninstalled.\n")
+
+                echo("Deleting $crxPackageName...")
+                executePost(httpClient, Delete, mapOf("name" to crxPackageName), configuration.retries)
+                echo("Deleted.\n")
+            }
         }
-
     }
 }

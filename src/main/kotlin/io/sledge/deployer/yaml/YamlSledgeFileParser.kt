@@ -3,7 +3,7 @@ package io.sledge.deployer.yaml
 import com.charleskorn.kaml.Yaml
 import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.core.api.Artifact
-import io.sledge.deployer.core.api.InstallationDefinition
+import io.sledge.deployer.core.api.DeploymentDefinition
 import io.sledge.deployer.core.api.SledgeFile
 import io.sledge.deployer.core.api.SledgeFileParser
 import kotlinx.serialization.Serializable
@@ -18,13 +18,12 @@ class YamlSledgeFileParser : SledgeFileParser {
 
         return SledgeFile(
                 result.artifactsPathPrefix,
-                result.uninstallationDefs,
-                mapInstallationDefinitionsWithArtifactsPathPrefix(result.artifactsPathPrefix, result.installationDefs))
+                mapDeyplomentDefinitionsWithArtifactsPathPrefix(result.artifactsPathPrefix, result.deploymentDefs))
     }
 
-    private fun mapInstallationDefinitionsWithArtifactsPathPrefix(artifactsPathPrefix: String, installationDefList: List<YamlInstallationDef>): List<InstallationDefinition> {
-        return installationDefList.map { installationDefItem ->
-            InstallationDefinition(installationDefItem.name, installationDefItem.artifacts.map { a ->
+    private fun mapDeyplomentDefinitionsWithArtifactsPathPrefix(artifactsPathPrefix: String, deploymentDefList: List<YamlDeploymentDef>): List<DeploymentDefinition> {
+        return deploymentDefList.map { installationDefItem ->
+            DeploymentDefinition(installationDefItem.name, installationDefItem.artifacts.map { a ->
                 Artifact("$artifactsPathPrefix$a")
             })
         }
@@ -34,12 +33,11 @@ class YamlSledgeFileParser : SledgeFileParser {
 @Serializable
 data class YamlSledgeRoot(
         val artifactsPathPrefix: String,
-        val uninstallationDefs: List<String>,
-        val installationDefs: List<YamlInstallationDef>
+        val deploymentDefs: List<YamlDeploymentDef>
 )
 
 @Serializable
-data class YamlInstallationDef(
+data class YamlDeploymentDef(
         val name: String,
         val artifacts: List<String>
 )

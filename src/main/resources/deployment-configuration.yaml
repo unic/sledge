@@ -2,12 +2,7 @@
 
 artifactsPathPrefix: packages/
 
-uninstallationDefs:
-  - my-package-artifactId-01
-  - my-package-artifactId-02
-  - my-package-artifactId-03
-
-installationDefs:
+deploymentDefs:
   - name: "local-author"
     artifacts:
       - my-package-1.0.zip

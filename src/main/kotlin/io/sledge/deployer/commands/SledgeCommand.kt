@@ -42,38 +42,45 @@ class SledgeCommand() : CliktCommand(name = "sledge") {
 }
 
 class Install(private val sledgeFileParser: SledgeFileParser, private val deployer: CrxDeployer) : CliktCommand(help = "Installs the defined packages in the deployment-configuration.yaml.") {
-    private val installationDefinitionName by argument(name = "INSTALLATION_DEFINITION_NAME", help = "The name of the installation definition, e.g. local, dev-auhor, dev-publish, test, prod, etc.")
+    private val deploymentDefinitionName by argument(name = "DEPLOYMENT_DEFINITION_NAME", help = "The name of the deployment definition, e.g. local, dev-auhor, dev-publish, test, prod, etc.")
     private val targetServerUrl by argument(name = "TARGET_SERVER_URL", help = "The url to the target server, e.g. http://server:4502")
 
     private val config by requireObject<Map<String, Any>>()
 
     override fun run() {
         echo("Working dir: ${System.getProperty("user.dir")}")
-        echo("Installation definition name: $installationDefinitionName")
+        echo("Deployment definition name: $deploymentDefinitionName")
         echo("Target server: $targetServerUrl\n")
 
         val yamlSledgeFile = parseSledgeFile(sledgeFileParser)
-        val installationDefinition = yamlSledgeFile.findInstallationDefinitionByName(installationDefinitionName)
+        val deploymentDefinition = yamlSledgeFile.findDeploymentDefinitionByName(deploymentDefinitionName)
 
-        if (installationDefinition == null) {
-            echo("Error: Could not find any valid installation definition with the name $installationDefinitionName")
+        if (deploymentDefinition == null) {
+            echo("Error: Could not find any valid deployment definition with the name $deploymentDefinitionName")
         } else {
-            deployer.install(installationDefinition, createConfiguration(targetServerUrl, config))
+            deployer.install(deploymentDefinition, createConfiguration(targetServerUrl, config))
         }
     }
 }
 
-class Uninstall(private val sledgeFileParser: SledgeFileParser, private val deployer: CrxDeployer) : CliktCommand(help = "Uninstalls the defined list of artifactIds or package names in the deployment-configuration.yaml") {
+class Uninstall(private val sledgeFileParser: SledgeFileParser, private val deployer: CrxDeployer) : CliktCommand(help = "Uninstalls the defined list of packages in the deployment-configuration.yaml") {
+    private val deploymentDefinitionName by argument(name = "DEPLOYMENT_DEFINITION_NAME", help = "The name of the deployment definition, e.g. local, dev-auhor, dev-publish, test, prod, etc.")
     private val targetServerUrl by argument(name = "TARGET_SERVER_URL", help = "The url to the target server, e.g. http://server:4502")
 
     private val config by requireObject<Map<String, Any>>()
 
     override fun run() {
         echo("Working dir: ${System.getProperty("user.dir")}")
-        echo("Target server: $targetServerUrl")
+        echo("Deployment definition name: $deploymentDefinitionName")
+        echo("Target server: $targetServerUrl\n")
 
         val yamlSledgeFile = parseSledgeFile(sledgeFileParser)
+        val deploymentDefinition = yamlSledgeFile.findDeploymentDefinitionByName(deploymentDefinitionName)
 
-        deployer.uninstall(yamlSledgeFile.uninstallationDefinitions, createConfiguration(targetServerUrl, config))
+        if (deploymentDefinition == null) {
+            echo("Error: Could not find any valid deployment definition with the name $deploymentDefinitionName")
+        } else {
+            deployer.uninstall(deploymentDefinition, createConfiguration(targetServerUrl, config))
+        }
     }
 }

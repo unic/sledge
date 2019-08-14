@@ -34,11 +34,11 @@ Example commands
 
 Install packages:
 
-`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX install installationDefinitionName targetServer`
+`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX install deploymentDefinitionName targetServer`
 
 Uninstall packages:
 
-`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX uninstall targetServer`
+`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX uninstall deploymentDefinitionName targetServer`
 
 Get the help:
 

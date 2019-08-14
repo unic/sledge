@@ -1,9 +1,9 @@
 package io.sledge.deployer.core.api
 
-class SledgeFile(val artifactsPathPrefix: String, val uninstallationDefinitions: List<String>, private val installationDefinitions: List<InstallationDefinition>) {
+class SledgeFile(val artifactsPathPrefix: String, private val deploymentDefinitions: List<DeploymentDefinition>) {
 
-    fun findInstallationDefinitionByName(deploymentDefName: String): InstallationDefinition? {
-        return installationDefinitions.find { item ->
+    fun findDeploymentDefinitionByName(deploymentDefName: String): DeploymentDefinition? {
+        return deploymentDefinitions.find { item ->
             item.name.equals(deploymentDefName, true)
         }
     }
