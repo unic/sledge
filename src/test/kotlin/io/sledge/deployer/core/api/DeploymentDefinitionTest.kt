@@ -14,6 +14,6 @@ internal class DeploymentDefinitionTest {
         // When
         // Then
         assertEquals("dev", deploymentDefinition.name);
-        assertNotNull(deploymentDefinition.deploymentArtifacts)
+        assertNotNull(deploymentDefinition.artifacts)
     }
 }

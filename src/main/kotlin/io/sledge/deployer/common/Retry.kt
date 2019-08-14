@@ -4,7 +4,7 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 
-suspend fun <T> retry(retries: Long = 5, delay: Long = 1000, block: (Long) -> T): T {
+suspend fun <T> retry(retries: Int = 5, delay: Long = 1000, block: (Long) -> T): T {
     for (i in 1..retries) {
         try {
             return withTimeout(5000) {

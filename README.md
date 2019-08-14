@@ -7,11 +7,8 @@ Sledge offers a set of scripts to easily deploy vault packages to an AEM instanc
 # In bullet points
 
 * “One-Click Rollouts”
+* Simple command line tool
 * Easy integration with CI/CD systems
-
-# Use Case for Sledge
-
-TODO
 
 
 # Requirements
@@ -19,31 +16,40 @@ TODO
 * Kotlin 1.3
 * Gradle 5.x
 
-TODO
-
 
 # Building from source
 
-TODO
-
 `gradle build`
 
-Create executable jar:
+Create executable jar containing all needed dependencies:
 
 `gradle shadowJar`
+
 
 # Documentation
 
 TODO
 
-Example command:
+Example commands
 
-java -jar sledge-deployer.jar --user=XX --pwd=XX deploymentDefinitionName targetServer
+Install packages:
+
+`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX install deploymentDefinitionName targetServer`
+
+Uninstall packages:
+
+`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX uninstall deploymentDefinitionName targetServer`
+
+Get the help:
+
+`java -jar sledge-deployer-VERSION-all.jar -h`
 
 
 # Release process
 
 TODO
+
+Still manual process.
 
 
 # License
