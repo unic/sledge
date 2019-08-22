@@ -61,6 +61,11 @@ We use this Gradle release plugin here: https://github.com/researchgate/gradle-r
 * Create a new release in Github and upload the generated binaries in the `build/libs` folder to the Github release
 * Add the needed release notes and publish the Github release
 
+You can then manually deploy the Sledge artifacts into your own repository for example with this command:
+
+`mvn deploy:deploy-file -DgroupId=io.sledge -DartifactId=io.sledge.deployer -Dclassifier=all -DgeneratePom=true -Dversion=2.0.0-rc.1 -Dpackaging=jar -Dfile=io.sledge.deployer-2.0.0-rc.1-all.jar -DrepositoryId=myrepoId -Durl=https://my-repo`
+
+
 
 # License
 
