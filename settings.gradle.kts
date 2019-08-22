@@ -1,4 +1,4 @@
-rootProject.name = "sledge-deployer"
+rootProject.name = "io.sledge.deployer"
 
 pluginManagement {
     resolutionStrategy {
