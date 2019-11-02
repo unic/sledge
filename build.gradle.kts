@@ -5,8 +5,8 @@ description = "Easy deployment tool for AEM applications"
 
 plugins {
     `maven-publish`
-    kotlin("jvm") version "1.3.31"
-    id ("kotlinx-serialization") version "1.3.41"
+    kotlin("jvm") version "1.3.50"
+    id ("kotlinx-serialization") version "1.3.50"
     id("com.github.johnrengelman.shadow") version "5.0.0"
     id("net.researchgate.release") version "2.8.1"
 }
@@ -29,15 +29,15 @@ repositories {
 }
 
 dependencies {
-    compile("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.11.0")
+    compile("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0")
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.github.ajalt:clikt:2.0.0")
-    implementation("com.charleskorn.kaml:kaml:0.11.0")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.8")
-    implementation("com.squareup.okhttp3:okhttp:4.0.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-M2")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.4.2")
+    implementation("com.github.ajalt:clikt:2.2.0")
+    implementation("com.charleskorn.kaml:kaml:0.14.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.10")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.10")
+    implementation("com.squareup.okhttp3:okhttp:4.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.5.2")
 }
 
 tasks.withType<Jar> {
