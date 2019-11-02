@@ -13,11 +13,13 @@ Sledge offers a set of scripts to easily deploy vault packages to an AEM instanc
 
 # Requirements
 
-* Kotlin 1.3
+* Kotlin 1.3.x
 * Gradle 5.x
 
 
 # Building from source
+
+Build project:
 
 `gradle build`
 
