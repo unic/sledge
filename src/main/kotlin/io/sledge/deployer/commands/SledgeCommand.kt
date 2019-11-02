@@ -22,22 +22,27 @@ private fun parseSledgeFile(sledgeFileParser: SledgeFileParser): SledgeFile {
 }
 
 private fun createConfiguration(targetServerUrl: String, config: Map<String, Any>): Configuration {
-    return Configuration(targetServerUrl, config["user"] as String, config["password"] as String, config["retries"] as Int, config["timeout"] as Int)
+    return Configuration(targetServerUrl, config["user"] as String, config["password"] as String, config["retries"] as Int,
+            config["retryDelay"] as Int, config["installUninstallWaitTime"] as Int, config["callTimeout"] as Int)
 }
 
 class SledgeCommand() : CliktCommand(name = "sledge") {
     private val user by option(help = "Defaults to admin").default("admin")
     private val password by option(help = "Defaults to admin").default("admin")
-    private val timeout by option(help = "Defaults to 8 seconds").int().default(8)
-    private val retries by option(help = "Defaults to 5 times").int().default(5)
+    private val retries by option(help = "Number of retries to re-execute the given request. Defaults to 8 times").int().default(8)
+    private val retryDelay by option(help = "Time to delay between retries. Defaults to 3 seconds").int().default(3)
+    private val installUninstallWaitTime by option(help = "Time to wait after installation or uninstallation of a package. Defaults to 2 seconds").int().default(2)
+    private val callTimeout by option(help = "Time to use to fulfill the complete request and response processing. Defaults to 6 seconds").int().default(6)
 
     private val config by findObject { mutableMapOf<String, Any>() }
 
     override fun run() {
         config["user"] = user
         config["password"] = password
-        config["timeout"] = timeout
         config["retries"] = retries
+        config["retryDelay"] = retryDelay
+        config["installUninstallWaitTime"] = installUninstallWaitTime
+        config["callTimeout"] = callTimeout
     }
 }
 

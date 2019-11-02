@@ -16,8 +16,7 @@ class HttpClient(val configuration: Configuration) {
 
     fun postMultipart(url: String, parameters: Map<String, *>): Response {
         val request = createRequest(url, parameters)
-        echo("Request url: " + request.url)
-        return client.callTimeout(Duration.ofSeconds(configuration.timeout.toLong())).build().newCall(request).execute()
+        return client.callTimeout(Duration.ofSeconds(configuration.callTimeout.toLong())).build().newCall(request).execute()
     }
 
     private fun createRequest(url: String, parameters: Map<String, *>): Request {

@@ -40,13 +40,19 @@ Use this file to define the needed _deployment definitions_ for your application
 
 Install packages:
 
-`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX install deploymentDefinitionName targetServer`
+`java -jar io.sledge.deployer-<VERSION>-all.jar --user=XX --password=XX install <deploymentDefinitionName> <targetServer>`
 
 Uninstall packages:
 
-`java -jar sledge-deployer-VERSION-all.jar --user=XX --password=XX uninstall deploymentDefinitionName targetServer`
+`java -jar io.sledge.deployer-<VERSION>-all.jar --user=XX --password=XX uninstall <deploymentDefinitionName> <targetServer>`
 
-Get the help:
+Use with custom retry configuration:
+
+`java -jar io.sledge.deployer-<VERSION>-all.jar --retries=10 --retry-delay=2 --install-uninstall-wait-time=3 install <deploymentDefinitionName> <targetServer>`
+
+See also the command line help to get the current valid options.
+
+Display help:
 
 `java -jar sledge-deployer-VERSION-all.jar -h`
 

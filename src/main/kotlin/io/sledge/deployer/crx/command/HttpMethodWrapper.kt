@@ -4,49 +4,42 @@ import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.common.retry
 import io.sledge.deployer.exception.SledgeCommandException
 import io.sledge.deployer.http.HttpClient
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import okhttp3.Response
 
-fun executePost(httpClient: HttpClient, command: Command, parameters: Map<String, Any> = emptyMap(), retries: Int) {
+fun executePost(httpClient: HttpClient, command: Command, parameters: Map<String, Any> = emptyMap(), retries: Int, retryDelay: Int) {
+    val delayInMilliseconds = retryDelay * 1000L
+
     runBlocking {
-        delay(2000)
-        retry(retries = retries) {
+        retry(retries = retries, delay = delayInMilliseconds) {
             try {
-                executeRequest(command, parameters, httpClient)
+                val params = mergeDefaultParameters(command, parameters)
+                val response = httpClient.postMultipart(command.url(), params)
+                command.validate(response)
             } catch (se: SledgeCommandException) {
-                echo("Request failed. Reason: " + se.localizedMessage)
+                if (endOfRetries(it)) {
+                    echo("Sledge request failed. Reason: " + se.localizedMessage)
+                    echo("-----------------------------------------------")
+                    echo("Error information:")
+                    echo("Request url: ${se.requestUrl}")
+                    echo("Response code: ${se.responseCode}")
+                    echo("Response body: ${se.responseBody}")
+                    echo("-----------------------------------------------\n")
+                }
                 throw se;
             } catch (e: Exception) {
-                echo("Request failed. Reason: " + e.localizedMessage)
+                if (endOfRetries(it)) {
+                    echo("Request failed. Reason: " + e.localizedMessage)
+                }
                 throw e;
             }
-
         }
     }
 }
 
-private fun executeRequest(command: Command, parameters: Map<String, Any>, httpClient: HttpClient): Response {
-    val url = createUrl(command)
-    val params = mergeDefaultParameters(command, parameters)
-    echo("-----------------------------------------------")
-    echo("Command: " + command.commandName)
-    echo("Parameters: $params")
-
-    val response = httpClient.postMultipart(url, params)
-    echo("-----------------------------------------------")
-
-    command.validate(response)
-
-    return response
-}
+private fun endOfRetries(currentRetryCount: Long) = currentRetryCount == 0L
 
 private fun mergeDefaultParameters(command: Command, parameters: Map<String, Any>): Map<String, Any?> {
-    return mapOf("cmd" to command.cmd).plus(parameters)
-}
-
-private fun createUrl(command: Command): String {
-    return command.commandUrl + "?cmd=" + command.cmd
+    return mapOf("cmd" to command.cmdParam).plus(parameters)
 }
 
 
