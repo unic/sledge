@@ -10,7 +10,7 @@ suspend fun <T> retry(retries: Int = 5, delay: Long = 1000, block: (Long) -> T):
             return withTimeout(5000) {
                 block(i.toLong())
             }
-        } catch (timeoutException: TimeoutCancellationException) { /* retry */
+        } catch (timeoutException: TimeoutCancellationException) {
         } catch (e: Exception) {
         }
         delay(delay)
