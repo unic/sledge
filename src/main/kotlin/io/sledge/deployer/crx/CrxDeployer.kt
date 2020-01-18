@@ -2,14 +2,15 @@ package io.sledge.deployer.crx
 
 import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.core.api.Configuration
+import io.sledge.deployer.core.api.Deployer
 import io.sledge.deployer.core.api.DeploymentDefinition
 import io.sledge.deployer.crx.command.*
 import io.sledge.deployer.http.HttpClient
 import java.io.File
 
-class CrxDeployer {
+class CrxDeployer : Deployer {
 
-    fun install(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
+    override fun install(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
         val httpClient = HttpClient(configuration)
         deploymentDefinition.let {
             for (artifact in it.artifacts) {
@@ -27,7 +28,7 @@ class CrxDeployer {
         }
     }
 
-    fun uninstall(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
+    override fun uninstall(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
         val httpClient = HttpClient(configuration)
         deploymentDefinition.let {
             for (artifact in it.artifacts) {

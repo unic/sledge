@@ -1,6 +1,5 @@
 package io.sledge.deployer.http
 
-import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.core.api.Configuration
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -10,7 +9,7 @@ import java.time.Duration
 
 class HttpClient(val configuration: Configuration) {
 
-    val MEDIA_TYPE_ZIP = "application/zip".toMediaTypeOrNull()
+    private val MEDIA_TYPE_ZIP = "application/zip".toMediaTypeOrNull()
 
     var client = OkHttpClient.Builder()
 
@@ -34,7 +33,6 @@ class HttpClient(val configuration: Configuration) {
             when (value) {
                 is String -> requestBody.addFormDataPart(key, value)
                 is File -> requestBody.addFormDataPart(key, value.name, value.asRequestBody(MEDIA_TYPE_ZIP))
-
             }
         }
 

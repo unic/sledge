@@ -1,5 +1,14 @@
 # Sledgefile example
 
+# Should only contain following characters: a-zA-Z0-9-_
+# Should be JCR repository path-safe
+deploymentName: "my-app"
+
+# Possible values: crx, sling (default: crx)
+# If using 'crx' then only crx/vault packages can be installed!
+# The `sling` deployer supports crx/vault and OSGi bundles for direct installations.
+deployerImplementation: crx
+
 artifactsPathPrefix: packages/
 
 deploymentDefs:
