@@ -1,16 +1,17 @@
 package io.sledge.deployer.sling
 
-import com.github.ajalt.clikt.output.TermUi
 import com.github.ajalt.clikt.output.TermUi.echo
-import io.sledge.deployer.checks.BundlesCheck
+import io.sledge.deployer.checks.BundleStatusCheck
+import io.sledge.deployer.common.SledgeConsoleReporter
+import io.sledge.deployer.common.endOfRetries
 import io.sledge.deployer.common.retry
 import io.sledge.deployer.core.api.Configuration
 import io.sledge.deployer.core.api.Deployer
 import io.sledge.deployer.core.api.DeploymentDefinition
-import io.sledge.deployer.exception.SledgeCommandException
+import io.sledge.deployer.core.exception.SledgeCommandException
 import io.sledge.deployer.http.HttpClient
+import io.sledge.deployer.http.SledgeHttpResponse
 import kotlinx.coroutines.runBlocking
-import okhttp3.Response
 import java.io.File
 
 /**
@@ -40,8 +41,8 @@ class SlingDeployer : Deployer {
         }
 
         waitFor(configuration.installUninstallWaitTime * 2)
-        BundlesCheck(configuration).executeCheck()
-        echo("Installation finished.")
+        BundleStatusCheck(configuration).executeCheck()
+        echo("\nInstallation finished.")
     }
 
     override fun uninstall(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
@@ -54,8 +55,8 @@ class SlingDeployer : Deployer {
         doPost(url, mapOf(":operation" to "delete"), httpClient, configuration)
         waitFor(configuration.installUninstallWaitTime * 2)
 
-        BundlesCheck(configuration).executeCheck()
-        echo("Uninstallation finished.\n")
+        BundleStatusCheck(configuration).executeCheck()
+        echo("\nUninstallation finished.\n")
     }
 
     private fun doPost(url: String = "", parameters: Map<String, Any> = emptyMap(), httpClient: HttpClient, configuration: Configuration) {
@@ -68,13 +69,7 @@ class SlingDeployer : Deployer {
                     validateResponse(response, url)
                 } catch (se: SledgeCommandException) {
                     if (endOfRetries(it)) {
-                        echo("Sledge request failed. Reason: " + se.localizedMessage)
-                        echo("-----------------------------------------------")
-                        echo("Error information:")
-                        echo("Request url: ${se.requestUrl}")
-                        echo("Response code: ${se.responseCode}")
-                        echo("Response body: ${se.responseBody}")
-                        echo("-----------------------------------------------\n")
+                        SledgeConsoleReporter().writeSledgeCommandExceptionInfo(se)
                     }
                     throw se;
                 } catch (e: Exception) {
@@ -87,16 +82,14 @@ class SlingDeployer : Deployer {
         }
     }
 
-    private fun validateResponse(response: Response, url: String) {
-        val responseBody = response.body?.string() ?: ""
+    private fun validateResponse(response: SledgeHttpResponse, url: String) {
+        val responseBody = response.bodayAsString
         val validResponseBodyTexts = setOf("200", "OK", "201", "Created")
 
         if (validResponseBodyTexts.any { it in responseBody }) else {
-            throw SledgeCommandException("Response did not contain expected validation text.", url, response.code, responseBody)
+            throw SledgeCommandException("Response did not contain expected validation text.", url, response.statusCode, responseBody)
         }
     }
-
-    private fun endOfRetries(currentRetryCount: Long) = currentRetryCount == 0L
 
     private fun waitFor(waitTimeInSeconds: Int) {
         Thread.sleep(waitTimeInSeconds * 1000L)

@@ -1,11 +1,15 @@
 package io.sledge.deployer.crx
 
 import com.github.ajalt.clikt.output.TermUi.echo
+import io.sledge.deployer.common.SledgeConsoleReporter
+import io.sledge.deployer.common.endOfRetries
+import io.sledge.deployer.common.retry
 import io.sledge.deployer.core.api.Configuration
 import io.sledge.deployer.core.api.Deployer
 import io.sledge.deployer.core.api.DeploymentDefinition
-import io.sledge.deployer.crx.command.*
+import io.sledge.deployer.core.exception.SledgeCommandException
 import io.sledge.deployer.http.HttpClient
+import kotlinx.coroutines.runBlocking
 import java.io.File
 
 class CrxDeployer : Deployer {
@@ -26,6 +30,8 @@ class CrxDeployer : Deployer {
                 echo("Installed.\n")
             }
         }
+
+        echo("\nInstallation finished.")
     }
 
     override fun uninstall(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
@@ -45,9 +51,39 @@ class CrxDeployer : Deployer {
                 echo("Deleted.\n")
             }
         }
+
+        echo("\nUninstallation finished.\n")
     }
 
     private fun waitFor(waitTimeInSeconds: Int) {
         Thread.sleep(waitTimeInSeconds * 1000L)
+    }
+
+    private fun executePost(httpClient: HttpClient, command: Command, parameters: Map<String, Any> = emptyMap(), retries: Int, retryDelay: Int) {
+        val delayInMilliseconds = retryDelay * 1000L
+
+        runBlocking {
+            retry(retries = retries, delay = delayInMilliseconds) {
+                try {
+                    val params = mergeDefaultParameters(command, parameters)
+                    val response = httpClient.postMultipart(command.url(), params)
+                    command.validate(response)
+                } catch (se: SledgeCommandException) {
+                    if (endOfRetries(it)) {
+                        SledgeConsoleReporter().writeSledgeCommandExceptionInfo(se)
+                    }
+                    throw se;
+                } catch (e: Exception) {
+                    if (endOfRetries(it)) {
+                        echo("Request failed. Reason: " + e.localizedMessage)
+                    }
+                    throw e;
+                }
+            }
+        }
+    }
+
+    private fun mergeDefaultParameters(command: Command, parameters: Map<String, Any>): Map<String, Any?> {
+        return mapOf("cmd" to command.cmdParam).plus(parameters)
     }
 }

@@ -1,16 +1,16 @@
-package io.sledge.deployer.crx.command
+package io.sledge.deployer.crx
 
-import io.sledge.deployer.exception.SledgeCommandException
-import okhttp3.Response
+import io.sledge.deployer.core.exception.SledgeCommandException
+import io.sledge.deployer.http.SledgeHttpResponse
 
 const val PATH = "/crx/packmgr/service"
 const val SERVICE_JSP = "$PATH.jsp"
 
 data class Command(val commandName: String, val cmdParam: String, val responseValidationConditions: Set<String>) {
-    fun validate(response: Response) {
-        val responseBody = response.body?.string() ?: ""
+    fun validate(response: SledgeHttpResponse) {
+        val responseBody = response.bodayAsString
         if (responseValidationConditions.any { it in responseBody }) else {
-            throw SledgeCommandException("Response did not contain expected validation text.", url(), response.code, responseBody)
+            throw SledgeCommandException("Response did not contain expected validation text.", url(), response.statusCode, responseBody)
         }
     }
 

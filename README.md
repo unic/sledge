@@ -32,7 +32,7 @@ Create executable jar containing all needed dependencies:
 
 ## The deployment-configuration.yaml file
 
-See an example `deployment-configration.yaml` [here](src/main/resources/deployment-configuration.yaml).
+See an example `deployment-configration.yaml` [here](src/test/resources/deployment-configuration.yaml).
 
 Use this file to define the needed _deployment definitions_ for your application.
 

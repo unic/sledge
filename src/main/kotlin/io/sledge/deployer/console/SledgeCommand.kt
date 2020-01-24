@@ -1,4 +1,4 @@
-package io.sledge.deployer.commands
+package io.sledge.deployer.console
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.findObject
@@ -83,6 +83,7 @@ class Install(private val sledgeFileParser: SledgeFileParser) : CliktCommand(hel
         if (deploymentDefinition == null) {
             echo("Error: Could not find any valid deployment definition with the name $deploymentDefinitionName")
         } else {
+            echo("Deployer implementation: ${yamlSledgeFile.deployerImplementation.name}\n")
             deployer.install(deploymentDefinition, createConfiguration(yamlSledgeFile.deploymentName, targetServerUrl, config))
         }
     }
@@ -105,6 +106,7 @@ class Uninstall(private val sledgeFileParser: SledgeFileParser) : CliktCommand(h
         if (deploymentDefinition == null) {
             echo("Error: Could not find any valid deployment definition with the name $deploymentDefinitionName")
         } else {
+            echo("Deployer implementation: ${yamlSledgeFile.deployerImplementation.name}\n")
             deployer.uninstall(deploymentDefinition, createConfiguration(yamlSledgeFile.deploymentName, targetServerUrl, config))
         }
     }
