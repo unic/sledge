@@ -25,9 +25,9 @@ private fun parseSledgeFile(sledgeFileParser: SledgeFileParser): SledgeFile {
     return yamlSledgeFile
 }
 
-private fun createConfiguration(deploymentName: String, targetServerUrl: String, config: Map<String, Any>): Configuration {
+private fun createConfiguration(appName: String, targetServerUrl: String, config: Map<String, Any>): Configuration {
     return Configuration(
-            deploymentName,
+            appName,
             targetServerUrl,
             config["user"] as String,
             config["password"] as String,
@@ -84,7 +84,7 @@ class Install(private val sledgeFileParser: SledgeFileParser) : CliktCommand(hel
             echo("Error: Could not find any valid deployment definition with the name $deploymentDefinitionName")
         } else {
             echo("Deployer implementation: ${yamlSledgeFile.deployerImplementation.name}\n")
-            deployer.install(deploymentDefinition, createConfiguration(yamlSledgeFile.deploymentName, targetServerUrl, config))
+            deployer.install(deploymentDefinition, createConfiguration(yamlSledgeFile.appName, targetServerUrl, config))
         }
     }
 }
@@ -101,13 +101,15 @@ class Uninstall(private val sledgeFileParser: SledgeFileParser) : CliktCommand(h
 
         val yamlSledgeFile = parseSledgeFile(sledgeFileParser)
         val deployer = initDeployer(yamlSledgeFile)
+
         val deploymentDefinition = yamlSledgeFile.findDeploymentDefinitionByName(deploymentDefinitionName)
 
         if (deploymentDefinition == null) {
             echo("Error: Could not find any valid deployment definition with the name $deploymentDefinitionName")
         } else {
             echo("Deployer implementation: ${yamlSledgeFile.deployerImplementation.name}\n")
-            deployer.uninstall(deploymentDefinition, createConfiguration(yamlSledgeFile.deploymentName, targetServerUrl, config))
+            val deployerConfig = createConfiguration(yamlSledgeFile.appName, targetServerUrl, config)
+            deployer.uninstall(deploymentDefinition, yamlSledgeFile.uninstallCleanupPaths, deployerConfig)
         }
     }
 }

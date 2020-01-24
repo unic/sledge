@@ -2,7 +2,7 @@
 
 # Should only contain following characters: a-zA-Z0-9-_
 # Should be JCR repository path-safe
-deploymentName: "my-app"
+appName: "my-app"
 
 # Possible values: crx, sling (default: crx)
 # If using 'crx' then only crx/vault packages can be installed!
@@ -10,6 +10,10 @@ deploymentName: "my-app"
 deployerImplementation: crx
 
 artifactsPathPrefix: packages/
+
+uninstallCleanupPaths:
+  - /apps/my-app
+  - /etc/packages/my-group
 
 deploymentDefs:
   - name: "local-author"

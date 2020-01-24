@@ -14,9 +14,10 @@ class YamlSledgeFileParser : SledgeFileParser {
         val result = Yaml.default.parse(YamlSledgeRoot.serializer(), sledgeFile.inputStream().readBytes().toString(Charsets.UTF_8))
 
         return SledgeFile(
-                result.deploymentName ?: "default-app",
+                result.appName ?: "default-app",
                 getDeployerImplementation(result),
                 result.artifactsPathPrefix,
+                result.uninstallCleanupPaths ?: emptyList(),
                 mapDeyplomentDefinitionsWithArtifactsPathPrefix(result.artifactsPathPrefix, result.deploymentDefs))
     }
 
@@ -26,18 +27,19 @@ class YamlSledgeFileParser : SledgeFileParser {
 
     private fun mapDeyplomentDefinitionsWithArtifactsPathPrefix(artifactsPathPrefix: String, deploymentDefList: List<YamlDeploymentDef>): List<DeploymentDefinition> {
         return deploymentDefList.map { installationDefItem ->
-            DeploymentDefinition(installationDefItem.name, installationDefItem.artifacts.map { a ->
-                Artifact("$artifactsPathPrefix$a")
-            })
+            DeploymentDefinition(
+                    installationDefItem.name,
+                    installationDefItem.artifacts.map { a -> Artifact("$artifactsPathPrefix$a") })
         }
     }
 }
 
 @Serializable
 data class YamlSledgeRoot(
-        val deploymentName: String? = null,
+        val appName: String? = null,
         val deployerImplementation: String? = null,
         val artifactsPathPrefix: String,
+        val uninstallCleanupPaths: List<String>? = null,
         val deploymentDefs: List<YamlDeploymentDef>
 )
 
