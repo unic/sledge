@@ -2,10 +2,7 @@ package io.sledge.deployer.yaml
 
 import com.charleskorn.kaml.Yaml
 import com.github.ajalt.clikt.output.TermUi.echo
-import io.sledge.deployer.core.api.Artifact
-import io.sledge.deployer.core.api.DeploymentDefinition
-import io.sledge.deployer.core.api.SledgeFile
-import io.sledge.deployer.core.api.SledgeFileParser
+import io.sledge.deployer.core.api.*
 import kotlinx.serialization.Serializable
 import java.io.File
 
@@ -17,8 +14,14 @@ class YamlSledgeFileParser : SledgeFileParser {
         val result = Yaml.default.parse(YamlSledgeRoot.serializer(), sledgeFile.inputStream().readBytes().toString(Charsets.UTF_8))
 
         return SledgeFile(
+                result.deploymentName ?: "default-app",
+                getDeployerImplementation(result),
                 result.artifactsPathPrefix,
                 mapDeyplomentDefinitionsWithArtifactsPathPrefix(result.artifactsPathPrefix, result.deploymentDefs))
+    }
+
+    private fun getDeployerImplementation(result: YamlSledgeRoot): DeployerImplementation {
+        return if (result.deployerImplementation == null) DeployerImplementation.crx else DeployerImplementation.valueOf(result.deployerImplementation)
     }
 
     private fun mapDeyplomentDefinitionsWithArtifactsPathPrefix(artifactsPathPrefix: String, deploymentDefList: List<YamlDeploymentDef>): List<DeploymentDefinition> {
@@ -32,6 +35,8 @@ class YamlSledgeFileParser : SledgeFileParser {
 
 @Serializable
 data class YamlSledgeRoot(
+        val deploymentName: String? = null,
+        val deployerImplementation: String? = null,
         val artifactsPathPrefix: String,
         val deploymentDefs: List<YamlDeploymentDef>
 )

@@ -17,3 +17,5 @@ suspend fun <T> retry(retries: Int = 5, delay: Long = 1000, block: (Long) -> T):
     }
     return block(0)
 }
+
+fun endOfRetries(currentRetryCount: Long) = currentRetryCount == 0L
