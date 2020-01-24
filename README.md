@@ -1,12 +1,12 @@
 Sledge - "One-Click Rollout"
 ============================
 
-Sledge offers a set of scripts to easily deploy vault packages to an AEM instance.
+Sledge offers a set of scripts to easily deploy CRX/vault packages or OSGi bundles to an AEM or Sling instance.
 
 
 # In bullet points
 
-* “One-Click Rollouts”
+* “One-Click Rollouts” made possible
 * Simple command line tool
 * Easy integration with CI/CD systems
 
