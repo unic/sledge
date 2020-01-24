@@ -32,9 +32,26 @@ Create executable jar containing all needed dependencies:
 
 ## The deployment-configuration.yaml file
 
+The _Sledgefile_ or the _deployment-configuration.yaml_ represents your application with all the needed CRX/Vault packages and/or 
+OSGi bundles.
+
+Each deployment definition is defined by:
+
+* the environment and optionally the Sling/AEM instance (author, publish)
+* a set of packages
+
 See an example `deployment-configration.yaml` [here](src/test/resources/deployment-configuration.yaml).
 
 Use this file to define the needed _deployment definitions_ for your application.
+
+## Deployer implementation
+
+With the `deployerImplementation` option you can define which Deployer you would like to use.
+
+Currently the following can be used:
+
+* crx: Uses the AEM CRX Package Manager HTTP API
+* sling: Uses the default OsgiInstaller installing packages automatically via the */install JCR path
 
 ## Deployment commands
 
