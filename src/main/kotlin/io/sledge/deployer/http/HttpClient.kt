@@ -31,10 +31,10 @@ class HttpClient(val configuration: Configuration) {
         }
     }
 
-    fun postMultipart(url: String, parameters: Map<String, *>): SledgeHttpResponse {
+    fun postMultipart(path: String, parameters: Map<String, *>): SledgeHttpResponse {
         val request = Request.Builder()
                 .header("Authorization", Credentials.basic(configuration.user, configuration.password))
-                .url(configuration.targetUrl + url)
+                .url(configuration.targetUrl + path)
                 .post(createMultipartRequestBody(parameters))
                 .build()
 

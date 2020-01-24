@@ -9,6 +9,8 @@ import io.sledge.deployer.core.api.Deployer
 import io.sledge.deployer.core.api.DeploymentDefinition
 import io.sledge.deployer.core.exception.SledgeCommandException
 import io.sledge.deployer.http.HttpClient
+import io.sledge.deployer.sling.SlingOperations
+import io.sledge.deployer.sling.validation.validateResponseBodyForOkAndCreatedStatusCode
 import kotlinx.coroutines.runBlocking
 import java.io.File
 
@@ -34,7 +36,7 @@ class CrxDeployer : Deployer {
         echo("\nInstallation finished.")
     }
 
-    override fun uninstall(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
+    override fun uninstall(deploymentDefinition: DeploymentDefinition, uninstallCleanupPaths: List<String>, configuration: Configuration) {
         val httpClient = HttpClient(configuration)
         deploymentDefinition.let {
             for (artifact in it.artifacts) {
@@ -49,6 +51,15 @@ class CrxDeployer : Deployer {
                 waitFor(2)
                 executePost(httpClient, Delete, mapOf("name" to crxPackageName), configuration.retries, configuration.retryDelay)
                 echo("Deleted.\n")
+            }
+        }
+
+        if (uninstallCleanupPaths.isNotEmpty()) {
+            echo("Cleaning up paths...")
+            for (jcrPath in uninstallCleanupPaths) {
+                SlingOperations().removeResource(jcrPath, validateResponseBodyForOkAndCreatedStatusCode, httpClient, configuration)
+                echo("Deleted $jcrPath")
+                waitFor(configuration.installUninstallWaitTime)
             }
         }
 

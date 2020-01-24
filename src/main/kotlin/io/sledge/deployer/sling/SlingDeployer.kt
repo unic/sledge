@@ -2,16 +2,11 @@ package io.sledge.deployer.sling
 
 import com.github.ajalt.clikt.output.TermUi.echo
 import io.sledge.deployer.checks.BundleStatusCheck
-import io.sledge.deployer.common.SledgeConsoleReporter
-import io.sledge.deployer.common.endOfRetries
-import io.sledge.deployer.common.retry
 import io.sledge.deployer.core.api.Configuration
 import io.sledge.deployer.core.api.Deployer
 import io.sledge.deployer.core.api.DeploymentDefinition
-import io.sledge.deployer.core.exception.SledgeCommandException
 import io.sledge.deployer.http.HttpClient
-import io.sledge.deployer.http.SledgeHttpResponse
-import kotlinx.coroutines.runBlocking
+import io.sledge.deployer.sling.validation.validateResponseBodyForOkAndCreatedStatusCode
 import java.io.File
 
 /**
@@ -24,16 +19,18 @@ class SlingDeployer : Deployer {
     private val sledgeBaseInstallPath = "/apps/sledge-deployment"
     private val slingInstallSuffixFolderName = "install"
 
+    private val slingOperations = SlingOperations()
+
     override fun install(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
         val httpClient = HttpClient(configuration)
-        val deploymentFolderName = configuration.deploymentName
+        val deploymentFolderName = configuration.appName
 
         deploymentDefinition.let {
             for (artifact in it.artifacts) {
                 echo("Installing ${artifact.filePath}...")
 
                 val url = "${sledgeBaseInstallPath}/${deploymentFolderName}/${slingInstallSuffixFolderName}"
-                doPost(url, mapOf("*" to File(artifact.filePath)), httpClient, configuration)
+                slingOperations.doPost(url, mapOf("*" to File(artifact.filePath)), validateResponseBodyForOkAndCreatedStatusCode, httpClient, configuration)
                 waitFor(configuration.installUninstallWaitTime)
 
                 echo("Installed.\n")
@@ -45,50 +42,27 @@ class SlingDeployer : Deployer {
         echo("\nInstallation finished.")
     }
 
-    override fun uninstall(deploymentDefinition: DeploymentDefinition, configuration: Configuration) {
+    override fun uninstall(deploymentDefinition: DeploymentDefinition, uninstallCleanupPaths: List<String>, configuration: Configuration) {
         val httpClient = HttpClient(configuration)
-        val deploymentFolderName = configuration.deploymentName
+        val deploymentFolderName = configuration.appName
 
-        echo("Uninstalling everything in ${sledgeBaseInstallPath}/${deploymentFolderName}")
+        echo("Uninstalling everything in ${sledgeBaseInstallPath}/${deploymentFolderName}\n")
 
-        val url = "${sledgeBaseInstallPath}/${deploymentFolderName}"
-        doPost(url, mapOf(":operation" to "delete"), httpClient, configuration)
+        val deploymentFolderAbsolutePath = "${sledgeBaseInstallPath}/${deploymentFolderName}"
+        slingOperations.removeResource(deploymentFolderAbsolutePath, validateResponseBodyForOkAndCreatedStatusCode, httpClient, configuration)
         waitFor(configuration.installUninstallWaitTime * 2)
+
+        if (uninstallCleanupPaths.isNotEmpty()) {
+            echo("Cleaning up paths...")
+            for (jcrPath in uninstallCleanupPaths) {
+                slingOperations.removeResource(jcrPath, validateResponseBodyForOkAndCreatedStatusCode, httpClient, configuration)
+                echo("Deleted $jcrPath")
+                waitFor(configuration.installUninstallWaitTime)
+            }
+        }
 
         BundleStatusCheck(configuration).executeCheck()
         echo("\nUninstallation finished.\n")
-    }
-
-    private fun doPost(url: String = "", parameters: Map<String, Any> = emptyMap(), httpClient: HttpClient, configuration: Configuration) {
-        val delayInMilliseconds = configuration.retryDelay * 1000L
-
-        runBlocking {
-            retry(retries = configuration.retries, delay = delayInMilliseconds) {
-                try {
-                    val response = httpClient.postMultipart(url, parameters)
-                    validateResponse(response, url)
-                } catch (se: SledgeCommandException) {
-                    if (endOfRetries(it)) {
-                        SledgeConsoleReporter().writeSledgeCommandExceptionInfo(se)
-                    }
-                    throw se;
-                } catch (e: Exception) {
-                    if (endOfRetries(it)) {
-                        echo("Request failed. Reason: " + e.localizedMessage)
-                    }
-                    throw e;
-                }
-            }
-        }
-    }
-
-    private fun validateResponse(response: SledgeHttpResponse, url: String) {
-        val responseBody = response.bodayAsString
-        val validResponseBodyTexts = setOf("200", "OK", "201", "Created")
-
-        if (validResponseBodyTexts.any { it in responseBody }) else {
-            throw SledgeCommandException("Response did not contain expected validation text.", url, response.statusCode, responseBody)
-        }
     }
 
     private fun waitFor(waitTimeInSeconds: Int) {
